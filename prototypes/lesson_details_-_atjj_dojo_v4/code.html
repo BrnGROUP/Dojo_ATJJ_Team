@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detalhes da Aula - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6a7d90",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#17191b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#131416] dark:text-white min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#ecedee] dark:border-neutral-800 px-10 py-3 bg-white dark:bg-neutral-900">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-[#131416] dark:text-white">
+<div class="size-6 text-primary">
+<svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">ATJJ Dojo v4</h2>
+</div>
+<nav class="flex items-center gap-9">
+<a class="text-[#131416] dark:text-neutral-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-bold leading-normal border-b-2 border-primary" href="#">Aulas</a>
+<a class="text-[#131416] dark:text-neutral-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Alunos</a>
+<a class="text-[#131416] dark:text-neutral-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Currículo</a>
+<a class="text-[#131416] dark:text-neutral-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Configurações</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<label class="flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-[#6c737a] flex border-none bg-[#ecedee] dark:bg-neutral-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#131416] dark:text-white focus:outline-0 focus:ring-0 border-none bg-[#ecedee] dark:bg-neutral-800 focus:border-none h-full placeholder:text-[#6c737a] px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Buscar aulas..." value=""/>
+</div>
+</label>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-neutral-200 dark:border-neutral-700" data-alt="User avatar placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCy9CgS9kWt5P4dyHuWKcVSGmCXQvSf7HJ8rMUqsh_JhSm1cNU8-SwbfW0eRdcYenKsob9JSxHk8jrcT_ZVehZnAPkf__EF9kgeXv0upHbZ9K1VB34pNjC8GtuAPzICf-HfExrtkQNzEjuqLW_8VlM8Cjri8cx66CGm_S6vR7l9UYKpWuDjEclgeP06u6pi6fQC6LTA_ZD6VhvRBBaauYlQYGYmyiSOMIkXgZnI0yLgiZg3_IR0MqK8cqYLFfEqlxoRK_BRa1DpO7wS");'></div>
+</div>
+</header>
+<main class="flex-1 flex justify-center py-8">
+<div class="layout-content-container flex flex-col max-w-[1024px] flex-1 px-4 sm:px-10">
+<div class="flex flex-wrap gap-2 items-center mb-2">
+<a class="text-[#6c737a] dark:text-neutral-500 text-sm font-medium leading-normal hover:underline" href="#">Aulas</a>
+<span class="text-[#6c737a] dark:text-neutral-500 text-sm font-medium leading-normal">/</span>
+<a class="text-[#6c737a] dark:text-neutral-500 text-sm font-medium leading-normal hover:underline" href="#">Fundamentals No-Gi</a>
+<span class="text-[#6c737a] dark:text-neutral-500 text-sm font-medium leading-normal">/</span>
+<span class="text-[#131416] dark:text-white text-sm font-bold leading-normal">Detalhes da Aula</span>
+</div>
+<div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+<div class="flex flex-col gap-1">
+<p class="text-[#131416] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Detalhes da Aula</p>
+<p class="text-[#6c737a] dark:text-neutral-400 text-base font-normal leading-normal">Revise e gerencie esta sessão de treino específica.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg font-bold text-sm hover:bg-opacity-90 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span>Salvar Alterações</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 space-y-6">
+<div class="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-200 dark:border-neutral-800">
+<h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">edit_note</span>
+                                Informações da Sessão
+                            </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<label class="flex flex-col gap-2">
+<p class="text-[#131416] dark:text-neutral-300 text-sm font-semibold">Turma</p>
+<select class="form-input flex w-full rounded-lg text-[#131416] dark:text-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 h-12 px-4 focus:ring-1 focus:ring-primary focus:border-primary">
+<option value="fundamentals">Fundamentals No-Gi</option>
+<option value="advanced">Advanced Gi</option>
+<option value="kids">Kids Program</option>
+<option value="openmat">Open Mat</option>
+</select>
+</label>
+<label class="flex flex-col gap-2">
+<p class="text-[#131416] dark:text-neutral-300 text-sm font-semibold">Data</p>
+<input class="form-input flex w-full rounded-lg text-[#131416] dark:text-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 h-12 px-4 focus:ring-1 focus:ring-primary focus:border-primary" type="date" value="2023-10-27"/>
+</label>
+<label class="flex flex-col gap-2">
+<p class="text-[#131416] dark:text-neutral-300 text-sm font-semibold">Hora Início</p>
+<input class="form-input flex w-full rounded-lg text-[#131416] dark:text-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 h-12 px-4 focus:ring-1 focus:ring-primary focus:border-primary" type="time" value="18:00"/>
+</label>
+<label class="flex flex-col gap-2">
+<p class="text-[#131416] dark:text-neutral-300 text-sm font-semibold">Duração (Minutos)</p>
+<input class="form-input flex w-full rounded-lg text-[#131416] dark:text-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 h-12 px-4 focus:ring-1 focus:ring-primary focus:border-primary" type="number" value="90"/>
+</label>
+</div>
+<div class="mb-6">
+<label class="flex flex-col gap-2">
+<p class="text-[#131416] dark:text-neutral-300 text-sm font-semibold">Tópico / Técnica</p>
+<input class="form-input flex w-full rounded-lg text-[#131416] dark:text-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 h-12 px-4 focus:ring-1 focus:ring-primary focus:border-primary" placeholder="ex: Raspagens de Guarda Fechada: Tesourinha" type="text" value="Guarda Fechada: Raspagem Tesourinha e Ajuste de Kimura"/>
+</label>
+</div>
+<div class="mb-2">
+<label class="flex flex-col gap-2">
+<p class="text-[#131416] dark:text-neutral-300 text-sm font-semibold">Notas do Instrutor &amp; Drills</p>
+<textarea class="form-input flex w-full rounded-lg text-[#131416] dark:text-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 p-4 focus:ring-1 focus:ring-primary focus:border-primary" placeholder="Detalhes específicos para esta sessão..." rows="4">Aquecimento: Fugas de quadril, cambalhotas. 
+Técnica principal: Mecânica da raspagem tesourinha, resolvendo problemas de postura.
+Drills: Sparring posicional da guarda fechada (rounds de 3 min).</textarea>
+</label>
+</div>
+</div>
+</div>
+<div class="space-y-6">
+<div class="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-200 dark:border-neutral-800">
+<p class="text-[#131416] dark:text-neutral-300 text-sm font-bold mb-4 uppercase tracking-wider">Status da Aula</p>
+<div class="flex h-11 items-center justify-center rounded-lg bg-[#ecedee] dark:bg-neutral-800 p-1 mb-6">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-neutral-700 has-[:checked]:shadow-sm has-[:checked]:text-[#131416] dark:has-[:checked]:text-white text-[#6c737a] text-[10px] font-bold leading-normal transition-all">
+<span class="truncate">AGENDADA</span>
+<input checked="" class="invisible w-0" name="lesson-status" type="radio" value="Scheduled"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-neutral-700 has-[:checked]:shadow-sm has-[:checked]:text-[#131416] dark:has-[:checked]:text-white text-[#6c737a] text-[10px] font-bold leading-normal transition-all">
+<span class="truncate">CONCLUÍDA</span>
+<input class="invisible w-0" name="lesson-status" type="radio" value="Completed"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-neutral-700 has-[:checked]:shadow-sm has-[:checked]:text-[#131416] dark:has-[:checked]:text-white text-[#6c737a] text-[10px] font-bold leading-normal transition-all">
+<span class="truncate">CANCELADA</span>
+<input class="invisible w-0" name="lesson-status" type="radio" value="Canceled"/>
+</label>
+</div>
+<button class="w-full py-4 bg-primary/10 text-primary hover:bg-primary/20 rounded-lg font-bold flex items-center justify-center gap-2 border border-primary/20 transition-all mb-4">
+<span class="material-symbols-outlined">group_add</span>
+                                Registrar Presença
+                            </button>
+<div class="flex items-center justify-between p-4 bg-background-light dark:bg-neutral-800 rounded-lg">
+<div class="flex flex-col">
+<span class="text-xs text-neutral-500 font-medium">Alunos Presentes</span>
+<span class="text-xl font-black text-primary">12 / 20</span>
+</div>
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-white dark:border-neutral-900 bg-cover" data-alt="Student avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDfgTpPfrQwhp1FtVGS-93hnNIbBNpkPK3u5IZ-pCDNweW8SWRcbRDlgQY0bAeLg_r6bDWFoFDz940Hul3b6IOG9IYm0bBc9r5HAEAKDnTUtGLXUx1mUXO7g02bzH1HMIn0PIsNeqHSA9un1DS9vovI8bar2ZY-xhh7Lu5-UvcQ9Z2R9ekEYuG0yMvM5DHxrs5w2lyfRWpi2qD3_7FY-fMOrMb7sR9YsD9ghvQDo2zNmba1VUiBrsLfMizZ5tFpGS_CUK-nlAPi2SDQ')"></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-neutral-900 bg-cover" data-alt="Student avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA7c47jDT32ikCXDOMMqioEiliBNnLf-3PL0kY1hafoGxznaw_CucAictLKRc97vDnKzkBrOY7O-zHSqMKZvuMAiZRGt70obw-5Os9LuTOhGYqTNHeFAD_MMMAFqH0lnvKGTSXuDM02Qdf0ju1fkkKwNpHRLJNKaWGe3zo4TyTflsqilYd3kTXyz-SPcvaHxKMV1Y7hC2-8KbKTQoc8x2hZQ9jTuNIkG2I7nY2qeQxjE34gEwpdirATZB4b-5VWDFULav7xBugvcVUw')"></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-neutral-900 bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center text-[10px] font-bold">+10</div>
+</div>
+</div>
+</div>
+<div class="bg-primary text-white rounded-xl p-6 shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<div class="p-2 bg-white/20 rounded-lg">
+<span class="material-symbols-outlined text-white">military_tech</span>
+</div>
+<div>
+<p class="text-xs font-medium opacity-80 uppercase tracking-wider">Recompensa da Aula</p>
+<p class="text-lg font-bold">XP de Técnica: +15</p>
+</div>
+</div>
+<div class="w-full bg-white/20 h-2 rounded-full mb-2">
+<div class="bg-white h-full rounded-full w-[65%]"></div>
+</div>
+<p class="text-[11px] opacity-80">Conta para o requisito de 'Faixa Azul 2º Grau'</p>
+</div>
+<div class="pt-2">
+<button class="w-full flex items-center justify-center gap-2 text-red-500 text-sm font-semibold py-2 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+                                Excluir esta Sessão
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

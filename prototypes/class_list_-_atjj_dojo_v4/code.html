@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lista de Turmas - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6a7d90",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#17191b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#131416] dark:text-neutral-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 border-r border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 flex flex-col">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="bg-primary size-10 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">sports_martial_arts</span>
+</div>
+<div>
+<h1 class="text-[#131416] dark:text-white text-base font-bold leading-none">ATJJ Dojo v4</h1>
+<p class="text-primary text-xs font-medium uppercase tracking-wider mt-1">Portal Admin</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 text-[#6c737a] dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="text-sm font-semibold">Turmas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#6c737a] dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-sm font-medium">Alunos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#6c737a] dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-sm font-medium">Cronograma</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#6c737a] dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">verified</span>
+<span class="text-sm font-medium">Presença</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#6c737a] dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Configurações</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6 border-t border-neutral-200 dark:border-neutral-800">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAw-ANvR7o67Tt7lABZY3Kv0b9X5PavXCvdAA3eWCU-TXFWS3y1H2jXqvtzUVLu7SB9KpFruOp867WWtjhs_QcWWgnCODxIhZpBC92lBDbbscHfBT6pYSAiZq3KyEsr0D_4ctNMDTU55GPE1pXH8ZN9k22eZdl6skRZ40h_U3RG9DsHTRHStljiZshs93FvyFb56w3ZvJzLENG38fB2hfWkVVOHsmGHyJ7dUvIlJrnwHX4LLozzvI20J4FUw3GI9tWHz1DHJRcz3CRd");'></div>
+<div class="flex flex-col">
+<p class="text-sm font-semibold dark:text-white">Sensei Rick</p>
+<p class="text-xs text-neutral-500">Super Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-y-auto bg-background-light dark:bg-background-dark">
+<div class="px-8 pt-8 pb-4">
+<div class="flex flex-wrap justify-between items-end gap-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-[#131416] dark:text-white text-3xl font-black tracking-tight">Lista de Turmas</h2>
+<p class="text-[#6c737a] dark:text-neutral-400 text-sm">Gerencie e monitore seus grupos de treinamento de Jiu-Jitsu e capacidade.</p>
+</div>
+<button class="flex items-center justify-center gap-2 rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 transition-all">
+<span class="material-symbols-outlined">add</span>
+<span>+ Nova Turma</span>
+</button>
+</div>
+</div>
+<div class="px-8 py-4">
+<div class="bg-white dark:bg-neutral-900 p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-sm flex flex-col gap-4">
+<div class="w-full">
+<label class="flex items-center h-11 w-full bg-neutral-100 dark:bg-neutral-800 rounded-lg px-4 border border-transparent focus-within:border-primary/50 transition-all">
+<span class="material-symbols-outlined text-neutral-400">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-[#131416] dark:text-white placeholder:text-neutral-500 text-sm ml-2" placeholder="Buscar por nome da turma, instrutor ou código..."/>
+</label>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<div class="text-xs font-bold text-neutral-400 uppercase tracking-widest mr-2">Filtros:</div>
+<button class="flex h-9 items-center gap-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 px-4 text-sm font-medium border border-neutral-200 dark:border-neutral-700 hover:border-primary transition-all">
+<span class="text-[#131416] dark:text-neutral-200">Status: <span class="text-primary font-bold">Ativo</span></span>
+<span class="material-symbols-outlined text-xs">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 items-center gap-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 px-4 text-sm font-medium border border-neutral-200 dark:border-neutral-700 hover:border-primary transition-all">
+<span class="text-[#131416] dark:text-neutral-200">Nível: <span class="text-primary font-bold">Todos</span></span>
+<span class="material-symbols-outlined text-xs">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 items-center gap-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 px-4 text-sm font-medium border border-neutral-200 dark:border-neutral-700 hover:border-primary transition-all">
+<span class="text-[#131416] dark:text-neutral-200">Faixa Etária: <span class="text-primary font-bold">Adultos</span></span>
+<span class="material-symbols-outlined text-xs">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 items-center gap-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 px-4 text-sm font-medium border border-neutral-200 dark:border-neutral-700 hover:border-primary transition-all">
+<span class="text-[#131416] dark:text-neutral-200">Horário: <span class="text-primary font-bold">Dias úteis</span></span>
+<span class="material-symbols-outlined text-xs">keyboard_arrow_down</span>
+</button>
+<button class="text-primary text-sm font-bold hover:underline ml-auto pr-2">Limpar Filtros</button>
+</div>
+</div>
+</div>
+<div class="px-8 pb-8">
+<div class="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-neutral-50 dark:bg-neutral-800/50 border-bottom border-neutral-200 dark:border-neutral-800">
+<th class="px-6 py-4 text-xs font-bold text-neutral-400 uppercase tracking-widest">Nome da Turma</th>
+<th class="px-6 py-4 text-xs font-bold text-neutral-400 uppercase tracking-widest">Código</th>
+<th class="px-6 py-4 text-xs font-bold text-neutral-400 uppercase tracking-widest">Nível</th>
+<th class="px-6 py-4 text-xs font-bold text-neutral-400 uppercase tracking-widest">Faixa Etária</th>
+<th class="px-6 py-4 text-xs font-bold text-neutral-400 uppercase tracking-widest">Horário</th>
+<th class="px-6 py-4 text-xs font-bold text-neutral-400 uppercase tracking-widest">Capacidade</th>
+<th class="px-6 py-4 text-xs font-bold text-neutral-400 uppercase tracking-widest text-center">Status</th>
+<th class="px-6 py-4 text-xs font-bold text-neutral-400 uppercase tracking-widest text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-100 dark:divide-neutral-800">
+<tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-neutral-600 dark:text-neutral-400">
+<span class="material-symbols-outlined">star</span>
+</div>
+<div>
+<p class="text-sm font-bold text-[#131416] dark:text-white">Fundamentos 101</p>
+<p class="text-xs text-neutral-500">Líder: Professor Silva</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-mono font-bold px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded dark:text-neutral-300">F-101</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 px-3 py-1 bg-white border border-neutral-200 dark:bg-neutral-800 dark:border-neutral-700 rounded-full w-fit">
+<div class="w-2 h-2 rounded-full bg-white border border-neutral-300"></div>
+<span class="text-xs font-bold text-[#131416] dark:text-neutral-300">Faixa Branca</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm dark:text-neutral-400">Adultos</td>
+<td class="px-6 py-4">
+<p class="text-sm font-medium dark:text-neutral-300">Seg/Qua/Sex</p>
+<p class="text-xs text-neutral-500">18:00 - 19:30</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 min-w-[100px] h-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 75%;"></div>
+</div>
+<span class="text-xs font-bold dark:text-neutral-300">15/20</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                        Ativo
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg text-neutral-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-neutral-600 dark:text-neutral-400">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div>
+<p class="text-sm font-bold text-[#131416] dark:text-white">Avançado Sem Kimono</p>
+<p class="text-xs text-neutral-500">Líder: Coach Miller</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-mono font-bold px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded dark:text-neutral-300">NG-202</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 px-3 py-1 bg-white border border-neutral-200 dark:bg-neutral-800 dark:border-neutral-700 rounded-full w-fit">
+<div class="w-2 h-2 rounded-full bg-purple-600"></div>
+<span class="text-xs font-bold text-[#131416] dark:text-neutral-300">Faixa Roxa+</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm dark:text-neutral-400">Adultos</td>
+<td class="px-6 py-4">
+<p class="text-sm font-medium dark:text-neutral-300">Ter/Qui</p>
+<p class="text-xs text-neutral-500">19:30 - 21:00</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 min-w-[100px] h-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 45%;"></div>
+</div>
+<span class="text-xs font-bold dark:text-neutral-300">11/25</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                        Ativo
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg text-neutral-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-neutral-600 dark:text-neutral-400">
+<span class="material-symbols-outlined">child_care</span>
+</div>
+<div>
+<p class="text-sm font-bold text-[#131416] dark:text-white">Pequenos Dragões BJJ</p>
+<p class="text-xs text-neutral-500">Líder: Professor Rick</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-mono font-bold px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded dark:text-neutral-300">K-100</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 px-3 py-1 bg-white border border-neutral-200 dark:bg-neutral-800 dark:border-neutral-700 rounded-full w-fit">
+<div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+<span class="text-xs font-bold text-[#131416] dark:text-neutral-300">Faixa Amarela</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm dark:text-neutral-400">Crianças (5-10)</td>
+<td class="px-6 py-4">
+<p class="text-sm font-medium dark:text-neutral-300">Seg/Qua</p>
+<p class="text-xs text-neutral-500">16:00 - 17:00</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 min-w-[100px] h-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+<div class="h-full bg-red-500" style="width: 100%;"></div>
+</div>
+<span class="text-xs font-bold text-red-600 dark:text-red-400">20/20</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400">
+                                        Lotada
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg text-neutral-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-neutral-600 dark:text-neutral-400">
+<span class="material-symbols-outlined">military_tech</span>
+</div>
+<div>
+<p class="text-sm font-bold text-[#131416] dark:text-white">Turma de Competição</p>
+<p class="text-xs text-neutral-500">Líder: Professor Silva</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-mono font-bold px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded dark:text-neutral-300">C-303</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 px-3 py-1 bg-white border border-neutral-200 dark:bg-neutral-800 dark:border-neutral-700 rounded-full w-fit">
+<div class="w-2 h-2 rounded-full bg-blue-600"></div>
+<span class="text-xs font-bold text-[#131416] dark:text-neutral-300">Faixa Azul+</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm dark:text-neutral-400">Misto</td>
+<td class="px-6 py-4">
+<p class="text-sm font-medium dark:text-neutral-300">Sábado</p>
+<p class="text-xs text-neutral-500">10:00 - 12:00</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 min-w-[100px] h-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 20%;"></div>
+</div>
+<span class="text-xs font-bold dark:text-neutral-300">6/30</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-400">
+                                        Inativo
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg text-neutral-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 border-t border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-800/30 flex items-center justify-between">
+<p class="text-xs font-medium text-neutral-500">Mostrando 4 de 24 turmas</p>
+<div class="flex gap-2">
+<button class="flex items-center justify-center size-8 rounded border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-400 cursor-not-allowed">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="flex items-center justify-center size-8 rounded border border-primary bg-primary/10 text-primary font-bold text-xs">1</button>
+<button class="flex items-center justify-center size-8 rounded border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 hover:border-primary transition-all text-xs">2</button>
+<button class="flex items-center justify-center size-8 rounded border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 hover:border-primary transition-all text-xs">3</button>
+<button class="flex items-center justify-center size-8 rounded border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="px-8 pb-12">
+<div class="bg-gradient-to-r from-primary to-[#8fa1b2] p-6 rounded-xl text-white flex items-center justify-between shadow-lg">
+<div class="flex items-center gap-4">
+<div class="size-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+<span class="material-symbols-outlined text-2xl">workspace_premium</span>
+</div>
+<div>
+<p class="font-bold text-lg">Você sabia?</p>
+<p class="text-white/80 text-sm">As turmas com melhor desempenho este mês ganham <span class="text-white font-bold underline">Dobro de Pontos Dojo</span> para os alunos.</p>
+</div>
+</div>
+<button class="bg-white text-primary px-4 py-2 rounded-lg text-sm font-bold hover:bg-neutral-50 transition-colors">
+                    Ver Ranking
+                </button>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

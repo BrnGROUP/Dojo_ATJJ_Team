@@ -1,0 +1,432 @@
+<html class="dark" lang="pt-br"><head></head><body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white transition-colors duration-300 overflow-hidden">```html
+
+
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ATJJ Dojo v4 - Forjando Campeões</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3398db",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#0f172a",
+                        "popup-bg": "#1e293b",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(51, 152, 219, 0.2);
+        }
+        .tatame-overlay {
+            background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD8Llp9TAiYsXptM4d5CdBin3s2VNzjEX_ujqwRdSfiPDuLDx7ZmHNXeYEPm1ONHa64htKV6YGguLTnlYFrJlsC3ZYnqMsuhKsotX90pqfOlqvqU-1kv9iBjmybZXuzUC6Pf3rAN3hDTaY4zHxeaXTCUtPu7RPKlUkR6H-WtUsDAJQGo91Hnbh-3dTA4ner0OqlaRyRjhYQ9Fr2Gj9hnI1eqVN-Do72YCRXtCZbJKIsaBdfgK6DSADsXDXQ4niHQLXauWSemn7a75ST");
+            background-size: cover;
+            background-position: center;
+            opacity: 0.05;
+        }
+    </style>
+
+
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+<div class="relative w-full max-w-lg overflow-hidden rounded-3xl bg-popup-bg shadow-2xl border border-white/10">
+<div class="absolute inset-0 tatame-overlay pointer-events-none"></div>
+<div class="relative z-10 p-8 md:p-10">
+<button class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="text-center mb-8">
+<div class="inline-flex items-center justify-center size-12 rounded-full bg-primary/20 text-primary mb-4">
+<span class="material-symbols-outlined text-3xl">sports_martial_arts</span>
+</div>
+<h2 class="text-2xl md:text-3xl font-black text-white mb-3 tracking-tight">Quer treinar com a gente?</h2>
+<p class="text-slate-300 text-sm md:text-base leading-relaxed">
+                    Ganhe agora <span class="text-primary font-bold">1 Aula Experimental Grátis</span> e comece sua jornada no Jiu-Jitsu!
+                </p>
+</div>
+<form class="space-y-4" onsubmit="return false;">
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">Nome Completo</label>
+<input class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-slate-600" placeholder="Seu nome" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">WhatsApp</label>
+<input class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-slate-600" placeholder="(00) 00000-0000" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">Turma de Interesse</label>
+<select class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all appearance-none">
+<option disabled="" selected="" value="">Selecione a turma</option>
+<option value="adulto">Adulto</option>
+<option value="infantil">Infantil</option>
+</select>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-black py-4 rounded-xl shadow-lg shadow-primary/20 transition-all transform hover:scale-[1.02] active:scale-[0.98] mt-2" type="submit">
+                    Garantir minha aula grátis
+                </button>
+</form>
+<div class="mt-6 flex items-center justify-center gap-2 py-2 px-4 bg-red-500/10 rounded-full border border-red-500/20">
+<span class="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+<p class="text-red-400 text-[10px] md:text-xs font-bold uppercase tracking-widest">
+                    Vagas limitadas para esta semana
+                </p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden blur-sm pointer-events-none">
+<header class="sticky top-0 z-50 w-full border-b border-white/10 bg-background-dark/80 backdrop-blur-md px-6 md:px-20 py-4">
+<div class="max-w-[1200px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-xl font-black tracking-tight uppercase">ATJJ <span class="text-primary">Dojo</span></h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#modalidades">Modalidades</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#diferenciais">Diferenciais</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#mural">Comunidade</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#planos">Planos</a>
+</nav>
+<button class="bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-6 rounded-lg transition-all">
+                    Matricule-se Agora
+                </button>
+</div>
+</header>
+<section class="relative w-full pt-10 pb-20 px-6 md:px-20">
+<div class="max-w-[1200px] mx-auto">
+<div class="relative overflow-hidden rounded-2xl aspect-[21/9] md:aspect-[2.4/1] flex items-center p-8 md:p-16 shadow-2xl">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Intense Jiu-Jitsu training session in dark dojo" style='background-image: linear-gradient(to right, rgba(15, 23, 42, 0.95) 30%, rgba(15, 23, 42, 0.4) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuD8Llp9TAiYsXptM4d5CdBin3s2VNzjEX_ujqwRdSfiPDuLDx7ZmHNXeYEPm1ONHa64htKV6YGguLTnlYFrJlsC3ZYnqMsuhKsotX90pqfOlqvqU-1kv9iBjmybZXuzUC6Pf3rAN3hDTaY4zHxeaXTCUtPu7RPKlUkR6H-WtUsDAJQGo91Hnbh-3dTA4ner0OqlaRyRjhYQ9Fr2Gj9hnI1eqVN-Do72YCRXtCZbJKIsaBdfgK6DSADsXDXQ4niHQLXauWSemn7a75ST");'></div>
+<div class="relative z-10 max-w-2xl flex flex-col gap-6">
+<h1 class="text-4xl md:text-6xl font-black leading-tight tracking-tight text-white">
+                            ATJJ Dojo - <span class="text-primary">Forjando Campeões</span>
+</h1>
+<p class="text-slate-300 text-lg md:text-xl font-light leading-relaxed">
+                            Descubra os benefícios do Jiu-Jitsu: disciplina, condicionamento físico e uma comunidade focada em evolução constante. Treine com os melhores.
+                        </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-transform">
+                                Agende uma Aula Experimental Grátis
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-20 px-6 md:px-20 bg-slate-900/50" id="diferenciais">
+<div class="max-w-[1200px] mx-auto">
+<div class="mb-12">
+<h2 class="text-primary font-bold tracking-widest uppercase text-sm mb-2">Por que nós?</h2>
+<h3 class="text-3xl md:text-4xl font-black">Nossos Diferenciais</h3>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="glass-card p-6 rounded-xl flex flex-col gap-4 group hover:border-primary transition-colors">
+<div class="size-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+<h4 class="text-xl font-bold">Metodologia Própria</h4>
+<p class="text-slate-400 text-sm leading-relaxed">Treinos estruturados cientificamente para acelerar o aprendizado em todos os níveis.</p>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col gap-4 group hover:border-primary transition-colors">
+<div class="size-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">psychology</span>
+</div>
+<h4 class="text-xl font-bold">Instrutores Qualificados</h4>
+<p class="text-slate-400 text-sm leading-relaxed">Faixas pretas certificados internacionalmente com foco em pedagogia marcial.</p>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col gap-4 group hover:border-primary transition-colors">
+<div class="size-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">diversity_3</span>
+</div>
+<h4 class="text-xl font-bold">Ambiente Familiar</h4>
+<p class="text-slate-400 text-sm leading-relaxed">Um espaço de respeito mútuo onde todos crescem juntos, da criança ao adulto.</p>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col gap-4 group hover:border-primary transition-colors">
+<div class="size-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">sports_esports</span>
+</div>
+<h4 class="text-xl font-bold">Sistema Gamificado</h4>
+<p class="text-slate-400 text-sm leading-relaxed">Acompanhe sua frequência, metas e graduação através do nosso ranking exclusivo.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-20 px-6 md:px-20" id="modalidades">
+<div class="max-w-[1200px] mx-auto">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="text-primary font-bold tracking-widest uppercase text-sm mb-2">Treinos</h2>
+<h3 class="text-3xl md:text-4xl font-black">Nossas Modalidades</h3>
+</div>
+<p class="hidden md:block text-slate-400 max-w-xs text-right">Programas específicos desenvolvidos para cada faixa etária e objetivo pessoal.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="group relative overflow-hidden rounded-2xl aspect-[3/4] shadow-xl cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Adult Jiu Jitsu class focused on technique" style='background-image: linear-gradient(to top, rgba(15,23,42,1) 0%, rgba(15,23,42,0) 60%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAOd7QlN5NsnOgEXAAfdW3p7IV9cK1xkuhEv4C8qDv1VzyhFUcVH-7VgQHGOSKbiwspyJ_BJstHNq_KHlG8vGeVOCTKgxO8ky8PsU-89qEElfIlD94DYcPnvVdsKrWw253eBNUdEAqvAXTG73VbCePG_3GOpSafmvG4JxDQulokkc6vK0uomZ4v4QVUH8RWeeelcJLQ3MMe_cDnxxzp7Phf2b1HQIYrqZSLBRvXXVDnp6o6DzRzpunIb6Pma74rhJJVtzQPHAz6DCQO");'></div>
+<div class="absolute bottom-0 left-0 p-6">
+<h4 class="text-xl font-bold mb-2">Jiu-Jitsu Adulto</h4>
+<p class="text-slate-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity">Foco em técnica, defesa pessoal e competição.</p>
+</div>
+</div>
+<div class="group relative overflow-hidden rounded-2xl aspect-[3/4] shadow-xl cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Kids Jiu Jitsu class showing discipline and fun" style='background-image: linear-gradient(to top, rgba(15,23,42,1) 0%, rgba(15,23,42,0) 60%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAyr4CzwVmGxsYWsofgJtAMRQmDkG3n4x8hMgBGbLYYpdphmKh_dO3K6TT8poN8zvbnbMg3Tu7dzECGunIaiG-a49dRaxENZxfif3t-rE8ZvBu0pO1NzuzEIz80hOEWUW-Sufhdbz54qj5otDFOmj8SbpcuKoM-aWGKeUek4z1tkaOxkkEs0OykdfeRqHv5dvWYrs6HA_fC6qCsPyt_jJmLCuNgJjNyQOj9M0ObNySTNQu4s1NmB9sZ6TBjOroPwopFs6QTEwPXTQT");'></div>
+<div class="absolute bottom-0 left-0 p-6">
+<h4 class="text-xl font-bold mb-2">Jiu-Jitsu Infantil</h4>
+<p class="text-slate-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity">Coordenação motora, disciplina e anti-bullying.</p>
+</div>
+</div>
+<div class="group relative overflow-hidden rounded-2xl aspect-[3/4] shadow-xl cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="No-Gi training session without kimono" style='background-image: linear-gradient(to top, rgba(15,23,42,1) 0%, rgba(15,23,42,0) 60%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDpz4fTEMiOIYhZ9x_IWcM7xLY-4-KedSEzySTw7GFjB8McK4of-z0cl03lkqLSfL4Hv63L8UAgjni-p9pH_BhvJB1g_3DPNFAENxPQRHSDCq3z3SYN9MyrOfIWB-LynfqP_OU30A-tEOxfA8s2Sw2aUVuEdDJE0QFhPysnzzjUT8A6wD6McGVYWe52aPHye9Ip6COBQAHmjNI5ofDKuTR3_7rJ1B-iLvMemSBrYSfln6BrTahu7LumwZsi4f0oMgLfRxIBlZdAD3Bd");'></div>
+<div class="absolute bottom-0 left-0 p-6">
+<h4 class="text-xl font-bold mb-2">No-Gi</h4>
+<p class="text-slate-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity">Treino dinâmico sem kimono para agilidade e gás.</p>
+</div>
+</div>
+<div class="group relative overflow-hidden rounded-2xl aspect-[3/4] shadow-xl cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Self defense class for safety and confidence" style='background-image: linear-gradient(to top, rgba(15,23,42,1) 0%, rgba(15,23,42,0) 60%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuC0EItT3BgVYp-YGH8VmDC-gseirb05EC-jMTu9Bf4UMZmqm7YOkdaHAxhS9Bb0Jxa1mTuRi2jVX2AUwmF9p0DZESwaRIkjRjwDYRgiyEOgSzlShsjY9xDoilGRFPCDTkDxPv29tHX8oEbh0PNqYbuGyP9ZdEwLuwYHTTgKIyqlmKWeBayLfe4JThqeWp3HRf53BeS-1xP2Xi49X_O9y9K9TOllRuxIEaSdZRhy7SsSOWL0mLjjsKUij5pFylmopbSddQ5a3em5CpXw");'></div>
+<div class="absolute bottom-0 left-0 p-6">
+<h4 class="text-xl font-bold mb-2">Defesa Pessoal</h4>
+<p class="text-slate-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity">Técnicas reais para situações do cotidiano.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-20 px-6 md:px-20 bg-slate-900/50" id="mural">
+<div class="max-w-[1200px] mx-auto">
+<div class="text-center mb-16">
+<h2 class="text-primary font-bold tracking-widest uppercase text-sm mb-2">Nossa Comunidade</h2>
+<h3 class="text-3xl md:text-5xl font-black mb-4">Mural de Destaques</h3>
+<p class="text-slate-400 max-w-2xl mx-auto">Celebrando o esforço e a evolução dos nossos guerreiros. Conheça os destaques do mês.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-end">
+<div class="glass-card p-8 rounded-2xl flex flex-col items-center gap-4 order-2 lg:order-1 lg:h-[350px] relative">
+<div class="absolute -top-4 bg-slate-700 text-white text-xs font-bold px-3 py-1 rounded-full">#2 Ranking</div>
+<div class="size-24 rounded-full border-4 border-slate-500 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Student profile second place" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJnWUVR-vOL5hsppkcAnj6zmhWb-83aYexSjmbpPMcueHsEThLeFUC7NiMCOnrHzoVBusebivK3QPXwyjIlz0Xkd_VodrIR0kUGpLSdH807vI91soBtS5-lnqroT_Rl_V3RAegeYKVEtvJnHvbx0E9NjPrVi7xxAK6lrTJBNlQ7uBpDjkpsDUVihVAhnA49qH8hetpbOV2jpKj27RaBg9iSRtAfsOjqzXHUdCo4kXIsj9aiRi8yQLl7efowOiUJv42hoFOIYiLcrdf"/>
+</div>
+<div class="text-center">
+<h4 class="text-xl font-bold">Marcos Silva</h4>
+<p class="text-slate-400">Faixa Azul - 2400 pts</p>
+</div>
+<span class="text-primary text-xs font-medium bg-primary/10 px-3 py-1 rounded-full">Destaque Técnico</span>
+</div>
+<div class="bg-primary/10 border-2 border-primary p-8 rounded-2xl flex flex-col items-center gap-6 order-1 lg:order-2 lg:h-[420px] relative shadow-[0_0_30px_rgba(51,152,219,0.2)]">
+<div class="absolute -top-6 bg-primary text-white text-sm font-bold px-4 py-2 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">stars</span> #1 Ranking
+                        </div>
+<div class="size-32 rounded-full border-4 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Student profile first place" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtC7mhbMGeHyVcKAeGzxLaQwSsDAIaRtItxonhL-XfF2L8WGtOto5sm2-ebXKcUQGcYDOo2-v_7PTOqBqOBoU8Bias4MSOzpjZyFZnC8dd-cnOOpZIIhdLdvbd3mEpGJPtnMjFfkePV36EYAwwsnxeUV56wQKs9xU8IIIEG-aqp4ZcmjK9-wtZDzclKy8_wYrqS2fBywXCETFrN0HeYzHw9RNSPju-5xmAZZyjrd4X2xXtuYcKWLGuyOL96Z1c7E38gG8i4J_1ueKP"/>
+</div>
+<div class="text-center">
+<h4 class="text-2xl font-black">Ricardo J.</h4>
+<p class="text-primary font-bold">Faixa Roxa - 3150 pts</p>
+</div>
+<div class="flex gap-2">
+<span class="bg-primary text-white text-xs font-bold px-3 py-1 rounded">100% Frequência</span>
+</div>
+</div>
+<div class="glass-card p-8 rounded-2xl flex flex-col items-center gap-4 order-3 lg:h-[320px] relative">
+<div class="absolute -top-4 bg-slate-800 text-white text-xs font-bold px-3 py-1 rounded-full">#3 Ranking</div>
+<div class="size-24 rounded-full border-4 border-amber-800 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Student profile third place" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ3n8D3mvTBUmgU3JIbpPfLbX7ZZlsr-VIQZf785A08i8RJJPFzXJ1eu77-klJLhSxRQh-5247OMhxrIhyNzCXJeb2TMhezo2E7j6RrSXekJarhnKHitsCcNeKrR-07k2Ul3Wp-AlwDnopB6if6ECRL9Hi4qC3HOZygr_x4-TW33Cr5fABr6ehyVA0rG_MVzMRIIeINZKIgwk0XyOmR3iDIw3kbuXxETYv9j2R-N774HFvldYkulDVKQg7j6MSMWW2aI5iVK2_zlqS"/>
+</div>
+<div class="text-center">
+<h4 class="text-xl font-bold">Ana Costa</h4>
+<p class="text-slate-400">Faixa Branca - 2100 pts</p>
+</div>
+<span class="text-primary text-xs font-medium bg-primary/10 px-3 py-1 rounded-full">Novo Graduado</span>
+</div>
+</div>
+</div>
+</section>
+<section class="py-20 px-6 md:px-20" id="planos">
+<div class="max-w-[1000px] mx-auto">
+<div class="text-center mb-16">
+<h2 class="text-primary font-bold tracking-widest uppercase text-sm mb-2">Investimento</h2>
+<h3 class="text-3xl md:text-5xl font-black">Nossos Planos</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="glass-card p-10 rounded-2xl flex flex-col gap-8 hover:bg-slate-800 transition-colors">
+<div>
+<h4 class="text-2xl font-bold mb-2">Mensal</h4>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-black">R$ 197</span>
+<span class="text-slate-400">/mês</span>
+</div>
+</div>
+<ul class="flex flex-col gap-4 text-slate-300">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+                                Acesso a todas as modalidades
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+                                Sem fidelidade
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+                                Aplicativo de acompanhamento
+                            </li>
+</ul>
+<button class="w-full py-4 border-2 border-primary text-primary font-bold rounded-xl hover:bg-primary hover:text-white transition-all">
+                            Selecionar Mensal
+                        </button>
+</div>
+<div class="bg-primary p-10 rounded-2xl flex flex-col gap-8 relative overflow-hidden shadow-2xl">
+<div class="absolute -right-10 -top-10 size-40 bg-white/10 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-2">
+<h4 class="text-2xl font-bold text-white">Trimestral</h4>
+<span class="bg-white text-primary text-xs font-black px-3 py-1 rounded-full uppercase">Melhor Valor</span>
+</div>
+<div class="flex items-baseline gap-1 text-white">
+<span class="text-4xl font-black">R$ 157</span>
+<span class="opacity-80">/mês*</span>
+</div>
+</div>
+<ul class="flex flex-col gap-4 text-white/90 relative z-10">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined">check_circle</span>
+                                Tudo do plano Mensal
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined">check_circle</span>
+                                Desconto exclusivo no Kimono
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined">check_circle</span>
+                                1 Seminário técnico grátis
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined">check_circle</span>
+                                Prioridade em eventos
+                            </li>
+</ul>
+<button class="w-full py-4 bg-white text-primary font-black rounded-xl hover:scale-105 transition-transform relative z-10">
+                            Matricule-se Agora
+                        </button>
+</div>
+</div>
+<p class="text-center text-slate-500 text-xs mt-8">*Valor total de R$ 471,00 cobrado no ato ou parcelado.</p>
+</div>
+</section>
+<section class="py-20 px-6 md:px-20 bg-slate-900/50">
+<div class="max-w-[1200px] mx-auto">
+<div class="text-center mb-16">
+<h3 class="text-3xl font-black">O que dizem nossos alunos</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="glass-card p-8 rounded-xl italic text-slate-300 relative">
+<span class="material-symbols-outlined absolute top-4 right-4 text-primary opacity-30 text-4xl">format_quote</span>
+                        "A ATJJ mudou a forma como eu lido com desafios. O ambiente é acolhedor e os professores são extremamente técnicos. Melhor decisão que tomei este ano."
+                        <div class="flex items-center gap-4 mt-8 not-italic">
+<img class="size-12 rounded-full object-cover" data-alt="Female student testimonial portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9xAF71-jJrp5hMU_YjiNXpA5MJLXiAp2YW0D9RPeQqPTA_BLATiHcXt-cWKJrr0GkPp3MKRioFuAhTeqolXVlZ5FWGMu_VsP2GwM6N691Tgr0lx_BlzeN4rHm1svZxrCgeg0osRmB_XlJgiE9Qu9goyFyA0kN1JvtV6OECqGNSKvvb9T3ihPwHhCY_voBv-XWHiKkJ-aFR3KE9dUt1y9kyl4MHPRPNoGOTCzSWqDotaYODrcLEO-YcFjBPgA0YCwfS0dXV8nd5NV9"/>
+<div>
+<p class="font-bold text-white">Juliana M.</p>
+<p class="text-xs text-slate-500 text-primary">Aluna há 2 anos</p>
+</div>
+</div>
+</div>
+<div class="glass-card p-8 rounded-xl italic text-slate-300 relative border-primary/40">
+<span class="material-symbols-outlined absolute top-4 right-4 text-primary opacity-30 text-4xl">format_quote</span>
+                        "Coloquei meu filho no Jiu-Jitsu Infantil e a evolução na disciplina e foco dele na escola foi nítida em poucos meses. Recomendo para todos os pais."
+                        <div class="flex items-center gap-4 mt-8 not-italic">
+<img class="size-12 rounded-full object-cover" data-alt="Parent testimonial portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBORsn9iKHSrpV1DWKY3egaLkhHMca_dvBfTxPvvzEHjrhDYXM-NGa4tmO33d9cXBNanVbvuc5H9mFieBHNztFLcJD3VXP0tFWinbFzGuoq0A9hzMV0Gjqee7Aatm_e_f64fVlb2mANrfeu8WaPdQxSpSI8kzrmjGxQB287PL4FE5kTq-T29-KDh8L4_mqU7NqRVxzpi1NPpOlMZ9xISjfABJ-mHRMym_YhPWzJoPvOBlbYDi_h54-eiV055rejkNtcJDm7ejSttOXy"/>
+<div>
+<p class="font-bold text-white">Pedro Santos</p>
+<p class="text-xs text-slate-500 text-primary">Pai de aluno</p>
+</div>
+</div>
+</div>
+<div class="glass-card p-8 rounded-xl italic text-slate-300 relative">
+<span class="material-symbols-outlined absolute top-4 right-4 text-primary opacity-30 text-4xl">format_quote</span>
+                        "A metodologia é o diferencial. Como profissional da área de TI, o sistema gamificado me mantém motivado a buscar a próxima graduação constantemente."
+                        <div class="flex items-center gap-4 mt-8 not-italic">
+<img class="size-12 rounded-full object-cover" data-alt="Male student testimonial portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNVRZMPOQBrXkWVU-RXEGlfkRqrrDaemReYQUWiZo0cmMBc4rxEskrfAao3ESjP_Asn8ZTRX2dskp8JDc7Z63uLzGcvglsJOkq1m484eZRrDOOedOejT74WPGtcOfYYPmbaQotTMTvlWbY1WLDgZjaK4Fcxmh-QEYz3SfGyh2j0cmt3gMzUdXj7lFGuTsFcPMSYCiMQrbJafwHjEhRz2c3yjrpkB8UiMorVoephH5WNZY141wMTeLdclfEISuRVW55WL_fQmU7dMcG"/>
+<div>
+<p class="font-bold text-white">Fábio Lima</p>
+<p class="text-xs text-slate-500 text-primary">Faixa Marrom</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer class="bg-slate-950 pt-20 pb-10 px-6 md:px-20 border-t border-white/5">
+<div class="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-16 mb-16">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-xl font-black tracking-tight uppercase">ATJJ <span class="text-primary">Dojo</span></h2>
+</div>
+<p class="text-slate-400 text-sm leading-relaxed">
+                        Referência em Jiu-Jitsu de alto nível. Focados em transformar vidas através da disciplina e da técnica.
+                    </p>
+<div class="flex gap-4">
+<a class="size-10 rounded-lg bg-slate-900 flex items-center justify-center text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">share</span>
+</a>
+<a class="size-10 rounded-lg bg-slate-900 flex items-center justify-center text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">video_library</span>
+</a>
+<a class="size-10 rounded-lg bg-slate-900 flex items-center justify-center text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">alternate_email</span>
+</a>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<h4 class="text-lg font-bold">Localização</h4>
+<div class="rounded-xl overflow-hidden h-40 bg-slate-800 relative">
+<div class="absolute inset-0 bg-cover bg-center grayscale opacity-60" data-alt="Map showing dojo location" data-location="Sao Paulo, Brazil" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAzgPWWLJ0HqLxwio5Ggd3kDlgFt5bIBm9zKioTg3VF_Sg2wgYQRdvmSJ10fUXiZGPgLXrEvm4G-6nNjqI3y5q2oabkCkNEoZJ4As91GBd6rrBs89IvhRCVFIOXQLanc8QsLvNIYQVlES5mVs2SSh44sSazsJJ-qvfkEZ9BqJ_xrG-vGuCqy3FO7Pg-UvYqcK_hnO5kJrcpXrUGhbiQ4POyEDVAwfD_qdEqt2WgnMqpVVW-gTY0gZ9qMgAwqUTe3cvrNdtgc1tcYw8C");'></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-4xl">location_on</span>
+</div>
+</div>
+<p class="text-slate-400 text-sm">Rua das Artes Suaves, 123 - Centro<br/>São Paulo, SP - CEP 01234-567</p>
+</div>
+<div class="flex flex-col gap-6">
+<h4 class="text-lg font-bold">Novidades</h4>
+<p class="text-slate-400 text-sm">Inscreva-se para receber dicas de treino e avisos de graduação.</p>
+<div class="flex gap-2">
+<input class="bg-slate-900 border-none rounded-lg flex-1 text-sm focus:ring-primary" placeholder="Seu melhor e-mail" type="email"/>
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-bold text-sm">OK</button>
+</div>
+<p class="text-slate-500 text-xs">WhatsApp: (11) 98765-4321</p>
+</div>
+</div>
+<div class="max-w-[1200px] mx-auto pt-8 border-t border-white/5 flex flex-col md:row justify-between items-center gap-4">
+<p class="text-slate-600 text-xs text-center">© 2024 ATJJ Dojo - Todos os direitos reservados. Design by Premium SaaS UI.</p>
+<div class="flex gap-6 text-slate-600 text-xs">
+<a class="hover:text-primary" href="#">Termos de Uso</a>
+<a class="hover:text-primary" href="#">Privacidade</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

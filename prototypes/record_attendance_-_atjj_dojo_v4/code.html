@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Registrar Presença - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6a7d90",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#17191b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        :root {
+            --checkbox-tick-svg: url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(250,250,250)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3cpath d=%27M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z%27/%3e%3c/svg%3e');
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#ecedee] dark:border-b-neutral-800 px-10 py-3 bg-white dark:bg-neutral-900">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-[#131416] dark:text-white">
+<div class="size-6 text-primary">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-[#131416] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">ATJJ Dojo v4</h2>
+</div>
+<label class="flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-[#6c737a] flex border-none bg-[#ecedee] dark:bg-neutral-800 items-center justify-center pl-4 rounded-l-lg" data-icon="search">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#131416] dark:text-white focus:outline-0 focus:ring-0 border-none bg-[#ecedee] dark:bg-neutral-800 focus:border-none h-full placeholder:text-[#6c737a] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Buscar alunos..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-[#131416] dark:text-neutral-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Painel</a>
+<a class="text-primary text-sm font-bold leading-normal border-b-2 border-primary" href="#">Turmas</a>
+<a class="text-[#131416] dark:text-neutral-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Alunos</a>
+<a class="text-[#131416] dark:text-neutral-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Agenda</a>
+<a class="text-[#131416] dark:text-neutral-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Relatórios</a>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="User profile avatar of instructor" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCKLFE8jJnCacEfpjfODK6v55k4hRO0wNgmTnPVNLi1E00Nv7sYUwgoeLkN6eDiUhMMSjKfWALvLSP_h5_X91J4tY_jrhRVnT0NfV4fW7P6Q80lRks3pYEC0iqWpLDM1q_zCpkcXqKeaMzENNU9GDpoy7F8tp9RcfAeAQb4GzaG52iqq0mEgiTTe4ufa1BQEx_Mo6ES4GYckE2SVkKB0_-VeXEOlCOUrT9lopKG5bAZBQwZNsQ8dYtOtAaS0698uCw2s9HsfWwpQtTk");'></div>
+</div>
+</header>
+<main class="flex-1 flex flex-col px-4 md:px-20 lg:px-40 py-5">
+<div class="layout-content-container flex flex-col max-w-[1200px] w-full mx-auto">
+<div class="flex flex-wrap gap-2 py-2">
+<a class="text-[#6c737a] hover:text-primary text-sm font-medium leading-normal" href="#">Turmas</a>
+<span class="text-[#6c737a] text-sm font-medium leading-normal">/</span>
+<a class="text-[#6c737a] hover:text-primary text-sm font-medium leading-normal" href="#">Fundamentos Out 24</a>
+<span class="text-[#6c737a] text-sm font-medium leading-normal">/</span>
+<span class="text-[#131416] dark:text-white text-sm font-bold leading-normal">Registro de Presença</span>
+</div>
+<div class="flex flex-wrap justify-between items-end gap-3 py-6">
+<div class="flex min-w-72 flex-col gap-1">
+<p class="text-[#131416] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Registro de Presença</p>
+<p class="text-primary font-medium text-lg">Turma de Fundamentos • 24 de Out, 2023</p>
+<p class="text-[#6c737a] text-base font-normal leading-normal">Tópico de hoje: <span class="text-[#131416] dark:text-neutral-200 font-semibold italic">Raspagem de Tesoura &amp; Reposição de Guarda</span></p>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="material-symbols-outlined mr-2 text-lg">check_circle</span>
+<span class="truncate">Marcar Todos</span>
+</button>
+</div>
+<div class="py-3 @container">
+<div class="flex overflow-hidden rounded-xl border border-[#d9dbdd] dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm">
+<table class="flex-1 border-collapse">
+<thead>
+<tr class="bg-neutral-50 dark:bg-neutral-800/50 border-b border-[#d9dbdd] dark:border-neutral-700">
+<th class="px-6 py-4 text-left text-[#131416] dark:text-neutral-200 text-sm font-bold leading-normal">Nome do Aluno</th>
+<th class="px-6 py-4 text-left text-[#131416] dark:text-neutral-200 text-sm font-bold leading-normal">Faixa</th>
+<th class="px-6 py-4 text-center text-[#131416] dark:text-neutral-200 text-sm font-bold leading-normal">Presença</th>
+<th class="px-6 py-4 text-right text-[#131416] dark:text-neutral-200 text-sm font-bold leading-normal">XP Atribuído</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-100 dark:divide-neutral-800">
+<tr class="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">JD</div>
+<span class="text-[#131416] dark:text-neutral-200 text-sm font-semibold">João Silva</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-neutral-100 text-neutral-800 border border-neutral-300">BRANCA</span>
+</td>
+<td class="px-6 py-4 text-center">
+<input checked="" class="h-6 w-6 rounded border-primary border-2 bg-transparent text-primary checked:bg-primary checked:border-primary checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:outline-none cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end items-center gap-2">
+<input class="w-16 h-9 rounded-lg border-[#d9dbdd] dark:border-neutral-700 dark:bg-neutral-800 text-right font-bold text-primary focus:ring-primary focus:border-primary" type="number" value="10"/>
+<span class="text-xs font-bold text-[#6c737a]">XP</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">JS</div>
+<span class="text-[#131416] dark:text-neutral-200 text-sm font-semibold">Joana Santos</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-600 text-white shadow-sm">AZUL</span>
+</td>
+<td class="px-6 py-4 text-center">
+<input checked="" class="h-6 w-6 rounded border-primary border-2 bg-transparent text-primary checked:bg-primary checked:border-primary checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:outline-none cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end items-center gap-2">
+<input class="w-16 h-9 rounded-lg border-[#d9dbdd] dark:border-neutral-700 dark:bg-neutral-800 text-right font-bold text-primary focus:ring-primary focus:border-primary" type="number" value="10"/>
+<span class="text-xs font-bold text-[#6c737a]">XP</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">MR</div>
+<span class="text-[#131416] dark:text-neutral-200 text-sm font-semibold">Miguel Rocha</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-purple-700 text-white shadow-sm">ROXA</span>
+</td>
+<td class="px-6 py-4 text-center">
+<input class="h-6 w-6 rounded border-primary border-2 bg-transparent text-primary checked:bg-primary checked:border-primary checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:outline-none cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end items-center gap-2 opacity-50">
+<input class="w-16 h-9 rounded-lg border-[#d9dbdd] dark:border-neutral-700 dark:bg-neutral-800 text-right font-bold text-primary focus:ring-primary focus:border-primary" type="number" value="0"/>
+<span class="text-xs font-bold text-[#6c737a]">XP</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">SC</div>
+<span class="text-[#131416] dark:text-neutral-200 text-sm font-semibold">Sara Costa</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-neutral-100 text-neutral-800 border border-neutral-300">BRANCA</span>
+</td>
+<td class="px-6 py-4 text-center">
+<input checked="" class="h-6 w-6 rounded border-primary border-2 bg-transparent text-primary checked:bg-primary checked:border-primary checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:outline-none cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end items-center gap-2">
+<input class="w-16 h-9 rounded-lg border-[#d9dbdd] dark:border-neutral-700 dark:bg-neutral-800 text-right font-bold text-primary focus:ring-primary focus:border-primary" type="number" value="15"/>
+<span class="text-xs font-bold text-[#6c737a]">XP</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">HS</div>
+<span class="text-[#131416] dark:text-neutral-200 text-sm font-semibold">Henrique Souza</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-900 text-white shadow-sm">MARROM</span>
+</td>
+<td class="px-6 py-4 text-center">
+<input checked="" class="h-6 w-6 rounded border-primary border-2 bg-transparent text-primary checked:bg-primary checked:border-primary checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:outline-none cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end items-center gap-2">
+<input class="w-16 h-9 rounded-lg border-[#d9dbdd] dark:border-neutral-700 dark:bg-neutral-800 text-right font-bold text-primary focus:ring-primary focus:border-primary" type="number" value="10"/>
+<span class="text-xs font-bold text-[#6c737a]">XP</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="flex justify-stretch mt-6 mb-10">
+<div class="flex flex-1 gap-4 flex-wrap justify-end">
+<button class="flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-[#ecedee] dark:bg-neutral-800 text-[#131416] dark:text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-[#d9dbdd] transition-colors">
+<span class="truncate">Cancelar</span>
+</button>
+<button class="flex min-w-[160px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-100 transition-all">
+<span class="material-symbols-outlined mr-2">save</span>
+<span class="truncate">Salvar Presenças</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<div class="sticky bottom-0 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 px-10 py-4 flex justify-between items-center z-10">
+<div class="flex gap-6">
+<div class="flex flex-col">
+<span class="text-xs text-[#6c737a] uppercase font-bold tracking-wider">Total Presente</span>
+<span class="text-xl font-black text-primary">4 / 5 Alunos</span>
+</div>
+<div class="flex flex-col border-l border-neutral-200 dark:border-neutral-700 pl-6">
+<span class="text-xs text-[#6c737a] uppercase font-bold tracking-wider">Total de XP a atribuir</span>
+<span class="text-xl font-black text-primary">45 XP</span>
+</div>
+</div>
+<p class="text-sm text-[#6c737a] hidden md:block italic">
+                    Todos os dados são salvos localmente. Clique em "Salvar" para sincronizar com a Nuvem Dojo.
+                </p>
+</div>
+</div>
+</div>
+
+</body></html>

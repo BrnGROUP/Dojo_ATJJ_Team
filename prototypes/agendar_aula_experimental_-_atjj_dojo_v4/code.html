@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agendar Aula Experimental - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3398db",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#0f172a",
+                        "card-dark": "#1e293b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Side Navigation -->
+<aside class="w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark hidden lg:flex flex-col">
+<div class="p-6 flex flex-col h-full">
+<div class="flex items-center gap-3 mb-10">
+<div class="bg-primary rounded-lg size-10 flex items-center justify-center text-white shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">sports_martial_arts</span>
+</div>
+<div>
+<h1 class="text-white text-lg font-bold leading-none">ATJJ Dojo v4</h1>
+<p class="text-slate-500 text-xs font-medium uppercase tracking-wider mt-1">Management</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-lg border border-primary/20" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-sm font-medium">Agenda</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-sm font-medium">Financeiro</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Configurações</span>
+</a>
+</nav>
+<div class="pt-6 border-t border-slate-800 mt-auto">
+<div class="flex items-center gap-3 px-2">
+<div class="size-10 rounded-full bg-slate-700 overflow-hidden">
+<img alt="Avatar do usuário" data-alt="User profile avatar circle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpsmr0SV5KhnlnhF22t8CwkrDHZKa9Ckd1J5fBWKUDTML-d9XmpOQU4cftLxf35SYtI1E04l_0isirqoSqLZfBZbggGUdPzr--A94eNghqnULY0JaoCW2Y-_va8XB2cP9NyusVvG88SrgcwqbnFSki8-pB2CjnWZABi1WRzkbTWmAZJJ6Phgs-gN5WEcDCuj-5_NWhlsWcC7sXmTDx44xfZsNnbu4iSuhbrlDVU4sa1Gep1NqiflJfw-sOtU-oEtivkBVGyuCN7lQZ"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-white truncate">Prof. Anderson</p>
+<p class="text-xs text-slate-500 truncate">Admin Principal</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-background-light dark:bg-background-dark">
+<!-- Breadcrumbs & Header -->
+<header class="border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-background-dark/50 backdrop-blur-md sticky top-0 z-10">
+<div class="max-w-6xl mx-auto px-6 py-4">
+<nav class="flex items-center gap-2 text-sm font-medium text-slate-500 mb-2">
+<a class="hover:text-primary transition-colors" href="#">Leads</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-slate-900 dark:text-white">Novo Agendamento</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col">
+<h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Agendar Aula Experimental</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-slate-500 text-sm">Lead: <strong class="text-slate-700 dark:text-slate-300">João Silva</strong></span>
+<span class="w-1 h-1 bg-slate-600 rounded-full"></span>
+<a class="text-primary text-sm font-medium hover:underline flex items-center gap-1" href="#">
+                                    +55 (11) 99999-9999
+                                </a>
+</div>
+</div>
+<div>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 text-amber-500 text-xs font-bold border border-amber-500/20 uppercase tracking-wider">
+<span class="size-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                                Agendamento em Aberto
+                            </span>
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-6 scrollbar-hide">
+<div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Form Columns -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Step 1: Calendar Selection -->
+<section class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
+<div class="size-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold">1</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Selecione a Data</h3>
+</div>
+<div class="p-6">
+<!-- Calendar Grid Component -->
+<div class="max-w-md mx-auto">
+<div class="flex items-center justify-between mb-6">
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500 transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<span class="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-widest">Outubro 2023</span>
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500 transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-7 gap-2 mb-2">
+<div class="text-center text-xs font-bold text-slate-500 py-2">DOM</div>
+<div class="text-center text-xs font-bold text-slate-500 py-2">SEG</div>
+<div class="text-center text-xs font-bold text-slate-500 py-2">TER</div>
+<div class="text-center text-xs font-bold text-slate-500 py-2">QUA</div>
+<div class="text-center text-xs font-bold text-slate-500 py-2">QUI</div>
+<div class="text-center text-xs font-bold text-slate-500 py-2">SEX</div>
+<div class="text-center text-xs font-bold text-slate-500 py-2">SAB</div>
+</div>
+<div class="grid grid-cols-7 gap-2">
+<!-- Days Placeholder -->
+<div class="aspect-square flex items-center justify-center text-slate-700 text-sm font-medium cursor-not-allowed opacity-30">24</div>
+<div class="aspect-square flex items-center justify-center text-slate-700 text-sm font-medium cursor-not-allowed opacity-30">25</div>
+<div class="aspect-square flex items-center justify-center text-slate-700 text-sm font-medium cursor-not-allowed opacity-30">26</div>
+<div class="aspect-square flex items-center justify-center text-slate-700 text-sm font-medium cursor-not-allowed opacity-30">27</div>
+<div class="aspect-square flex items-center justify-center text-slate-700 text-sm font-medium cursor-not-allowed opacity-30">28</div>
+<div class="aspect-square flex items-center justify-center text-slate-700 text-sm font-medium cursor-not-allowed opacity-30">29</div>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">1</button>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">2</button>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">3</button>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">4</button>
+<button class="aspect-square flex items-center justify-center bg-primary text-white text-sm font-bold rounded-lg shadow-lg shadow-primary/30 transform scale-110">5</button>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">6</button>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">7</button>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">8</button>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">9</button>
+<!-- More days... -->
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">10</button>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">11</button>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">12</button>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">13</button>
+<button class="aspect-square flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm font-medium hover:bg-slate-800 rounded-lg transition-colors">14</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Step 2: Time Selection -->
+<section class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
+<div class="size-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold">2</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Escolha o Horário</h3>
+</div>
+<div class="p-6 space-y-8">
+<!-- Morning -->
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-amber-500">light_mode</span>
+<h4 class="text-sm font-bold text-slate-500 uppercase tracking-widest">Manhã</h4>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<button class="flex items-center justify-between p-4 rounded-xl border border-slate-700 hover:border-primary hover:bg-primary/5 transition-all group text-left">
+<div>
+<p class="text-lg font-bold text-white">07:00</p>
+<p class="text-xs text-slate-400">Jiu-Jitsu Fundamental (Gi)</p>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold text-primary uppercase block">3 Vagas</span>
+<span class="text-xs text-slate-500">Prof. Bruno</span>
+</div>
+</button>
+<button class="flex items-center justify-between p-4 rounded-xl border border-slate-700 hover:border-primary hover:bg-primary/5 transition-all group text-left">
+<div>
+<p class="text-lg font-bold text-white">09:30</p>
+<p class="text-xs text-slate-400">Turma Iniciante</p>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold text-primary uppercase block">2 Vagas</span>
+<span class="text-xs text-slate-500">Prof. Sarah</span>
+</div>
+</button>
+</div>
+</div>
+<!-- Night -->
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-indigo-500">dark_mode</span>
+<h4 class="text-sm font-bold text-slate-500 uppercase tracking-widest">Noite</h4>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<button class="flex items-center justify-between p-4 rounded-xl border-2 border-primary bg-primary/10 shadow-lg shadow-primary/10 transition-all group text-left">
+<div>
+<p class="text-lg font-bold text-white">19:00</p>
+<p class="text-xs text-white/80 font-medium">No-Gi Essentials</p>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold text-white bg-primary px-1.5 rounded uppercase block mb-1">Selecionado</span>
+<span class="text-xs text-primary font-bold">Prof. Carlos</span>
+</div>
+</button>
+<button class="flex items-center justify-between p-4 rounded-xl border border-slate-700 hover:border-primary hover:bg-primary/5 transition-all group text-left opacity-50 cursor-not-allowed grayscale">
+<div>
+<p class="text-lg font-bold text-white">20:30</p>
+<p class="text-xs text-slate-400">Competition Class</p>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold text-red-500 uppercase block">Lotado</span>
+<span class="text-xs text-slate-500">Prof. Carlos</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Step 3: Additional Info -->
+<section class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
+<div class="size-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold">3</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Informações Adicionais</h3>
+</div>
+<div class="p-6 space-y-6">
+<div>
+<label class="block text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Possui alguma limitação física ou lesão?</label>
+<textarea class="w-full bg-slate-900/50 border border-slate-700 rounded-lg focus:ring-primary focus:border-primary text-white text-sm" placeholder="Ex: Lesão no joelho esquerdo, asma..." rows="3"></textarea>
+</div>
+<div>
+<label class="block text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Experiência prévia em artes marciais?</label>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<label class="flex items-center gap-2 p-3 border border-slate-700 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+<input class="text-primary bg-slate-800 border-slate-600 focus:ring-primary" name="exp" type="radio"/>
+<span class="text-sm font-medium">Nenhuma</span>
+</label>
+<label class="flex items-center gap-2 p-3 border border-slate-700 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+<input class="text-primary bg-slate-800 border-slate-600 focus:ring-primary" name="exp" type="radio"/>
+<span class="text-sm font-medium">Iniciante</span>
+</label>
+<label class="flex items-center gap-2 p-3 border border-slate-700 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+<input checked="" class="text-primary bg-slate-800 border-slate-600 focus:ring-primary" name="exp" type="radio"/>
+<span class="text-sm font-medium">Intermediário</span>
+</label>
+<label class="flex items-center gap-2 p-3 border border-slate-700 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+<input class="text-primary bg-slate-800 border-slate-600 focus:ring-primary" name="exp" type="radio"/>
+<span class="text-sm font-medium">Avançado</span>
+</label>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Sidebar: Summary -->
+<div class="lg:col-span-4 h-fit sticky top-28">
+<div class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
+<div class="p-6 bg-slate-900/50 border-b border-slate-800">
+<h3 class="text-white text-base font-bold uppercase tracking-widest">Resumo do Agendamento</h3>
+</div>
+<div class="p-6 space-y-6">
+<div class="flex items-start gap-4">
+<div class="size-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary">event_available</span>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-500 uppercase">Data Escolhida</p>
+<p class="text-white font-medium text-lg">Quinta-feira, 05 Out 2023</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="size-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary">schedule</span>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-500 uppercase">Horário &amp; Turma</p>
+<p class="text-white font-medium text-lg">19:00 - No-Gi Essentials</p>
+<p class="text-sm text-slate-400">Instrutor: Prof. Carlos</p>
+</div>
+</div>
+<div class="p-4 bg-primary/5 border border-primary/20 rounded-lg">
+<div class="flex items-center justify-between mb-1">
+<span class="text-xs font-bold text-primary uppercase">Status da Aula</span>
+<span class="text-[10px] px-1.5 py-0.5 bg-primary text-white font-bold rounded">CONFIRMÁVEL</span>
+</div>
+<p class="text-xs text-slate-400">A aula selecionada possui vagas para alunos experimentais e está ativa no cronograma.</p>
+</div>
+</div>
+<div class="p-6 bg-slate-900/50 border-t border-slate-800 space-y-4">
+<div class="flex items-center gap-3 px-2">
+<span class="material-symbols-outlined text-amber-500 text-lg">workspace_premium</span>
+<p class="text-[11px] text-slate-400 italic">O primeiro passo na jornada para a sua Faixa Preta começa aqui.</p>
+</div>
+<button class="w-full h-14 bg-primary hover:bg-[#2980b9] text-white font-black text-lg rounded-xl shadow-lg shadow-primary/20 transform transition active:scale-[0.98] flex items-center justify-center gap-2">
+                                    CONFIRMAR AGENDAMENTO
+                                    <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="w-full text-slate-500 text-sm font-medium hover:text-slate-300 py-2">
+                                    Cancelar agendamento
+                                </button>
+</div>
+</div>
+<!-- Quick Info Card -->
+<div class="mt-6 p-4 rounded-xl border border-slate-800 bg-slate-900/30 flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500">help</span>
+<p class="text-xs text-slate-500">Precisa de ajuda com o horário? <a class="text-primary hover:underline" href="#">Fale com suporte</a></p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Novo Plano - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f172a", // Updated to match user request
+                        "surface-dark": "#1e293b",
+                        "border-dark": "#334155"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-white min-h-screen">
+<!-- TopNavBar Component -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark bg-background-dark px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-white">
+<div class="size-6 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">swords</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">ATJJ Dojo v4</h2>
+</div>
+<label class="flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-surface-dark border border-border-dark">
+<div class="text-[#90b7cb] flex items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-sm">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-transparent focus:border-none h-full placeholder:text-[#94a3b8] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal" placeholder="Buscar no sistema..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<nav class="flex items-center gap-9">
+<a class="text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Alunos</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary py-1" href="#">Planos</a>
+<a class="text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Financeiro</a>
+<a class="text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Ranking</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-surface-dark border border-border-dark text-white hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-surface-dark border border-border-dark text-white hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-primary/30" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBn7rd-KMEJA3BKjSc0dQoXrJBsQXdhnCU5x0BgTO_4KwYrDVLM1RC7TLuIeEJOzD9Ft6MGKM3C3Ultaxn39d3bA43ICuK2eIRl7VZwoHv4LH6NTpKNvAxL0iK88zBZTQzaJW-p0eRL2SszmqhRuwyq5uPU2ed-bKNrJI8O-N0r0X1bNyKZcoJMXPqoWjLja3JaDOkjH-lXVBmyJqqKiFcn19dkfbSw387bmS0yJAn3mzZt8l-kL05-UAUOFW5gRwM9acW7Qr8cKia2");'></div>
+</div>
+</header>
+<main class="max-w-[1100px] mx-auto py-10 px-6">
+<!-- PageHeading Component -->
+<div class="flex flex-wrap justify-between items-end gap-3 mb-8">
+<div class="flex min-w-72 flex-col gap-2">
+<h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em]">Novo Plano</h1>
+<p class="text-slate-400 text-base font-normal leading-normal">Configure as regras, valores e gamificação do novo plano de assinatura.</p>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-surface-dark border border-border-dark text-white text-sm font-bold hover:bg-slate-700 transition-colors">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">arrow_back</span> Voltar para Planos</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Section 1: Informações do Plano -->
+<div class="flex flex-col gap-4">
+<div class="bg-surface-dark border border-border-dark rounded-xl p-6 shadow-xl">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">info</span>
+<h2 class="text-white text-xl font-bold">Informações do Plano</h2>
+</div>
+<div class="space-y-4">
+<label class="flex flex-col gap-2">
+<span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Nome do Plano</span>
+<input class="w-full bg-background-dark border border-border-dark rounded-lg h-12 px-4 text-white focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-slate-600" placeholder="Ex: Black Belt - Anual Ilimitado" type="text"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Descrição</span>
+<textarea class="w-full bg-background-dark border border-border-dark rounded-lg h-24 p-4 text-white focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-slate-600" placeholder="Benefícios e restrições do plano..."></textarea>
+</label>
+<div class="flex flex-col gap-2">
+<span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Modalidades Vinculadas</span>
+<div class="flex flex-wrap gap-2 mt-1">
+<label class="cursor-pointer">
+<input checked="" class="hidden peer" type="checkbox"/>
+<span class="px-4 py-2 rounded-full border border-border-dark bg-background-dark text-slate-400 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all text-sm font-medium">Jiu-Jitsu</span>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" type="checkbox"/>
+<span class="px-4 py-2 rounded-full border border-border-dark bg-background-dark text-slate-400 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all text-sm font-medium">Muay Thai</span>
+</label>
+<label class="cursor-pointer">
+<input checked="" class="hidden peer" type="checkbox"/>
+<span class="px-4 py-2 rounded-full border border-border-dark bg-background-dark text-slate-400 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all text-sm font-medium">No-Gi</span>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" type="checkbox"/>
+<span class="px-4 py-2 rounded-full border border-border-dark bg-background-dark text-slate-400 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all text-sm font-medium">Judô</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Regras de Cobrança -->
+<div class="bg-surface-dark border border-border-dark rounded-xl p-6 shadow-xl">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">gavel</span>
+<h2 class="text-white text-xl font-bold">Regras de Cobrança</h2>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<label class="flex flex-col gap-2 col-span-2">
+<span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Dia de Vencimento</span>
+<input class="w-full bg-background-dark border border-border-dark rounded-lg h-12 px-4 text-white focus:ring-2 focus:ring-primary" max="31" min="1" placeholder="5" type="number"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Multa por Atraso</span>
+<div class="relative">
+<input class="w-full bg-background-dark border border-border-dark rounded-lg h-12 px-4 pr-10 text-white focus:ring-2 focus:ring-primary" placeholder="2.0" type="number"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">%</span>
+</div>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Juros ao Dia</span>
+<div class="relative">
+<input class="w-full bg-background-dark border border-border-dark rounded-lg h-12 px-4 pr-10 text-white focus:ring-2 focus:ring-primary" placeholder="0.1" type="number"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">%</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Section 2: Valores e Recorrência -->
+<div class="bg-surface-dark border border-border-dark rounded-xl p-6 shadow-xl">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">payments</span>
+<h2 class="text-white text-xl font-bold">Valores e Recorrência</h2>
+</div>
+<div class="space-y-4">
+<label class="flex flex-col gap-2">
+<span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Valor da Mensalidade</span>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">R$</span>
+<input class="w-full bg-background-dark border border-border-dark rounded-lg h-12 pl-12 pr-4 text-white focus:ring-2 focus:ring-primary" placeholder="0,00" type="text"/>
+</div>
+</label>
+<div class="flex flex-col gap-2">
+<span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Periodicidade</span>
+<div class="grid grid-cols-2 gap-2">
+<button class="h-12 rounded-lg bg-primary text-white font-bold text-sm">Mensal</button>
+<button class="h-12 rounded-lg bg-background-dark border border-border-dark text-slate-400 font-medium text-sm hover:border-slate-500">Trimestral</button>
+<button class="h-12 rounded-lg bg-background-dark border border-border-dark text-slate-400 font-medium text-sm hover:border-slate-500">Semestral</button>
+<button class="h-12 rounded-lg bg-background-dark border border-border-dark text-slate-400 font-medium text-sm hover:border-slate-500">Anual</button>
+</div>
+</div>
+<label class="flex flex-col gap-2">
+<span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Taxa de Matrícula</span>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">R$</span>
+<input class="w-full bg-background-dark border border-border-dark rounded-lg h-12 pl-12 pr-4 text-white focus:ring-2 focus:ring-primary" placeholder="0,00" type="text"/>
+</div>
+</label>
+</div>
+</div>
+<!-- Section 4: Gamificação Vinculada -->
+<div class="bg-surface-dark border border-border-dark rounded-xl p-6 shadow-xl relative overflow-hidden group">
+<!-- Subtle background glow for gamification -->
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/20 transition-all"></div>
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-yellow-500">stars</span>
+<h2 class="text-white text-xl font-bold">Gamificação Vinculada</h2>
+</div>
+<div class="space-y-6">
+<label class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Bônus de XP (Contratação)</span>
+<span class="text-xs text-slate-500 italic">One-time</span>
+</div>
+<div class="relative">
+<input class="w-full bg-background-dark border border-border-dark rounded-lg h-12 px-4 pr-12 text-white focus:ring-2 focus:ring-primary" placeholder="500" type="number"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 bg-yellow-500/20 text-yellow-500 rounded px-1.5 py-0.5 text-xs font-black">XP</div>
+</div>
+</label>
+<label class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Bônus de XP (Pagamento em Dia)</span>
+<span class="text-xs text-slate-500 italic">Recorrente</span>
+</div>
+<div class="relative">
+<input class="w-full bg-background-dark border border-border-dark rounded-lg h-12 px-4 pr-12 text-white focus:ring-2 focus:ring-primary" placeholder="150" type="number"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 bg-yellow-500/20 text-yellow-500 rounded px-1.5 py-0.5 text-xs font-black">XP</div>
+</div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Action Footer -->
+<div class="mt-10 flex items-center justify-end gap-4 pb-10">
+<button class="px-8 py-3 rounded-lg text-slate-400 font-bold hover:text-white transition-colors">
+                Cancelar
+            </button>
+<button class="px-10 py-3 rounded-lg bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                Salvar Plano
+            </button>
+</div>
+</main>
+<!-- Background Illustration/Pattern -->
+<div class="fixed bottom-0 right-0 opacity-10 pointer-events-none -z-10 overflow-hidden">
+<svg height="400" viewbox="0 0 200 200" width="400" xmlns="http://www.w3.org/2000/svg">
+<path d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,77.3,-44.7C85.4,-31.3,90.5,-15.7,91.2,0.4C91.9,16.5,88.3,33,79.8,47.4C71.3,61.8,58,74.1,42.7,80.7C27.4,87.3,10.2,88.2,-6.3,85.5C-22.8,82.8,-38.7,76.5,-52.8,66.4C-66.9,56.3,-79.2,42.4,-85.4,26.4C-91.6,10.4,-91.7,-7.7,-86.7,-24.1C-81.7,-40.5,-71.6,-55.2,-58,-64.1C-44.4,-73.1,-27.3,-76.3,-11.1,-74.4C5.1,-72.5,21.3,-83.5,44.7,-76.4Z" fill="#25aff4" transform="translate(100 100)"></path>
+</svg>
+</div>
+</body></html>

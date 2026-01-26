@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Avaliação Técnica - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3290dc",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#121a20",
+                        "dojo-dark": "#2c3e50",
+                        "dojo-blue": "#3498db",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .proficiency-btn:checked + label {
+            background-color: #3290dc;
+            color: white;
+            border-color: #3290dc;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-dojo-dark dark:text-gray-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 flex flex-col bg-white dark:bg-[#1a242d] border-r border-gray-200 dark:border-gray-800">
+<div class="p-6 flex flex-col h-full">
+<div class="flex items-center gap-3 mb-8">
+<div class="bg-primary p-2 rounded-lg text-white">
+<span class="material-symbols-outlined">sports_martial_arts</span>
+</div>
+<div>
+<h1 class="text-dojo-dark dark:text-white text-base font-bold leading-tight">ATJJ Dojo v4</h1>
+<p class="text-gray-500 dark:text-gray-400 text-xs">Instrutor Senior</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Alunos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">school</span>
+<span class="text-sm font-medium">Turmas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl fill-[1]">workspace_premium</span>
+<span class="text-sm font-bold">Avaliações</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">account_balance_wallet</span>
+<span class="text-sm font-medium">Financeiro</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="text-sm font-medium">Configurações</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-gray-100 dark:border-gray-800">
+<button class="w-full bg-primary text-white py-2.5 rounded-lg text-sm font-bold flex items-center justify-center gap-2 hover:bg-dojo-blue transition-colors">
+<span class="material-symbols-outlined text-lg">add</span>
+                        Nova Avaliação
+                    </button>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="h-16 bg-white dark:bg-[#1a242d] border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-8 z-10">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 text-dojo-dark dark:text-white">
+<span class="material-symbols-outlined text-primary">assignment_turned_in</span>
+<h2 class="text-lg font-bold tracking-tight">Avaliação Técnica Individual</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6 text-sm">
+<a class="text-gray-500 hover:text-primary transition-colors" href="#">Histórico</a>
+<a class="text-gray-500 hover:text-primary transition-colors" href="#">Requisitos</a>
+<a class="text-gray-500 hover:text-primary transition-colors" href="#">Ranking</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl">search</span>
+<input class="bg-background-light dark:bg-gray-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm w-64 focus:ring-2 focus:ring-primary/20" placeholder="Buscar aluno..." type="text"/>
+</div>
+<div class="flex items-center gap-3 pl-4 border-l border-gray-100 dark:border-gray-800">
+<div class="w-8 h-8 rounded-full bg-cover bg-center" data-alt="Avatar do Instrutor" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAljboVTGI8o-behLHqWzMA63xe-PsCPwu7DIE4mZcyYLQv_agRiGZBtI8i04y3nWQ0258uVjn2TZVKy41oLx5xj82cPhCfv0h4iTKM6hT9cBMvtzyZqGf4Gap0I7UqwOPSSLSM4c6q13vi-lqJZlFj_WB1QzKve8xUnJrbkr7910i5bzPAMTLSIx1oUQPi0A-x5w4W-2GZE8U615NNVrI8xu5dTXKDU6N45NOtt4mrbfwRuIMCH_il9iOWPv-8BrhtYFbIF8dXIYXc')"></div>
+</div>
+</div>
+</header>
+<!-- Content Body -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-8">
+<div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8">
+<!-- Form Section -->
+<div class="flex-1 space-y-8">
+<!-- Student Profile Header -->
+<div class="bg-white dark:bg-[#1a242d] p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex flex-wrap items-center justify-between gap-6">
+<div class="flex items-center gap-5">
+<div class="relative">
+<div class="w-20 h-20 rounded-full border-4 border-dojo-blue/20 bg-cover bg-center" data-alt="Foto do aluno Ricardo Silva" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCCloSqcgzo8OpILC5mg0Adl2JqTNuSmYzI_BntP2yWSa1ID_5UeLfDe5lKahC8KINiNH06mge8idhwVaeDnuYFaHBJLA6welX9otFh1iH37TaAQtOo8EtOyPfa7wKJfY9uVLNToJ1u_GfJF9Aic2ZMTqLEMBjX4gyrglLU_qKWrPaqACIuCO28uj9SouIKxnVS6IOp96od9e_e8kbnwEH96S5akepF9QXk_XhlLDsghcJU7GOztTPloCBuxyIwrMsBoQo-dO12lWES')"></div>
+<div class="absolute -bottom-1 -right-1 bg-white dark:bg-[#1a242d] p-1 rounded-full shadow-md">
+<div class="w-6 h-6 rounded-full bg-blue-600 border border-gray-300"></div>
+</div>
+</div>
+<div>
+<h3 class="text-2xl font-black text-dojo-dark dark:text-white uppercase tracking-tight">Ricardo 'Tubarão' Silva</h3>
+<div class="flex items-center gap-3 mt-1">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                            Faixa Azul - 2º Grau
+                                        </span>
+<span class="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm leading-none">calendar_today</span>
+                                            Data: 24 Out 2023
+                                        </span>
+</div>
+</div>
+</div>
+<button class="bg-gray-100 dark:bg-gray-800 text-dojo-dark dark:text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                                Ver Perfil Completo
+                            </button>
+</div>
+<!-- Skill Categories -->
+<div class="space-y-6">
+<!-- Category: Quedas -->
+<section>
+<div class="flex items-center gap-2 mb-4 px-1">
+<span class="material-symbols-outlined text-primary">downhill_skiing</span>
+<h4 class="text-lg font-bold">1. Quedas (Takedowns)</h4>
+</div>
+<div class="grid gap-4">
+<!-- Skill Item -->
+<div class="bg-white dark:bg-[#1a242d] p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-20 h-12 rounded-lg bg-cover bg-center flex-shrink-0" data-alt="Demonstração da técnica Baiana" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBpXyEZUf5dCtXgL_Fn8m7Sy7IvEd7nHjrrfRkHXSLMTeYWqcoTr0IcL3BMrVd9iMheOSylQP4yIASPY1R0FQLp-13DTWwYnIkKHFdOVFBr2ZqS0PzOi1yFZ2txfQkeATpiVuvsgyuRzwiUtVjrihIxy6YStstSmikGAKML0AeyfurCVffDCUuhgIrAA3pm2gB3IPEvNkSgO7uB8nh-j56WKtQriG5JX-MdCtRnsSWkej6R9D05-bnO96TkRgG9evOwWjJpFKfHZ-_y')"></div>
+<div>
+<p class="font-bold text-dojo-dark dark:text-white">Baiana (Double Leg)</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">Execução técnica da entrada de queda com controle de pernas.</p>
+</div>
+</div>
+<div class="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+<input class="hidden proficiency-btn" id="s1_0" name="skill_1" type="radio" value="0"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s1_0">N/E</label>
+<input class="hidden proficiency-btn" id="s1_1" name="skill_1" type="radio" value="1"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s1_1">Aprendiz</label>
+<input checked="" class="hidden proficiency-btn" id="s1_2" name="skill_1" type="radio" value="2"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s1_2">Competente</label>
+<input class="hidden proficiency-btn" id="s1_3" name="skill_1" type="radio" value="3"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s1_3">Excelente</label>
+</div>
+</div>
+</div>
+<!-- Skill Item 2 -->
+<div class="bg-white dark:bg-[#1a242d] p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-20 h-12 rounded-lg bg-cover bg-center flex-shrink-0" data-alt="Demonstração de Osoto Gari" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCBAgXT5g-moAG5OG1XLpMQaatOnzXTXbPu6ZbZpFNLDsZnaLhQfpe5Q2WccIVRizRHBGo07g-Sd_y0pPPMcf64f_nP3eS-AyzoItqeUNGxOWtowKta-DgOn7pbZqreb1989yc2NCC47ASwE8fvMyLi41EAOuWWGqo6_n8cEqDuwLVZOwgmRcb7gVlPPRtGRAHV4gLedquAPB41UJ9oEdkAWHGiik1MuEudyjVFehgQ41rasXWaGxDJCjV-bHAn2uTsSa3VSYeL7R4z')"></div>
+<div>
+<p class="font-bold text-dojo-dark dark:text-white">Osoto Gari</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">Projeção lateral com desequilíbrio e gancho de perna.</p>
+</div>
+</div>
+<div class="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+<input class="hidden proficiency-btn" id="s2_0" name="skill_2" type="radio" value="0"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s2_0">N/E</label>
+<input checked="" class="hidden proficiency-btn" id="s2_1" name="skill_2" type="radio" value="1"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s2_1">Aprendiz</label>
+<input class="hidden proficiency-btn" id="s2_2" name="skill_2" type="radio" value="2"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s2_2">Competente</label>
+<input class="hidden proficiency-btn" id="s2_3" name="skill_2" type="radio" value="3"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s2_3">Excelente</label>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Category: Defesa -->
+<section>
+<div class="flex items-center gap-2 mb-4 px-1">
+<span class="material-symbols-outlined text-primary">shield</span>
+<h4 class="text-lg font-bold">2. Defesa (Defense)</h4>
+</div>
+<div class="grid gap-4">
+<div class="bg-white dark:bg-[#1a242d] p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-20 h-12 rounded-lg bg-cover bg-center flex-shrink-0" data-alt="Técnica de Reposição de Guarda" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBzq7-i_5Id3QNrmM0GA7r6hx2PmCrzfO5BIXy7PDZt0y_zCjxA6hN4ThbjtObkIdRQLXyVe4LiLF8cFXn6hHuE64fgZ_5Zq_RdlYAJYdfo3t8AWdAATms1QNYz7geJNcpCObqhQb2FDGx1A1vLb0tmb5QmWpf76AfGyisxnnyjQzNJ7dzyAp8ou-55_xTCNugT7lgKxNlK8u9yYcrndlAN_B1Il-qVmgWsVzuqNnaTlHgqMbVhus0QscLVdjUjBYG3PXCOnUuSIMwt')"></div>
+<div>
+<p class="font-bold text-dojo-dark dark:text-white">Reposição de Guarda</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">Capacidade de voltar para a guarda após tentativa de passagem.</p>
+</div>
+</div>
+<div class="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+<input class="hidden proficiency-btn" id="s3_0" name="skill_3" type="radio" value="0"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s3_0">N/E</label>
+<input class="hidden proficiency-btn" id="s3_1" name="skill_3" type="radio" value="1"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s3_1">Aprendiz</label>
+<input checked="" class="hidden proficiency-btn" id="s3_2" name="skill_3" type="radio" value="2"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s3_2">Competente</label>
+<input class="hidden proficiency-btn" id="s3_3" name="skill_3" type="radio" value="3"/>
+<label class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700" for="s3_3">Excelente</label>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Observations -->
+<section>
+<div class="flex items-center gap-2 mb-4 px-1">
+<span class="material-symbols-outlined text-primary">edit_note</span>
+<h4 class="text-lg font-bold">Observações do Professor</h4>
+</div>
+<div class="bg-white dark:bg-[#1a242d] p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+<textarea class="w-full bg-background-light dark:bg-gray-800 border-none rounded-lg p-4 text-sm focus:ring-2 focus:ring-primary/20 placeholder:text-gray-400" placeholder="Escreva aqui o feedback técnico e pontos de melhoria para o aluno..." rows="4"></textarea>
+</div>
+</section>
+</div>
+</div>
+<!-- Sidebar Summary Widget (Sticky) -->
+<div class="lg:w-80 space-y-6">
+<div class="bg-white dark:bg-[#1a242d] p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-lg sticky top-8">
+<h5 class="text-sm font-bold uppercase tracking-wider text-gray-500 mb-6">Resumo da Pontuação</h5>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between items-end mb-2">
+<p class="text-sm font-medium">XP Técnico Acumulado</p>
+<p class="text-2xl font-black text-primary">85 <span class="text-sm font-normal text-gray-400">/ 100</span></p>
+</div>
+<div class="w-full h-3 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 85%"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg border border-gray-100 dark:border-gray-700 text-center">
+<p class="text-[10px] font-bold text-gray-400 uppercase">Mínimo</p>
+<p class="text-lg font-bold">80 XP</p>
+</div>
+<div class="bg-green-50 dark:bg-green-900/10 p-3 rounded-lg border border-green-100 dark:border-green-900/30 text-center">
+<p class="text-[10px] font-bold text-green-600 uppercase">Status</p>
+<p class="text-sm font-bold text-green-700 dark:text-green-400">Apto</p>
+</div>
+</div>
+<div class="p-4 rounded-lg bg-primary/5 border border-primary/10">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                                            Com esta avaliação, o aluno atinge os requisitos mínimos para a graduação do 3º grau da faixa azul.
+                                        </p>
+</div>
+</div>
+<button class="w-full bg-primary text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg shadow-primary/30 hover:bg-dojo-blue transition-all transform active:scale-[0.98]">
+<span class="material-symbols-outlined">auto_awesome</span>
+                                    Finalizar e Atribuir XP
+                                </button>
+<p class="text-[10px] text-center text-gray-400">
+                                    A pontuação será registrada permanentemente no histórico do aluno e atualizada no Ranking Geral do Dojo.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

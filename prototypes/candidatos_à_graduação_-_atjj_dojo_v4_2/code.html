@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Exame de Graduação Coletivo - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3498db",
+                        "secondary": "#2c3e50",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#121a20",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Lexend', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #3498db;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-secondary">
+<div class="flex min-h-screen">
+<aside class="w-64 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-background-dark flex flex-col justify-between p-4 sticky top-0 h-screen">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3 px-2">
+<div class="bg-primary rounded-lg p-1.5 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-2xl">sports_kabaddi</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-secondary dark:text-white text-base font-bold leading-tight">ATJJ Dojo v4</h1>
+<p class="text-gray-500 text-xs font-normal">Gestão Gamificada</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<p class="text-sm font-medium">Alunos</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg" href="#">
+<span class="material-symbols-outlined filled-icon">school</span>
+<p class="text-sm font-medium">Exames</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<p class="text-sm font-medium">Aulas</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium">Configurações</p>
+</a>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+<header class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-background-dark px-8 py-3 z-10 shrink-0">
+<div class="flex items-center gap-8">
+<div>
+<h2 class="text-secondary dark:text-white text-lg font-bold">Exame de Graduação Coletivo</h2>
+<p class="text-xs text-gray-500">Turma Juvenil - Agosto 2024</p>
+</div>
+<div class="bg-red-50 text-red-600 px-3 py-1 rounded-full text-xs font-bold border border-red-100 flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+</span>
+                    AO VIVO
+                </div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700">
+<div class="w-8 h-8 rounded-full bg-cover" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA4OvJqIj2p4MvBMlQYQ8YW67nRlXdhfl8HINSnaIqrJEPwaiDuOmSuoFnjLixFP1gquOIEbknah_7wfKMk4qnOh_E7Ie-vuQ2Se4F21UFGvLRaGZprBHA3L3DIFx1YDbvYAF9SpiEno7zXnF4zAH-5V6vZFjht1uJpEgeqTO74wzoja8eD2j3Zi3uUA7BZyzzidlBgUaoph9X-JIaIYALqjCvnWQqnV4Ot9n2UlIKYVU_-ysnU5qaSem1V-J-b-k_FvGU8gB-meG-U')"></div>
+<span class="text-sm font-medium text-secondary dark:text-white">Instrutor Silva</span>
+</div>
+</div>
+</header>
+<div class="flex-1 flex overflow-hidden">
+<div class="flex-1 flex flex-col p-6 overflow-hidden">
+<div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-6 shrink-0">
+<label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 px-1">Técnica em Avaliação</label>
+<div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm whitespace-nowrap shadow-md shadow-primary/20">
+<span class="material-symbols-outlined text-lg">height</span>
+                            Quedas
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg font-medium text-sm whitespace-nowrap hover:bg-gray-200 transition-colors">
+<span class="material-symbols-outlined text-lg">move_down</span>
+                            Passagem de Guarda
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg font-medium text-sm whitespace-nowrap hover:bg-gray-200 transition-colors">
+<span class="material-symbols-outlined text-lg">lock</span>
+                            Finalizações
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg font-medium text-sm whitespace-nowrap hover:bg-gray-200 transition-colors">
+<span class="material-symbols-outlined text-lg">shield</span>
+                            Defesa Pessoal
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg font-medium text-sm whitespace-nowrap hover:bg-gray-200 transition-colors">
+<span class="material-symbols-outlined text-lg">fitness_center</span>
+                            Condicionamento
+                        </button>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden flex flex-col">
+<div class="overflow-x-auto overflow-y-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead class="bg-gray-50 dark:bg-gray-900 sticky top-0 z-10 border-b border-gray-200 dark:border-gray-700">
+<tr>
+<th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest w-1/3">Candidato</th>
+<th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Faixa Atual</th>
+<th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest w-64">Nota (Quedas)</th>
+<th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">Média Geral</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cover shadow-sm border border-gray-200" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6AJNTI1zEdhFqN0pzpHqgt1nqgYLsACT42i_HoNpsbZqDCqfg0eZQNYDCesnO5qN3mF4oVrHOu0mfXitW7fS4USUdq_P1fXSTo6cnDHPfS9XZid0A5KuivrnsiJrKK4hyQAGAfYTeUTxAVuGriBW76ggM51yOKGsfmbIaQA-SnYY23DH5t3Ki963vFQQoZJfjKxJH76FXagBjkMsnQydEAroBjqxFx94DFbjyBBH-O1xRFbVedIK977GKFSMVMAEgMru7jbp4TTvv')"></div>
+<div>
+<p class="font-bold text-sm text-secondary dark:text-white leading-none">Lucas Oliveira</p>
+<p class="text-[10px] text-gray-500 font-mono mt-1">#ATJJ-2024-089</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 bg-blue-500 rounded-sm"></span>
+<span class="text-sm font-medium text-gray-600 dark:text-gray-300">Azul</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<input class="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-primary" max="10" min="0" step="0.5" type="range" value="8.5"/>
+<span class="text-sm font-black text-primary min-w-[32px] text-right">8.5</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="text-sm font-bold text-green-500">7.7</span>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cover shadow-sm border border-gray-200" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuChk11bBOYYJ6KAZnbqrNldappb83whYpySau20_6k9hpadExIi1oEvG-jFCF_VnEUVGsewaDJyAnIib3hGsLgV5_IgZrwebIcKpdKXcxbX9IvFW1qwKwkkCoulVhXwR7mQccoth9Ae5Fp4SzRqsDoIlg5boyy-XCSuCDE_VPnoEZRQ7_FM9eQQMZTVVCc7yOAi9E5P6fTJQbUYE2FiW-MgCG04qI9WWUChYpbJLJzXW42lFMkGDSRuInPBkW3XuA7gKwf8_DKrtc7u')"></div>
+<div>
+<p class="font-bold text-sm text-secondary dark:text-white leading-none">Gabriel Santos</p>
+<p class="text-[10px] text-gray-500 font-mono mt-1">#ATJJ-2024-112</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 bg-white border border-gray-300 rounded-sm"></span>
+<span class="text-sm font-medium text-gray-600 dark:text-gray-300">Branca</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<input class="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-primary" max="10" min="0" step="0.5" type="range" value="7.0"/>
+<span class="text-sm font-black text-primary min-w-[32px] text-right">7.0</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="text-sm font-bold text-gray-400">--</span>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cover shadow-sm border border-gray-200" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCbjh5QcyRnAMr42feAC1VPK0F_VeFPPf4D89GZ0CZqYQ_WDJmjxHkKxUIdi1_YpCltvGR2bBkFokVZuFbAkOqEurzXEhfL9_rH3wKWV_G8ONKLFy8f4Qy4F1G_GnwNHlr2OY_rN02L9JMP-CV--wof2gYPFYdIbARKpqMb80i3cVlTQ0LwYT0rH4xomcaOcczoAT-xsw9eDQYyRufT4fhfVb0QBd3ryjH7FtbgEk2LRiwICpHxKTKH73SATgITbKl1siTQhjAkmcO0')"></div>
+<div>
+<p class="font-bold text-sm text-secondary dark:text-white leading-none">Marina Silva</p>
+<p class="text-[10px] text-gray-500 font-mono mt-1">#ATJJ-2024-045</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 bg-blue-500 rounded-sm"></span>
+<span class="text-sm font-medium text-gray-600 dark:text-gray-300">Azul</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<input class="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-primary" max="10" min="0" step="0.5" type="range" value="9.0"/>
+<span class="text-sm font-black text-primary min-w-[32px] text-right">9.0</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="text-sm font-bold text-green-500">8.2</span>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cover shadow-sm border border-gray-200" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAmbEzRV6XkjnRwcYOmvB0Q9kEOgaK4oU8bmLs1ptYIzFxJqhlOUUYDCPldnPEMJr9IMA713lnmRQSSwlAEo9vo7xeYkEpVd5I-9RUpGx-vTRZpOJt1ZecERzwW9f87XtXyR6wW6WHAzkhAXelVWAk52T36oa7NfM8pPbDmSdNOFfS4fYpWMdiFFa-0sxyiGZE0rQvYrL5GiVsx93pVrP0kfL41HVSyp2U_dCVulK7kO6mC0Qor9vki5jg7yMNoEOJO2nsxp_zLDXDx')"></div>
+<div>
+<p class="font-bold text-sm text-secondary dark:text-white leading-none">Ricardo Mendes</p>
+<p class="text-[10px] text-gray-500 font-mono mt-1">#ATJJ-2024-156</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 bg-purple-600 rounded-sm"></span>
+<span class="text-sm font-medium text-gray-600 dark:text-gray-300">Roxa</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<input class="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-primary" max="10" min="0" step="0.5" type="range" value="0"/>
+<span class="text-sm font-black text-gray-300 min-w-[32px] text-right">--</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="text-sm font-bold text-gray-400">--</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<aside class="w-80 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 p-6 flex flex-col shrink-0">
+<div class="flex-1 space-y-8">
+<div>
+<h4 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">Status Geral do Exame</h4>
+<div class="space-y-6">
+<div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-medium text-gray-500">Candidatos</span>
+<span class="text-sm font-bold text-secondary dark:text-white">12 total</span>
+</div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-medium text-gray-500">Avaliados (Quedas)</span>
+<span class="text-sm font-bold text-primary">8 / 12</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[66%]"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-green-50 dark:bg-green-900/10 p-4 rounded-xl border border-green-100 dark:border-green-900/30">
+<p class="text-[10px] font-bold text-green-600 uppercase mb-1">Aprovação Parcial</p>
+<p class="text-2xl font-black text-green-700 dark:text-green-400">75%</p>
+</div>
+<div class="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-xl border border-blue-100 dark:border-blue-900/30">
+<p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Duração</p>
+<p class="text-2xl font-black text-blue-700 dark:text-blue-400">24:05</p>
+</div>
+</div>
+<div class="space-y-3">
+<h5 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Progresso por Técnica</h5>
+<div class="space-y-2">
+<div class="flex items-center justify-between text-xs px-1">
+<span class="text-gray-600 dark:text-gray-400">Quedas</span>
+<span class="font-bold text-green-500">Concluído</span>
+</div>
+<div class="flex items-center justify-between text-xs px-1">
+<span class="text-gray-600 dark:text-gray-400">Passagem de Guarda</span>
+<span class="font-bold text-primary italic">Em andamento</span>
+</div>
+<div class="flex items-center justify-between text-xs px-1 opacity-50">
+<span class="text-gray-600 dark:text-gray-400">Finalizações</span>
+<span>Pendente</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
+<h5 class="text-xs font-bold text-secondary dark:text-white mb-2">Lembrete do Instrutor</h5>
+<p class="text-xs text-gray-500 leading-relaxed italic">"Focar na postura das costas durante as entradas de queda."</p>
+</div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800 space-y-3">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-3 text-sm">
+<span class="material-symbols-outlined filled-icon">verified</span>
+                        Finalizar Avaliação Coletiva
+                    </button>
+<button class="w-full py-2.5 text-red-500 text-xs font-bold hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
+                        Cancelar Exame
+                    </button>
+</div>
+</aside>
+</div>
+</main>
+</div>
+
+</body></html>

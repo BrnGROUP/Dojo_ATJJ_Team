@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Candidatos à Graduação - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3398db",
+                        "secondary": "#2c3e50",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#121a20",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Lexend', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-secondary">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="w-64 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-background-dark flex flex-col justify-between p-4 sticky top-0 h-screen">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3 px-2">
+<div class="bg-primary rounded-lg p-1.5 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-2xl">sports_kabaddi</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-secondary dark:text-white text-base font-bold leading-tight">ATJJ Dojo v4</h1>
+<p class="text-gray-500 text-xs font-normal">Gestão Gamificada</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<p class="text-sm font-medium">Alunos</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg" href="#">
+<span class="material-symbols-outlined filled-icon">school</span>
+<p class="text-sm font-medium">Candidatos</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<p class="text-sm font-medium">Aulas</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">monetization_on</span>
+<p class="text-sm font-medium">Financeiro</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium">Configurações</p>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar -->
+<header class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-background-dark px-8 py-3 sticky top-0 z-10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<h2 class="text-secondary dark:text-white text-lg font-bold">Candidatos à Graduação</h2>
+</div>
+<nav class="flex items-center gap-6">
+<a class="text-primary text-sm font-semibold border-b-2 border-primary py-4 -mb-4" href="#">Promoções</a>
+<a class="text-gray-500 dark:text-gray-400 text-sm font-medium hover:text-primary transition-colors" href="#">Exames</a>
+<a class="text-gray-500 dark:text-gray-400 text-sm font-medium hover:text-primary transition-colors" href="#">Histórico</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<label class="relative flex items-center min-w-64">
+<span class="material-symbols-outlined absolute left-3 text-gray-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 text-sm border-none bg-gray-100 dark:bg-gray-800 rounded-lg focus:ring-2 focus:ring-primary/50 text-secondary dark:text-white" placeholder="Buscar aluno..."/>
+</label>
+<button class="p-2 text-gray-500 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+</button>
+<button class="p-1 flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg pr-3">
+<div class="w-8 h-8 rounded-full bg-cover" data-alt="Avatar do Instrutor" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA4OvJqIj2p4MvBMlQYQ8YW67nRlXdhfl8HINSnaIqrJEPwaiDuOmSuoFnjLixFP1gquOIEbknah_7wfKMk4qnOh_E7Ie-vuQ2Se4F21UFGvLRaGZprBHA3L3DIFx1YDbvYAF9SpiEno7zXnF4zAH-5V6vZFjht1uJpEgeqTO74wzoja8eD2j3Zi3uUA7BZyzzidlBgUaoph9X-JIaIYALqjCvnWQqnV4Ot9n2UlIKYVU_-ysnU5qaSem1V-J-b-k_FvGU8gB-meG-U')"></div>
+<span class="text-sm font-medium text-secondary dark:text-white">Mestre Silva</span>
+</button>
+</div>
+</header>
+<!-- Page Body -->
+<div class="p-8 space-y-6">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 text-sm">
+<a class="text-gray-500 hover:text-primary" href="#">Dashboard</a>
+<span class="material-symbols-outlined text-xs text-gray-400">chevron_right</span>
+<span class="text-secondary dark:text-white font-medium">Candidatos à Graduação</span>
+</div>
+<!-- Stats Summary -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center gap-4">
+<div class="p-3 bg-green-100 text-green-600 rounded-full">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<p class="text-gray-500 text-xs font-medium uppercase tracking-wider">Total de Aptos</p>
+<p class="text-secondary dark:text-white text-2xl font-bold">14 Alunos</p>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center gap-4">
+<div class="p-3 bg-primary/10 text-primary rounded-full">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<div>
+<p class="text-gray-500 text-xs font-medium uppercase tracking-wider">Média de XP</p>
+<p class="text-secondary dark:text-white text-2xl font-bold">2,840 XP</p>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center gap-4">
+<div class="p-3 bg-orange-100 text-orange-600 rounded-full">
+<span class="material-symbols-outlined">calendar_month</span>
+</div>
+<div>
+<p class="text-gray-500 text-xs font-medium uppercase tracking-wider">Taxa de Presença Mín.</p>
+<p class="text-secondary dark:text-white text-2xl font-bold">85%</p>
+</div>
+</div>
+</div>
+<!-- Filters Section -->
+<div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-wrap items-center justify-between gap-4">
+<div class="flex flex-wrap items-center gap-4">
+<div class="flex flex-col">
+<label class="text-xs font-bold text-gray-500 mb-1 ml-1">FILTRAR POR TURMA</label>
+<select class="bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-primary focus:border-primary">
+<option>Todas as Turmas</option>
+<option>Matutino - Intermediário</option>
+<option>Noturno - Avançado</option>
+<option>Kids - Nível 1</option>
+</select>
+</div>
+<div class="flex flex-col">
+<label class="text-xs font-bold text-gray-500 mb-1 ml-1">FAIXA ATUAL</label>
+<select class="bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-primary focus:border-primary">
+<option>Todas as Faixas</option>
+<option>Branca</option>
+<option>Azul</option>
+<option>Roxa</option>
+<option>Marrom</option>
+</select>
+</div>
+<div class="flex flex-col">
+<label class="text-xs font-bold text-gray-500 mb-1 ml-1">STATUS</label>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg">Aptos</button>
+<button class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm font-semibold rounded-lg border border-gray-200 dark:border-gray-600">Pendentes</button>
+</div>
+</div>
+</div>
+<button class="flex items-center gap-2 text-primary hover:bg-primary/5 px-4 py-2 rounded-lg transition-colors text-sm font-semibold">
+<span class="material-symbols-outlined">filter_list</span>
+                        Filtros Avançados
+                    </button>
+</div>
+<!-- Table Content -->
+<div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+<th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Apto</th>
+<th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Aluno</th>
+<th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Faixa Atual</th>
+<th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Progresso XP</th>
+<th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Média Técnica</th>
+<th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Presença</th>
+<th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+<!-- Candidate Row 1 -->
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
+<td class="px-6 py-4">
+<span class="material-symbols-outlined text-green-500 filled-icon">check_circle</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-700 shadow-sm bg-cover" data-alt="Foto do Aluno 1" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6AJNTI1zEdhFqN0pzpHqgt1nqgYLsACT42i_HoNpsbZqDCqfg0eZQNYDCesnO5qN3mF4oVrHOu0mfXitW7fS4USUdq_P1fXSTo6cnDHPfS9XZid0A5KuivrnsiJrKK4hyQAGAfYTeUTxAVuGriBW76ggM51yOKGsfmbIaQA-SnYY23DH5t3Ki963vFQQoZJfjKxJH76FXagBjkMsnQydEAroBjqxFx94DFbjyBBH-O1xRFbVedIK977GKFSMVMAEgMru7jbp4TTvv')"></div>
+<div>
+<p class="text-sm font-bold text-secondary dark:text-white">Lucas Oliveira</p>
+<p class="text-xs text-gray-500">lucas.o@email.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">Faixa Azul</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1 w-40">
+<div class="flex justify-between items-center text-[10px] font-bold">
+<span class="text-primary">105% (Apto)</span>
+<span class="text-gray-400">2,100 / 2,000 XP</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 100%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">
+<div class="flex items-center gap-1 text-orange-400">
+<span class="material-symbols-outlined text-sm filled-icon">star</span>
+<span class="font-bold text-secondary dark:text-white">4.8</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm font-medium text-green-600 dark:text-green-400">
+                                    92%
+                                </td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-gray-400 hover:text-primary transition-colors" title="Convocar para Exame">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+</button>
+<button class="bg-primary hover:bg-primary/90 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors">
+                                            Promover
+                                        </button>
+</div>
+</td>
+</tr>
+<!-- Candidate Row 2 -->
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
+<td class="px-6 py-4">
+<span class="material-symbols-outlined text-green-500 filled-icon">check_circle</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-700 shadow-sm bg-cover" data-alt="Foto do Aluno 2" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3SeAAaCZm2RBSI5EquOm_1hxGbKB4thBP1BjqnusHn3JLOYJmM4OS70F4ACtx2J3iT-DQU0VnZATaGwcmk1_TwDVoJonEEHGMrh7lrp2fWUNehKmXrYE69Pv43O7drmMnk0fbkJVMmiVaIAzpSdynkKB_DnJOmN9tD89NcBxE-JrzZfTbveyhuQfJHD4pgut8WfugVFArIpRnWKRwOxCtZzFufJioIGwhXjL5yIlftzZSqDwdwbZ5MydPTJogRwWbjBJL6izoscok')"></div>
+<div>
+<p class="text-sm font-bold text-secondary dark:text-white">Beatriz Santos</p>
+<p class="text-xs text-gray-500">biabs@email.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700">Faixa Branca</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1 w-40">
+<div class="flex justify-between items-center text-[10px] font-bold">
+<span class="text-primary">120% (Max)</span>
+<span class="text-gray-400">1,200 / 1,000 XP</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 100%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">
+<div class="flex items-center gap-1 text-orange-400">
+<span class="material-symbols-outlined text-sm filled-icon">star</span>
+<span class="font-bold text-secondary dark:text-white">4.2</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm font-medium text-green-600 dark:text-green-400">
+                                    88%
+                                </td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-gray-400 hover:text-primary transition-colors" title="Convocar para Exame">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+</button>
+<button class="bg-primary hover:bg-primary/90 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors">
+                                            Promover
+                                        </button>
+</div>
+</td>
+</tr>
+<!-- Candidate Row 3 -->
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
+<td class="px-6 py-4">
+<span class="material-symbols-outlined text-gray-300">hourglass_empty</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-700 shadow-sm bg-cover" data-alt="Foto do Aluno 3" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA7VAEvsfZgnC3Lubs0Ib64Pmy0OP2tIureoF6GZTDmOdQSC_i72NWrGReQew0YmGHmTKkgDfGYVljtald0GtUZKSyzYa5SWm-weiMJiIfvZB2jakKnn1KDccxJMFodgAu6GhHql5muKfMY-9PbTdXp8FlRvRUaoepEx66S_ozekI5qU-nVP4X907tDe_XLYbNnx9avgsFS1arpzwVmr6-YeQN5sSBu3c9MCJREgrzB4KWINMgDAleCjvGuwc78tDyr5J12I07BzbxQ')"></div>
+<div>
+<p class="text-sm font-bold text-secondary dark:text-white">Ricardo Mendes</p>
+<p class="text-xs text-gray-500">rick.m@email.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 border border-purple-200 dark:border-purple-800">Faixa Roxa</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1 w-40">
+<div class="flex justify-between items-center text-[10px] font-bold">
+<span class="text-orange-500">98% (Pendente)</span>
+<span class="text-gray-400">3,920 / 4,000 XP</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+<div class="bg-orange-400 h-full rounded-full" style="width: 98%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">
+<div class="flex items-center gap-1 text-orange-400">
+<span class="material-symbols-outlined text-sm filled-icon">star</span>
+<span class="font-bold text-secondary dark:text-white">4.9</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm font-medium text-red-500">
+                                    82%
+                                </td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<button class="p-2 text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">info</span>
+</button>
+<span class="text-[10px] font-bold text-gray-400 uppercase">Em progresso</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination / Footer Actions -->
+<div class="px-6 py-4 bg-gray-50 dark:bg-gray-900/30 flex items-center justify-between border-t border-gray-100 dark:border-gray-700">
+<p class="text-xs text-gray-500">Mostrando 1-14 de 14 alunos aptos</p>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-secondary dark:text-white text-sm font-bold rounded-lg hover:bg-gray-300 transition-colors">
+                                Convocar Todos Selecionados
+                            </button>
+<button class="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 transition-shadow shadow-lg shadow-primary/20">
+                                Graduação em Massa
+                            </button>
+</div>
+</div>
+</div>
+<!-- Technical Legend Card -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
+<h4 class="text-sm font-bold text-secondary dark:text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">info</span>
+                            Critérios de Aptidão Automática
+                        </h4>
+<ul class="space-y-3">
+<li class="flex items-start gap-3 text-xs text-gray-500">
+<span class="material-symbols-outlined text-green-500 text-sm">check</span>
+<div><b class="text-secondary dark:text-white">XP Base:</b> Mínimo de 100% dos pontos da faixa atual atingidos através de aulas e conquistas.</div>
+</li>
+<li class="flex items-start gap-3 text-xs text-gray-500">
+<span class="material-symbols-outlined text-green-500 text-sm">check</span>
+<div><b class="text-secondary dark:text-white">Frequência:</b> Taxa de presença mínima de 85% nos últimos 3 meses de treino.</div>
+</li>
+<li class="flex items-start gap-3 text-xs text-gray-500">
+<span class="material-symbols-outlined text-green-500 text-sm">check</span>
+<div><b class="text-secondary dark:text-white">Avaliação Técnica:</b> Média de habilidades (Passagem, Guarda, Finalização) acima de 4.0.</div>
+</li>
+</ul>
+</div>
+<div class="bg-primary/5 p-6 rounded-xl border border-primary/20 flex flex-col justify-center items-center text-center">
+<div class="w-12 h-12 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-3xl">emoji_events</span>
+</div>
+<h4 class="text-base font-bold text-secondary dark:text-white">Novo Ciclo de Exames</h4>
+<p class="text-xs text-gray-500 mt-2 mb-4 px-8">Existem 14 candidatos prontos para o exame de graduação do próximo mês. Deseja agendar agora?</p>
+<button class="px-6 py-2 bg-primary text-white text-sm font-bold rounded-lg shadow-md shadow-primary/30">Agendar Evento</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

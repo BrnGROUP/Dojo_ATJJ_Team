@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Realizar Exame de Graduação - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3498db",
+                        "secondary": "#2c3e50",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#121a20",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Lexend', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #3498db;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-secondary">
+<div class="flex min-h-screen">
+<aside class="w-64 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-background-dark flex flex-col justify-between p-4 sticky top-0 h-screen">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3 px-2">
+<div class="bg-primary rounded-lg p-1.5 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-2xl">sports_kabaddi</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-secondary dark:text-white text-base font-bold leading-tight">ATJJ Dojo v4</h1>
+<p class="text-gray-500 text-xs font-normal">Gestão Gamificada</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<p class="text-sm font-medium">Alunos</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg" href="#">
+<span class="material-symbols-outlined filled-icon">school</span>
+<p class="text-sm font-medium">Candidatos</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<p class="text-sm font-medium">Aulas</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">monetization_on</span>
+<p class="text-sm font-medium">Financeiro</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium">Configurações</p>
+</a>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0">
+<header class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-background-dark px-8 py-3 sticky top-0 z-10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<h2 class="text-secondary dark:text-white text-lg font-bold">Exame de Graduação</h2>
+</div>
+<div class="bg-red-50 text-red-600 px-3 py-1 rounded-full text-xs font-bold border border-red-100 flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+</span>
+                        AO VIVO
+                    </div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-gray-500 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 transition-colors">
+<span class="material-symbols-outlined text-sm">help_outline</span>
+</button>
+<div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700">
+<div class="w-8 h-8 rounded-full bg-cover" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA4OvJqIj2p4MvBMlQYQ8YW67nRlXdhfl8HINSnaIqrJEPwaiDuOmSuoFnjLixFP1gquOIEbknah_7wfKMk4qnOh_E7Ie-vuQ2Se4F21UFGvLRaGZprBHA3L3DIFx1YDbvYAF9SpiEno7zXnF4zAH-5V6vZFjht1uJpEgeqTO74wzoja8eD2j3Zi3uUA7BZyzzidlBgUaoph9X-JIaIYALqjCvnWQqnV4Ot9n2UlIKYVU_-ysnU5qaSem1V-J-b-k_FvGU8gB-meG-U')"></div>
+<span class="text-sm font-medium text-secondary dark:text-white">Instrutor Silva</span>
+</div>
+</div>
+</header>
+<div class="p-8 grid grid-cols-12 gap-8">
+<div class="col-span-8 space-y-6">
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full border-4 border-blue-100 dark:border-blue-900 shadow-sm bg-cover" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6AJNTI1zEdhFqN0pzpHqgt1nqgYLsACT42i_HoNpsbZqDCqfg0eZQNYDCesnO5qN3mF4oVrHOu0mfXitW7fS4USUdq_P1fXSTo6cnDHPfS9XZid0A5KuivrnsiJrKK4hyQAGAfYTeUTxAVuGriBW76ggM51yOKGsfmbIaQA-SnYY23DH5t3Ki963vFQQoZJfjKxJH76FXagBjkMsnQydEAroBjqxFx94DFbjyBBH-O1xRFbVedIK977GKFSMVMAEgMru7jbp4TTvv')"></div>
+<div>
+<h3 class="text-xl font-bold text-secondary dark:text-white">Lucas Oliveira</h3>
+<p class="text-sm text-gray-500 flex items-center gap-2">
+<span class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-500 rounded-sm"></span> Faixa Azul</span>
+<span class="material-symbols-outlined text-xs">trending_flat</span>
+<span class="flex items-center gap-1 font-bold text-purple-600 dark:text-purple-400"><span class="w-3 h-3 bg-purple-600 rounded-sm"></span> Faixa Roxa</span>
+</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">ID do Aluno</p>
+<p class="text-sm font-mono font-bold text-secondary dark:text-white">#ATJJ-2024-089</p>
+</div>
+</div>
+<div class="space-y-4">
+<h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider ml-1">Avaliação Técnica</h4>
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+<div class="flex items-start justify-between mb-6">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/10 text-primary rounded-lg">
+<span class="material-symbols-outlined">height</span>
+</div>
+<div>
+<h5 class="font-bold text-secondary dark:text-white">Quedas (Takedowns)</h5>
+<p class="text-xs text-gray-500">Postura, tempo de entrada e finalização da projeção.</p>
+</div>
+</div>
+<div class="text-2xl font-black text-primary">8.5</div>
+</div>
+<div class="space-y-4">
+<input class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary" max="10" min="0" step="0.5" type="range" value="8.5"/>
+<div class="flex justify-between gap-2">
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">0</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">2.5</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">5.0</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">7.5</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-primary text-primary rounded bg-primary/5 hover:bg-primary hover:text-white transition-colors">10</button>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+<div class="flex items-start justify-between mb-6">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/10 text-primary rounded-lg">
+<span class="material-symbols-outlined">move_down</span>
+</div>
+<div>
+<h5 class="font-bold text-secondary dark:text-white">Passagem de Guarda</h5>
+<p class="text-xs text-gray-500">Controle de pernas, pressão e estabilização lateral.</p>
+</div>
+</div>
+<div class="text-2xl font-black text-primary">7.0</div>
+</div>
+<div class="space-y-4">
+<input class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary" max="10" min="0" step="0.5" type="range" value="7.0"/>
+<div class="flex justify-between gap-2">
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">0</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">2.5</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">5.0</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">7.5</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">10</button>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+<div class="flex items-start justify-between mb-6">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/10 text-primary rounded-lg">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div>
+<h5 class="font-bold text-secondary dark:text-white">Finalizações (Submissions)</h5>
+<p class="text-xs text-gray-500">Ajuste técnico, fluidez e controle de finalização.</p>
+</div>
+</div>
+<div class="text-2xl font-black text-primary">--</div>
+</div>
+<div class="space-y-4">
+<input class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary" max="10" min="0" step="0.5" type="range" value="0"/>
+<div class="flex justify-between gap-2">
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">0</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">2.5</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">5.0</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">7.5</button>
+<button class="flex-1 py-1.5 text-xs font-bold border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 hover:bg-primary hover:text-white transition-colors">10</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-4 space-y-6">
+<div class="sticky top-24 space-y-6">
+<div class="bg-secondary dark:bg-gray-900 rounded-2xl p-6 text-white shadow-xl shadow-secondary/20">
+<h4 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">Placar do Exame</h4>
+<div class="flex flex-col items-center mb-8">
+<p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Média Atual</p>
+<div class="text-6xl font-black text-primary">7.7</div>
+<div class="mt-2 flex items-center gap-1 text-xs text-green-400">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>Acima do mínimo (7.0)</span>
+</div>
+</div>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between items-end">
+<p class="text-xs font-bold text-gray-300">Progresso de Aprovação</p>
+<p class="text-xs font-bold text-primary">77%</p>
+</div>
+<div class="w-full bg-gray-700 h-2.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[77%]"></div>
+</div>
+<div class="flex justify-between text-[10px] text-gray-500 font-bold">
+<span>REP</span>
+<span class="text-red-400">7.0 MIN</span>
+<span>APR</span>
+</div>
+</div>
+<div class="border-t border-gray-700 pt-6 flex items-center justify-between">
+<div class="flex flex-col">
+<p class="text-[10px] font-bold text-gray-400 uppercase">Duração</p>
+<p class="text-2xl font-mono font-bold">14:22</p>
+</div>
+<div class="bg-gray-800 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary">timer</span>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+<h4 class="text-sm font-bold text-secondary dark:text-white mb-3">Observações</h4>
+<textarea class="w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 rounded-lg text-sm p-3 focus:ring-primary h-24 placeholder-gray-400" placeholder="Anote detalhes técnicos aqui..."></textarea>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined filled-icon">verified</span>
+                            Finalizar Exame e Aprovar
+                        </button>
+<button class="w-full py-3 text-red-500 text-xs font-bold hover:bg-red-50 rounded-lg transition-colors">
+                            Suspender Exame (Reprovar)
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sistema de Insígnias - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white min-h-screen">
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 flex flex-col bg-background-light dark:bg-background-dark fixed h-full">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined filled-icon">sports_kabaddi</span>
+</div>
+<div>
+<h1 class="font-bold text-sm tracking-tight">ATJJ Dojo v4</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">Jiu-Jitsu Management</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-sm font-medium">Aulas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary text-white rounded-lg transition-colors shadow-lg shadow-primary/20" href="#">
+<span class="material-symbols-outlined filled-icon">military_tech</span>
+<span class="text-sm font-medium">Insígnias</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-sm font-medium">Ranking</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Configurações</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+<div class="size-8 rounded-full bg-cover bg-center" data-alt="Foto de perfil do usuário" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD69udA1P3N17eqRbup2BBQamYYaG6a4ozi9xGl-W0j8j8XybV7-HBEjGXgU0AritQ0NLmgIBrADxNh7Qh_qHB-7PVZn_ubgqzEKnC4Ou1ApfbzbS3BbYgDUDHiQ6bm3qTJWhV23WuVJawyyVgtUZoiqj5PtdXzRdLyaqOMiCYlGXpnd0akBekt4d7qj6o8ZTDGxspkBr-YcVe-U9CzL0rx2I_joFkuDm9imyK-JNtqhXk2NWuM7LPx3MqFO7D2eR4kZAPKp6XM_r2u')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-bold truncate">Gabriel Silva</p>
+<p class="text-[10px] text-slate-500">Faixa Azul</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-sm">logout</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 flex">
+<div class="flex-1 p-8">
+<!-- Header Section -->
+<div class="flex flex-wrap justify-between items-end gap-6 mb-8">
+<div class="flex flex-col gap-2">
+<h2 class="text-4xl font-black leading-tight tracking-tight">Sistema de Insígnias</h2>
+<p class="text-slate-500 dark:text-[#92adc9] text-base">Acompanhe suas conquistas e suba de nível no tatame.</p>
+</div>
+<button class="flex items-center justify-center rounded-lg h-11 px-6 bg-primary text-white text-sm font-bold transition-all hover:bg-primary/90 shadow-lg shadow-primary/20">
+<span class="truncate">Ver Catálogo de Recompensas</span>
+</button>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-[#324d67] shadow-sm">
+<p class="text-slate-500 dark:text-[#92adc9] text-sm font-medium">Nível Atual</p>
+<div class="flex items-center justify-between">
+<p class="text-2xl font-bold">Faixa Azul - Grau 2</p>
+<span class="text-[#0bda5b] text-sm font-bold bg-[#0bda5b]/10 px-2 py-1 rounded">+1 Grau</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 65%;"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-[#324d67] shadow-sm">
+<p class="text-slate-500 dark:text-[#92adc9] text-sm font-medium">Insígnias Totais</p>
+<div class="flex items-center justify-between">
+<p class="text-2xl font-bold">12 / 45</p>
+<span class="text-primary text-sm font-bold bg-primary/10 px-2 py-1 rounded">27%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 27%;"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-[#324d67] shadow-sm">
+<p class="text-slate-500 dark:text-[#92adc9] text-sm font-medium">Pontos de Conquista</p>
+<div class="flex items-center justify-between">
+<p class="text-2xl font-bold">1,250 pts</p>
+<span class="text-[#0bda5b] text-sm font-bold bg-[#0bda5b]/10 px-2 py-1 rounded">+150 exp</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full mt-2 overflow-hidden">
+<div class="bg-[#0bda5b] h-full rounded-full" style="width: 45%;"></div>
+</div>
+</div>
+</div>
+<!-- Tabs Filter -->
+<div class="mb-8 border-b border-slate-200 dark:border-[#324d67]">
+<div class="flex gap-8 overflow-x-auto">
+<a class="border-b-2 border-primary text-primary pb-4 font-bold text-sm whitespace-nowrap" href="#">Geral</a>
+<a class="border-b-2 border-transparent text-slate-500 dark:text-[#92adc9] hover:text-primary pb-4 font-bold text-sm transition-colors whitespace-nowrap" href="#">Técnicas</a>
+<a class="border-b-2 border-transparent text-slate-500 dark:text-[#92adc9] hover:text-primary pb-4 font-bold text-sm transition-colors whitespace-nowrap" href="#">Consistência</a>
+<a class="border-b-2 border-transparent text-slate-500 dark:text-[#92adc9] hover:text-primary pb-4 font-bold text-sm transition-colors whitespace-nowrap" href="#">Competição</a>
+</div>
+</div>
+<!-- Badge Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Achievement Card: Unlocked -->
+<div class="group bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col gap-4 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/5">
+<div class="flex items-start justify-between">
+<div class="size-16 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-symbols-outlined text-3xl filled-icon">shield</span>
+</div>
+<span class="px-2 py-1 bg-[#0bda5b]/10 text-[#0bda5b] text-[10px] font-bold rounded uppercase tracking-wider">Desbloqueado</span>
+</div>
+<div>
+<h3 class="font-bold text-lg">Guardião de Ferro</h3>
+<p class="text-sm text-slate-500 dark:text-[#92adc9] mt-1 leading-relaxed">Defenda 50 tentativas de raspagem com sucesso em rolas oficiais.</p>
+</div>
+<div class="mt-auto">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-xs font-bold text-primary">Concluído</span>
+<span class="text-xs font-bold">50/50</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 100%"></div>
+</div>
+</div>
+</div>
+<!-- Achievement Card: Progress -->
+<div class="group bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col gap-4 transition-all hover:scale-[1.02] hover:shadow-xl">
+<div class="flex items-start justify-between">
+<div class="size-16 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
+<span class="material-symbols-outlined text-3xl filled-icon">bolt</span>
+</div>
+<span class="px-2 py-1 bg-amber-500/10 text-amber-500 text-[10px] font-bold rounded uppercase tracking-wider">Em Progresso</span>
+</div>
+<div>
+<h3 class="font-bold text-lg">Mestre da Passagem</h3>
+<p class="text-sm text-slate-500 dark:text-[#92adc9] mt-1 leading-relaxed">Realize 20 passagens de guarda registradas durante o mês.</p>
+</div>
+<div class="mt-auto">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-xs font-bold text-slate-400">75% Completo</span>
+<span class="text-xs font-bold">15/20</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 75%"></div>
+</div>
+</div>
+</div>
+<!-- Achievement Card: Locked -->
+<div class="group bg-white/50 dark:bg-[#1e293b]/40 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 p-5 flex flex-col gap-4 opacity-75 grayscale hover:grayscale-0 transition-all hover:bg-white dark:hover:bg-[#1e293b] hover:opacity-100">
+<div class="flex items-start justify-between">
+<div class="size-16 rounded-xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined text-3xl">trophy</span>
+</div>
+<span class="px-2 py-1 bg-slate-200 dark:bg-slate-800 text-slate-500 text-[10px] font-bold rounded uppercase tracking-wider">Bloqueado</span>
+</div>
+<div>
+<h3 class="font-bold text-lg">Pódio de Ouro</h3>
+<p class="text-sm text-slate-400 mt-1 leading-relaxed">Conquiste o primeiro lugar em um torneio regional da IBJJF.</p>
+</div>
+<div class="mt-auto">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-xs font-bold text-slate-400">Requisito Pendente</span>
+<span class="text-xs font-bold">0/1</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-slate-300 dark:bg-slate-700 rounded-full" style="width: 0%"></div>
+</div>
+</div>
+</div>
+<!-- Achievement Card: Progress 2 -->
+<div class="group bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col gap-4 transition-all hover:scale-[1.02]">
+<div class="flex items-start justify-between">
+<div class="size-16 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+<span class="material-symbols-outlined text-3xl filled-icon">exercise</span>
+</div>
+<span class="px-2 py-1 bg-amber-500/10 text-amber-500 text-[10px] font-bold rounded uppercase tracking-wider">Em Progresso</span>
+</div>
+<div>
+<h3 class="font-bold text-lg">Guerreiro de Ferro</h3>
+<p class="text-sm text-slate-500 dark:text-[#92adc9] mt-1 leading-relaxed">Frequência ininterrupta de 30 dias de treino no Dojo.</p>
+</div>
+<div class="mt-auto">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-xs font-bold text-slate-400">Faltam 8 dias</span>
+<span class="text-xs font-bold">22/30</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 73%"></div>
+</div>
+</div>
+</div>
+<!-- Achievement Card: Progress 3 -->
+<div class="group bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col gap-4 transition-all hover:scale-[1.02]">
+<div class="flex items-start justify-between">
+<div class="size-16 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500">
+<span class="material-symbols-outlined text-3xl filled-icon">target</span>
+</div>
+<span class="px-2 py-1 bg-amber-500/10 text-amber-500 text-[10px] font-bold rounded uppercase tracking-wider">Em Progresso</span>
+</div>
+<div>
+<h3 class="font-bold text-lg">Finalizador</h3>
+<p class="text-sm text-slate-500 dark:text-[#92adc9] mt-1 leading-relaxed">Vença 10 lutas por finalização em competições internas.</p>
+</div>
+<div class="mt-auto">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-xs font-bold text-slate-400">80% Completo</span>
+<span class="text-xs font-bold">8/10</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 80%"></div>
+</div>
+</div>
+</div>
+<!-- Achievement Card: Unlocked 2 -->
+<div class="group bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col gap-4 transition-all hover:scale-[1.02]">
+<div class="flex items-start justify-between">
+<div class="size-16 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500">
+<span class="material-symbols-outlined text-3xl filled-icon">star</span>
+</div>
+<span class="px-2 py-1 bg-[#0bda5b]/10 text-[#0bda5b] text-[10px] font-bold rounded uppercase tracking-wider">Desbloqueado</span>
+</div>
+<div>
+<h3 class="font-bold text-lg">Presença VIP</h3>
+<p class="text-sm text-slate-500 dark:text-[#92adc9] mt-1 leading-relaxed">Participe de todos os seminários especiais realizados este mês.</p>
+</div>
+<div class="mt-auto">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-xs font-bold text-primary">Concluído</span>
+<span class="text-xs font-bold">4/4</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 100%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Sidebar: Achievement Ranking -->
+<aside class="w-80 border-l border-slate-200 dark:border-[#324d67] p-8 hidden xl:block overflow-y-auto">
+<div class="sticky top-0">
+<h3 class="text-xl font-bold mb-6">Ranking de Conquistas</h3>
+<div class="space-y-4">
+<!-- Rank Item: 1 -->
+<div class="flex items-center gap-4 p-3 rounded-xl bg-primary/5 border border-primary/20">
+<span class="text-primary font-black text-lg w-4">1</span>
+<div class="size-10 rounded-full bg-cover bg-center border-2 border-primary" data-alt="Avatar do ranking 1" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBlCu1BJN6vT0RL0SdhQq-Ro9Nzt1ye2vmHf2mqsAapwc6z2Qzmn6T02DAADME-uKk0BLDiEy_gUbS6sXod4eKFEn763XSgI5JElz5x-qekkl9Arw3uJvd0afwGvw-qDLeRoy40Bt0cpoILExkAw0Zko6Di2IccisxTAD3pnrolC0RrY1ahL1GxkZ-E4NEOGZRZup1fEOeF1xHDzT03Pd_UKQVMj12ihYAxorOh00jZ5PF3svioPhFqY21pWafWkgVCUZy-kOzS1XBe')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Lucas Oliveira</p>
+<p class="text-xs text-slate-500">32 Insígnias</p>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-primary">2.4k pts</p>
+</div>
+</div>
+<!-- Rank Item: 2 -->
+<div class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-[#1e293b] transition-colors">
+<span class="text-slate-400 font-black text-lg w-4">2</span>
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Avatar do ranking 2" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAH8Elzu2ixNFvaB11CTKRTB9HKYvWlRXYpCGKlLMV-jMGxY29XxqVOXeeMNK6p5l2OtottBWnRWg9tmPnf1Tir6WxjlYx0doZXwGkxRoGmfI3cfAt4JxUhV--hkY9hZ_OYPFu7b40diU3DxgCEUOps2Rc--ODBOVQXaEKDgUGKy_m97HsKntn3WN1x-OzKwmuENHGeiZ1yyglj2bJ0rqOC3jSg8j1l8OVPQerHHZfxcusFOhrwKaNcjMS_tdM9Ez0CQM_1dsyLSvck')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Ana Martins</p>
+<p class="text-xs text-slate-500">28 Insígnias</p>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold">2.1k pts</p>
+</div>
+</div>
+<!-- Rank Item: Current User (Highlighted) -->
+<div class="flex items-center gap-4 p-3 rounded-xl bg-primary text-white shadow-lg shadow-primary/30 transform scale-105">
+<span class="font-black text-lg w-4 text-white">3</span>
+<div class="size-10 rounded-full bg-cover bg-center border-2 border-white/50" data-alt="Sua foto de perfil" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuABTGdiLwhd9x2wfOIR-V_uCpq5_a1R75TQPZr3VJNyDrGa5WqPeN7BF3Wq0OoAf0K61rfD5v0lW5DhydRGgFSK0bwWuShh8_HoLO4JPzhCRZ7am18kQP9Kcnk51li-5MBg_z_XNZjtoXT5xm84x8Yzaqk6_qRE3tFX496kjm49rubwJwiHm2m6lQ8OUAg5oFKl4fjHX8d5vIdIUkWHfVlX6kzIos5XMWJT-J4L-hVAfS8_2pEObHjc2HHM1bLOl6UVxNLLudC7LVgE')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Gabriel Silva (Você)</p>
+<p class="text-[10px] text-white/80">12 Insígnias</p>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-white">1.2k pts</p>
+</div>
+</div>
+<!-- Rank Item: 4 -->
+<div class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-[#1e293b] transition-colors">
+<span class="text-slate-400 font-black text-lg w-4">4</span>
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Avatar do ranking 4" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCaWuw7qLH3Ai0mR9fVcIpSSufaIpj4wqE3WNMqL1iFEgZQOKqH4IDUECsKH0kLvxQdy3M1zbQ_6keI1QoRS8dOJ8J2Vcv0a4tFerS-prwsZmOniFtv4yVq-d0MjU8iCS6D4NfcPrClVVAs1NCTOLQrz1_w_PKkqsYuc5sLzelKnilF-2TLvHfvYBFmuzUk16hnC8j15CNunDCI3ssyKg7ZVSyIzvPSAGPkeVvnBFY1u7lUmtQnCe1id7OB4v1-3B9B6wxBodmEtDTN')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Rafael Sousa</p>
+<p class="text-xs text-slate-500">11 Insígnias</p>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold">950 pts</p>
+</div>
+</div>
+<!-- Rank Item: 5 -->
+<div class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-[#1e293b] transition-colors">
+<span class="text-slate-400 font-black text-lg w-4">5</span>
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Avatar do ranking 5" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBhKqRrembv-s-g6j_Rji9AIXEXR72vwrgdlUOoAfHzvODSTb5_6O_GpSCfZSUH2figpT4ClgsPRk2Bj5NDqto58Fipb-YXSfJpUFhnZwDdQKOxnmjOf1qgDiYoxV1KDTZnhBjUFPmwwu8dJkCf76pMiEz3tqAqy2WGqMb-pLEGg5jLzcrLxba8efKEFbkam9j4ntLiT3UYGsGzFsEjyPPPrFJ-qJQTPb3ClBFHwVC01hiWx2EpT4qxeUnpnLbGiTRWfGe79xBVXjQc')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Bruno Lima</p>
+<p class="text-xs text-slate-500">9 Insígnias</p>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold">820 pts</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-3 text-sm font-bold text-primary border border-primary/20 rounded-xl hover:bg-primary/5 transition-colors">
+                        Ver Ranking Global
+                    </button>
+<div class="mt-8 p-4 bg-slate-100 dark:bg-slate-800 rounded-xl">
+<div class="flex items-center gap-2 mb-2 text-primary">
+<span class="material-symbols-outlined text-sm filled-icon">info</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Dica Pro</p>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Complete o conjunto de <span class="text-primary font-bold">Insígnias de Técnicas</span> para desbloquear o acesso antecipado ao seminário de Passagem de Guarda.
+                        </p>
+</div>
+</div>
+</aside>
+</main>
+</div>
+</body></html>

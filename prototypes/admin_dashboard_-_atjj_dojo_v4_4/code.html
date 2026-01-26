@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Painel Administrativo Dark SaaS - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --primary-accent: #3498db;
+            --text-muted: #94a3b8;
+            --sidebar-width: 280px;
+        }
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "main": "#0f172a",
+                        "card": "#1e293b",
+                        "border-slate": "#334155",
+                        "accent": "#3498db",
+                        "muted": "#94a3b8",
+                    },
+                    fontFamily: {
+                        "sans": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </style>
+<style>
+        body {
+            background-color: var(--bg-main);
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sidebar-link {
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+        }
+        .sidebar-link:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+            color: white;
+        }
+        .sidebar-link.active {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary-accent);
+        }
+        .sidebar-link.active .material-symbols-outlined {
+            color: var(--primary-accent);
+            font-variation-settings: 'FILL' 1;
+        }
+        .metric-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .metric-card:hover {
+            border-color: var(--primary-accent);
+            transform: translateY(-2px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
+        .belt-glow-blue { box-shadow: 0 0 15px rgba(52, 152, 219, 0.3); border: 2px solid #3498db; }
+        .belt-glow-purple { box-shadow: 0 0 15px rgba(155, 89, 182, 0.3); border: 2px solid #9b59b6; }
+        .belt-glow-brown { box-shadow: 0 0 15px rgba(121, 85, 72, 0.3); border: 2px solid #795548; }
+        .belt-glow-black { box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); border: 2px solid #ffffff; }
+        .sparkline {
+            height: 30px;
+            width: 80px;
+            background: linear-gradient(90deg, transparent 0%, rgba(52, 152, 219, 0.1) 50%, transparent 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .sparkline::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #3498db;
+            box-shadow: 0 0 8px #3498db;
+        }
+    </style>
+</head>
+<body class="antialiased">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-[var(--sidebar-width)] flex-shrink-0 bg-main flex flex-col h-full z-40 border-r border-border-slate">
+<div class="p-8 flex items-center gap-3">
+<div class="bg-accent rounded-lg p-2 text-white shadow-[0_0_20px_rgba(52,152,219,0.4)]">
+<span class="material-symbols-outlined text-[28px]">sports_martial_arts</span>
+</div>
+<div>
+<h1 class="text-white text-xl font-extrabold tracking-tight leading-none uppercase">ATJJ Dojo</h1>
+<p class="text-muted text-[10px] font-bold tracking-[0.2em] mt-1">SISTEMA V4</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
+<p class="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 opacity-50">Geral</p>
+<a class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Painel Geral
+            </a>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined">group</span>
+                Membros
+            </a>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+                Agenda de Aulas
+            </a>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined">trophy</span>
+                Competições
+            </a>
+<p class="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 mt-8 opacity-50">Administrativo</p>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined">payments</span>
+                Financeiro
+            </a>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Relatórios
+            </a>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Configurações
+            </a>
+</nav>
+<div class="p-6 border-t border-border-slate">
+<div class="bg-card rounded-2xl p-4 border border-border-slate">
+<p class="text-[11px] font-medium text-muted mb-2">Plano Premium</p>
+<div class="h-1.5 w-full bg-main rounded-full mb-3">
+<div class="h-full bg-accent w-2/3 rounded-full shadow-[0_0_10px_rgba(52,152,219,0.5)]"></div>
+</div>
+<button class="text-[10px] font-bold text-accent hover:text-white uppercase tracking-wider transition-colors">Ver detalhes</button>
+</div>
+</div>
+</aside>
+<div class="flex-1 flex flex-col relative overflow-hidden bg-main">
+<header class="h-18 flex items-center justify-between bg-main/80 backdrop-blur-md border-b border-border-slate px-10 sticky top-0 z-30 py-4">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-accent transition-colors">search</span>
+<input class="w-full bg-card border border-border-slate rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:ring-1 focus:ring-accent focus:border-accent transition-all placeholder:text-muted/50" placeholder="Pesquisar por alunos, graduações..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-2">
+<button class="p-2 text-muted hover:text-white hover:bg-card rounded-xl transition-all relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2.5 right-2.5 w-2 h-2 bg-accent rounded-full border-2 border-main shadow-[0_0_8px_#3498db]"></span>
+</button>
+<button class="p-2 text-muted hover:text-white hover:bg-card rounded-xl transition-all">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+</div>
+<div class="h-8 w-px bg-border-slate"></div>
+<div class="flex items-center gap-3 pl-2 group cursor-pointer">
+<div class="text-right">
+<p class="text-sm font-bold text-white group-hover:text-accent transition-colors">Mestre Silva</p>
+<p class="text-[10px] text-accent font-bold uppercase tracking-wider">Administrador</p>
+</div>
+<img alt="User" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-border-slate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdR_rYip1JZqYRefkGQm9GaJKZ8Cad7hdhZi9sZLamFJ0Of7VDRtVr_Z64DLoev5KIDFC_uLK043WEHDXLzkeueFp-LzM1pYN88kEckc4Mlnybnwox1ZUX6NNDCGbkMs31YankLnAWYfcAwjVOiKgs-b_W6crglye3QdBdqeHsy0YN5YPGxYHnpKwoE1uqnerCu-Sqjmod8kN3jx6NtH_X8o5wRRKsZrQxloBylC4eReqXl5aZLydCDMhg6eOkYYUG2IQhlcpiBHis"/>
+</div>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto p-10 custom-scrollbar">
+<div class="max-w-7xl mx-auto space-y-10">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="metric-card p-6 rounded-2xl flex flex-col justify-between">
+<div class="flex justify-between items-start mb-6">
+<p class="text-muted text-xs font-semibold uppercase tracking-wider">Total de Alunos</p>
+<div class="sparkline rounded opacity-50"></div>
+</div>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-extrabold text-white">152</h3>
+<span class="text-[11px] font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-md">+12%</span>
+</div>
+</div>
+<div class="metric-card p-6 rounded-2xl flex flex-col justify-between">
+<div class="flex justify-between items-start mb-6">
+<p class="text-muted text-xs font-semibold uppercase tracking-wider">Aulas no Mês</p>
+<div class="sparkline rounded opacity-50"></div>
+</div>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-extrabold text-white">42</h3>
+<span class="text-[11px] font-bold text-muted bg-white/5 px-2 py-0.5 rounded-md">ESTÁVEL</span>
+</div>
+</div>
+<div class="metric-card p-6 rounded-2xl flex flex-col justify-between">
+<div class="flex justify-between items-start mb-6">
+<p class="text-muted text-xs font-semibold uppercase tracking-wider">Média de XP</p>
+<div class="sparkline rounded opacity-50"></div>
+</div>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-extrabold text-white">1,240</h3>
+<span class="text-[11px] font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-md">+8%</span>
+</div>
+</div>
+<div class="metric-card p-6 rounded-2xl flex flex-col justify-between">
+<div class="flex justify-between items-start mb-6">
+<p class="text-muted text-xs font-semibold uppercase tracking-wider">Faturamento</p>
+<div class="sparkline rounded opacity-50"></div>
+</div>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-extrabold text-white">R$ 24.5k</h3>
+<span class="text-[11px] font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-md">+5%</span>
+</div>
+</div>
+</div>
+<div class="bg-card rounded-3xl p-8 border border-border-slate">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="text-2xl font-black text-white tracking-tight">Mural de Destaques</h2>
+<p class="text-muted text-sm font-medium">Reconhecimento e conquistas da semana</p>
+</div>
+<button class="flex items-center gap-2 text-white font-bold text-sm bg-accent px-5 py-2.5 rounded-xl hover:bg-accent/90 transition-all shadow-[0_0_15px_rgba(52,152,219,0.3)]">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+                            Novo Destaque
+                        </button>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-6">
+<h3 class="text-xs font-bold text-muted uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-500 text-sm">military_tech</span>
+                                Novos Graduados
+                            </h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-main border border-border-slate hover:border-accent/50 transition-all cursor-default group">
+<div class="relative">
+<img alt="Sarah" class="w-14 h-14 rounded-full object-cover belt-glow-blue" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnBBROuYduiOql-YXCBRTutObP0upXni6Wi8C1kTPbEee6-pKErpcU-FvnocYuICP8DTFN1sUwqE4LS3M_GKu9_feyZKPNpQ4jF71urYZDq8WDRMaZ1KQ7u8Lm2hLTq-QsxzDJ-vKLZp-ydrWrlyz8q8mx-GqKc0Lof_lXtK5rPGuYfKtB9Vrb5DN6qmnTgOykq5WxuR1NcbGi-EJLCkESumvWbDE6Nj8BbhMTvHkMQ4c3DgaFZsQyHym-FeGuBF8pq3o3RwjOMSHb"/>
+</div>
+<div>
+<p class="font-bold text-white text-sm">Sarah Jenkins</p>
+<span class="text-[10px] font-black uppercase text-accent">Faixa Azul</span>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-main border border-border-slate hover:border-purple-500/50 transition-all cursor-default">
+<div class="relative">
+<img alt="Felipe" class="w-14 h-14 rounded-full object-cover belt-glow-purple" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5oe-Q9EJLDrUqh1TgQhyCSho4ItznlGxcKTHGuP3odngXkijh_Qay3mjfXtahAFKP-2sWFymC1G7dIY5J5eOfzFNV1M7nNn-7GHJKbpt0YEhGSQsQ6G8bb1VOAWhFAKeSHhHhiqSxo-tVTuge1Kcshp9ko6z_vxjGooyhp1glrYWvRZFTwYlG2aJIYVEwN2KEQ-NqvUbNs5vbIoBCnfyGgJBGpBtdN8RBSvVu86IwmoGzCkmiKTkRfDv1pxPnmQMdZhwIyU3LJK81"/>
+</div>
+<div>
+<p class="font-bold text-white text-sm">Felipe Costa</p>
+<span class="text-[10px] font-black uppercase text-purple-400">Faixa Roxa</span>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-main border border-border-slate hover:border-amber-700/50 transition-all cursor-default">
+<div class="relative">
+<img alt="Thiago" class="w-14 h-14 rounded-full object-cover belt-glow-brown" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdR_rYip1JZqYRefkGQm9GaJKZ8Cad7hdhZi9sZLamFJ0Of7VDRtVr_Z64DLoev5KIDFC_uLK043WEHDXLzkeueFp-LzM1pYN88kEckc4Mlnybnwox1ZUX6NNDCGbkMs31YankLnAWYfcAwjVOiKgs-b_W6crglye3QdBdqeHsy0YN5YPGxYHnpKwoE1uqnerCu-Sqjmod8kN3jx6NtH_X8o5wRRKsZrQxloBylC4eReqXl5aZLydCDMhg6eOkYYUG2IQhlcpiBHis"/>
+</div>
+<div>
+<p class="font-bold text-white text-sm">Thiago Neves</p>
+<span class="text-[10px] font-black uppercase text-amber-600">Faixa Marrom</span>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-main border border-border-slate hover:border-white/50 transition-all cursor-default">
+<div class="relative">
+<img alt="André" class="w-14 h-14 rounded-full object-cover belt-glow-black" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5oe-Q9EJLDrUqh1TgQhyCSho4ItznlGxcKTHGuP3odngXkijh_Qay3mjfXtahAFKP-2sWFymC1G7dIY5J5eOfzFNV1M7nNn-7GHJKbpt0YEhGSQsQ6G8bb1VOAWhFAKeSHhHhiqSxo-tVTuge1Kcshp9ko6z_vxjGooyhp1glrYWvRZFTwYlG2aJIYVEwN2KEQ-NqvUbNs5vbIoBCnfyGgJBGpBtdN8RBSvVu86IwmoGzCkmiKTkRfDv1pxPnmQMdZhwIyU3LJK81"/>
+</div>
+<div>
+<p class="font-bold text-white text-sm">André Alves</p>
+<span class="text-[10px] font-black uppercase text-white">Faixa Preta</span>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-3">
+<h3 class="text-xs font-bold text-muted uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-yellow-500 text-sm">stars</span>
+                                Aluno Destaque
+                            </h3>
+<div class="bg-gradient-to-br from-accent/20 to-main rounded-3xl p-6 text-center border border-accent/20 h-full flex flex-col items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-from)_0%,_transparent_70%)] opacity-20"></div>
+<div class="relative z-10">
+<div class="relative inline-block mb-4">
+<img alt="Marcus" class="w-20 h-20 rounded-full object-cover belt-glow-black p-0.5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5oe-Q9EJLDrUqh1TgQhyCSho4ItznlGxcKTHGuP3odngXkijh_Qay3mjfXtahAFKP-2sWFymC1G7dIY5J5eOfzFNV1M7nNn-7GHJKbpt0YEhGSQsQ6G8bb1VOAWhFAKeSHhHhiqSxo-tVTuge1Kcshp9ko6z_vxjGooyhp1glrYWvRZFTwYlG2aJIYVEwN2KEQ-NqvUbNs5vbIoBCnfyGgJBGpBtdN8RBSvVu86IwmoGzCkmiKTkRfDv1pxPnmQMdZhwIyU3LJK81"/>
+<div class="absolute -bottom-1 right-0 bg-yellow-400 text-main font-black text-[9px] px-2 py-0.5 rounded-full border border-main">TOP #1</div>
+</div>
+<h4 class="text-lg font-bold text-white">Marcus Aurelius</h4>
+<p class="text-accent font-black text-[11px] uppercase tracking-wider mt-1">+2.450 XP</p>
+<div class="mt-4 flex gap-2 justify-center">
+<span class="bg-white/5 border border-white/10 px-3 py-1 rounded-full text-[9px] font-bold text-white">12 Aulas</span>
+<span class="bg-white/5 border border-white/10 px-3 py-1 rounded-full text-[9px] font-bold text-white">3 Medalhas</span>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-3">
+<h3 class="text-xs font-bold text-muted uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-pink-500 text-sm">cake</span>
+                                Aniversariantes
+                            </h3>
+<div class="space-y-4">
+<div class="flex items-center gap-3 p-3 rounded-2xl border border-border-slate bg-main/30">
+<img alt="Lara" class="w-10 h-10 rounded-xl object-cover grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnBBROuYduiOql-YXCBRTutObP0upXni6Wi8C1kTPbEee6-pKErpcU-FvnocYuICP8DTFN1sUwqE4LS3M_GKu9_feyZKPNpQ4jF71urYZDq8WDRMaZ1KQ7u8Lm2hLTq-QsxzDJ-vKLZp-ydrWrlyz8q8mx-GqKc0Lof_lXtK5rPGuYfKtB9Vrb5DN6qmnTgOykq5WxuR1NcbGi-EJLCkESumvWbDE6Nj8BbhMTvHkMQ4c3DgaFZsQyHym-FeGuBF8pq3o3RwjOMSHb"/>
+<div>
+<p class="text-sm font-bold text-white">Lara Silva</p>
+<p class="text-[10px] text-muted font-medium">12 de Outubro</p>
+</div>
+<span class="material-symbols-outlined text-pink-500 text-lg ml-auto">celebration</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-2xl border border-border-slate bg-main/30">
+<img alt="Beto" class="w-10 h-10 rounded-xl object-cover grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdR_rYip1JZqYRefkGQm9GaJKZ8Cad7hdhZi9sZLamFJ0Of7VDRtVr_Z64DLoev5KIDFC_uLK043WEHDXLzkeueFp-LzM1pYN88kEckc4Mlnybnwox1ZUX6NNDCGbkMs31YankLnAWYfcAwjVOiKgs-b_W6crglye3QdBdqeHsy0YN5YPGxYHnpKwoE1uqnerCu-Sqjmod8kN3jx6NtH_X8o5wRRKsZrQxloBylC4eReqXl5aZLydCDMhg6eOkYYUG2IQhlcpiBHis"/>
+<div>
+<p class="text-sm font-bold text-white">Beto Mendes</p>
+<p class="text-[10px] text-muted font-medium">24 de Outubro</p>
+</div>
+<span class="material-symbols-outlined text-pink-500 text-lg ml-auto opacity-30">celebration</span>
+</div>
+<button class="w-full mt-2 py-3 bg-white/5 text-muted rounded-xl text-[10px] font-bold uppercase tracking-widest hover:text-white hover:bg-white/10 transition-colors">Calendário</button>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-10">
+<div class="xl:col-span-8 space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="text-xl font-black text-white tracking-tight uppercase">Agenda do Dia</h2>
+<button class="text-accent font-bold text-xs hover:underline">Ver agenda completa</button>
+</div>
+<div class="bg-card rounded-3xl border border-border-slate overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-main/40 border-b border-border-slate">
+<tr>
+<th class="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest">Horário</th>
+<th class="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest">Modalidade</th>
+<th class="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest">Instrutor</th>
+<th class="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest">Lotação</th>
+<th class="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-slate/50">
+<tr class="hover:bg-main/20 transition-colors">
+<td class="px-8 py-5 text-sm font-bold text-white">10:00</td>
+<td class="px-8 py-5">
+<span class="px-2.5 py-1 bg-white/5 border border-white/10 text-white text-[9px] font-black rounded-lg uppercase">Gi (Kimono)</span>
+</td>
+<td class="px-8 py-5 text-sm font-semibold text-muted">Mestre Silva</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-20 bg-main h-1.5 rounded-full overflow-hidden">
+<div class="bg-accent h-full shadow-[0_0_8px_#3498db]" style="width: 80%;"></div>
+</div>
+<span class="text-[10px] font-bold text-white">80%</span>
+</div>
+</td>
+<td class="px-8 py-5 text-right">
+<span class="inline-flex items-center px-2 py-0.5 bg-emerald-400/10 text-emerald-400 text-[9px] font-bold rounded-full border border-emerald-400/20 uppercase">Em aula</span>
+</td>
+</tr>
+<tr class="hover:bg-main/20 transition-colors">
+<td class="px-8 py-5 text-sm font-bold text-white">14:30</td>
+<td class="px-8 py-5">
+<span class="px-2.5 py-1 bg-accent/10 border border-accent/20 text-accent text-[9px] font-black rounded-lg uppercase">No-Gi</span>
+</td>
+<td class="px-8 py-5 text-sm font-semibold text-muted">Coach Miller</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-20 bg-main h-1.5 rounded-full overflow-hidden">
+<div class="bg-accent h-full shadow-[0_0_8px_#3498db]" style="width: 45%;"></div>
+</div>
+<span class="text-[10px] font-bold text-white">45%</span>
+</div>
+</td>
+<td class="px-8 py-5 text-right">
+<span class="inline-flex items-center px-2 py-0.5 bg-accent/10 text-accent text-[9px] font-bold rounded-full border border-accent/20 uppercase">Em breve</span>
+</td>
+</tr>
+<tr class="hover:bg-main/20 transition-colors">
+<td class="px-8 py-5 text-sm font-bold text-white">18:00</td>
+<td class="px-8 py-5">
+<span class="px-2.5 py-1 bg-white/5 border border-white/10 text-white text-[9px] font-black rounded-lg uppercase">Infantil</span>
+</td>
+<td class="px-8 py-5 text-sm font-semibold text-muted">Profa. Gabi</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-20 bg-main h-1.5 rounded-full overflow-hidden">
+<div class="bg-accent h-full shadow-[0_0_8px_#3498db]" style="width: 100%;"></div>
+</div>
+<span class="text-[10px] font-bold text-white">Lotado</span>
+</div>
+</td>
+<td class="px-8 py-5 text-right">
+<span class="inline-flex items-center px-2 py-0.5 bg-white/5 text-muted text-[9px] font-bold rounded-full border border-white/10 uppercase">Agendado</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="xl:col-span-4 space-y-6">
+<h2 class="text-xl font-black text-white tracking-tight uppercase">Ranking Elite</h2>
+<div class="bg-card rounded-3xl p-8 border border-border-slate">
+<div class="mb-10">
+<div class="flex justify-between items-end mb-3">
+<div>
+<p class="text-[10px] font-bold text-accent uppercase tracking-[0.2em]">Progresso do Dojo</p>
+<h3 class="text-2xl font-black text-white">Nível 42</h3>
+</div>
+<span class="text-[10px] font-bold text-muted px-3 py-1 bg-main rounded-full">75% p/ Nv. 43</span>
+</div>
+<div class="h-2 w-full bg-main rounded-full overflow-hidden border border-border-slate">
+<div class="h-full bg-gradient-to-r from-accent to-accent/40 rounded-full" style="width: 75%;"></div>
+</div>
+</div>
+<div class="space-y-5">
+<div class="flex items-center justify-between group cursor-pointer hover:bg-main/50 p-2 -mx-2 rounded-2xl transition-all">
+<div class="flex items-center gap-3">
+<div class="w-6 text-xs font-black text-yellow-400 italic">01</div>
+<img alt="Marcus" class="w-10 h-10 rounded-xl object-cover border-2 border-yellow-400/50 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5oe-Q9EJLDrUqh1TgQhyCSho4ItznlGxcKTHGuP3odngXkijh_Qay3mjfXtahAFKP-2sWFymC1G7dIY5J5eOfzFNV1M7nNn-7GHJKbpt0YEhGSQsQ6G8bb1VOAWhFAKeSHhHhiqSxo-tVTuge1Kcshp9ko6z_vxjGooyhp1glrYWvRZFTwYlG2aJIYVEwN2KEQ-NqvUbNs5vbIoBCnfyGgJBGpBtdN8RBSvVu86IwmoGzCkmiKTkRfDv1pxPnmQMdZhwIyU3LJK81"/>
+<div>
+<p class="text-sm font-bold text-white">Marcus Aurelius</p>
+<p class="text-[9px] text-muted font-bold uppercase">Faixa Preta</p>
+</div>
+</div>
+<span class="text-[10px] font-black text-white bg-accent/20 border border-accent/30 px-3 py-1 rounded-lg">12.4k XP</span>
+</div>
+<div class="flex items-center justify-between group cursor-pointer hover:bg-main/50 p-2 -mx-2 rounded-2xl transition-all">
+<div class="flex items-center gap-3">
+<div class="w-6 text-xs font-black text-muted italic">02</div>
+<img alt="Sarah" class="w-10 h-10 rounded-xl object-cover border-2 border-border-slate shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnBBROuYduiOql-YXCBRTutObP0upXni6Wi8C1kTPbEee6-pKErpcU-FvnocYuICP8DTFN1sUwqE4LS3M_GKu9_feyZKPNpQ4jF71urYZDq8WDRMaZ1KQ7u8Lm2hLTq-QsxzDJ-vKLZp-ydrWrlyz8q8mx-GqKc0Lof_lXtK5rPGuYfKtB9Vrb5DN6qmnTgOykq5WxuR1NcbGi-EJLCkESumvWbDE6Nj8BbhMTvHkMQ4c3DgaFZsQyHym-FeGuBF8pq3o3RwjOMSHb"/>
+<div>
+<p class="text-sm font-bold text-white">Sarah Jenkins</p>
+<p class="text-[9px] text-muted font-bold uppercase">Faixa Marrom</p>
+</div>
+</div>
+<span class="text-[10px] font-black text-muted bg-main px-3 py-1 rounded-lg">11.2k XP</span>
+</div>
+<div class="flex items-center justify-between group cursor-pointer hover:bg-main/50 p-2 -mx-2 rounded-2xl transition-all">
+<div class="flex items-center gap-3">
+<div class="w-6 text-xs font-black text-amber-900 italic">03</div>
+<img alt="Felipe" class="w-10 h-10 rounded-xl object-cover border-2 border-border-slate shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5oe-Q9EJLDrUqh1TgQhyCSho4ItznlGxcKTHGuP3odngXkijh_Qay3mjfXtahAFKP-2sWFymC1G7dIY5J5eOfzFNV1M7nNn-7GHJKbpt0YEhGSQsQ6G8bb1VOAWhFAKeSHhHhiqSxo-tVTuge1Kcshp9ko6z_vxjGooyhp1glrYWvRZFTwYlG2aJIYVEwN2KEQ-NqvUbNs5vbIoBCnfyGgJBGpBtdN8RBSvVu86IwmoGzCkmiKTkRfDv1pxPnmQMdZhwIyU3LJK81"/>
+<div>
+<p class="text-sm font-bold text-white">Felipe Costa</p>
+<p class="text-[9px] text-muted font-bold uppercase">Faixa Roxa</p>
+</div>
+</div>
+<span class="text-[10px] font-black text-muted bg-main px-3 py-1 rounded-lg">9.8k XP</span>
+</div>
+</div>
+<button class="w-full mt-8 py-3 bg-white/5 border border-white/10 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-accent transition-all shadow-sm">
+                                Ranking Completo
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

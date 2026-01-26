@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Emissão de Certificados em Lote - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2c99e2",
+                        "secondary": "#2c3e50",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111b21",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Lexend', sans-serif; }
+        .certificate-preview {
+            aspect-ratio: 1.414 / 1;
+            background: linear-gradient(135deg, #fff 0%, #fdfdfd 100%);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-secondary dark:text-gray-200 min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-background-dark px-6 py-3">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined">shield</span>
+</div>
+<h2 class="text-secondary dark:text-white text-lg font-bold leading-tight tracking-tight">ATJJ Dojo <span class="text-primary">v4</span></h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-gray-500 hover:text-primary text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-gray-500 hover:text-primary text-sm font-medium transition-colors" href="#">Alunos</a>
+<a class="text-gray-500 hover:text-primary text-sm font-medium transition-colors" href="#">Exames</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-1" href="#">Certificados</a>
+<a class="text-gray-500 hover:text-primary text-sm font-medium transition-colors" href="#">Configurações</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+<input class="bg-gray-100 dark:bg-gray-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary w-64" placeholder="Buscar aluno ou certificado..." type="text"/>
+</div>
+<button class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-cover bg-center border-2 border-primary" data-alt="Foto de perfil do mestre" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBXEQXccAWB7LABwwwMWZYb_6OqfqBnxqXHX8ZOApFMfIqVeKR-2dqagS90CAEDo_9rmaUWQCaJaNhwhJ1bW5S7FAALmHUkNgkTjdMS5QHeDuYst7h3DxeD8Vduww1UPEP3muV4xGI-w-38rgj6aHkwVTVYMQGKOD07oOKEQZqEf5f6fme7JnQUvvhOP4c3Kl5VjU8FhEV8h7jP3OLrCdnhxXDwK5BUKZeEAHJmCOW102ft8PGFcP_Kvc4F3wTUq2FbEjJgxAtApdOu');"></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Side Navigation -->
+<aside class="w-64 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-background-dark hidden lg:flex flex-col p-4 gap-6">
+<div class="flex items-center gap-3 p-2">
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">workspace_premium</span>
+</div>
+<div>
+<h1 class="text-secondary dark:text-white text-sm font-bold">Gestão de Faixas</h1>
+<p class="text-gray-400 text-xs font-medium uppercase tracking-wider">Exame 2023.2</p>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">dashboard</span>
+<span class="text-sm font-medium">Visão Geral</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined text-xl">layers</span>
+<span class="text-sm font-bold">Emissão em Lote</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">style</span>
+<span class="text-sm font-medium">Modelos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">history</span>
+<span class="text-sm font-medium">Histórico</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">draw</span>
+<span class="text-sm font-medium">Assinaturas</span>
+</a>
+</div>
+<div class="mt-auto bg-gray-50 dark:bg-gray-800 rounded-xl p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-bold text-secondary dark:text-gray-300">Uso de Armazenamento</span>
+<span class="text-xs text-primary">85%</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%]"></div>
+</div>
+<p class="text-[10px] text-gray-400 mt-2">Você emitiu 425 certificados este mês.</p>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto custom-scrollbar bg-background-light dark:bg-background-dark p-6 relative">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 mb-4 text-xs font-medium text-gray-400 uppercase tracking-widest">
+<a class="hover:text-primary" href="#">Certificados</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-secondary dark:text-gray-300">Emissão em Lote</span>
+</div>
+<!-- Page Heading -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+<div>
+<h2 class="text-3xl font-black text-secondary dark:text-white leading-tight">Emissão em Lote</h2>
+<p class="text-gray-500 dark:text-gray-400 text-base">Selecione os alunos aprovados e finalize os documentos oficiais.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-bold text-secondary dark:text-white bg-white dark:bg-gray-800 hover:bg-gray-50">
+<span class="material-symbols-outlined text-lg">settings_backup_restore</span>
+                        Restaurar Seleção
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all">
+<span class="material-symbols-outlined text-lg">add</span>
+                        Novo Modelo
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start pb-24">
+<!-- Left: Student Selection -->
+<div class="xl:col-span-7 flex flex-col gap-6">
+<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+<div class="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/50">
+<h3 class="font-bold text-secondary dark:text-white">1. Alunos Aprovados (12)</h3>
+<div class="flex items-center gap-2">
+<span class="text-xs text-gray-500">Filtrar por Faixa:</span>
+<select class="text-xs border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded focus:ring-primary py-1">
+<option>Todas</option>
+<option>Azul</option>
+<option>Roxa</option>
+</select>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[10px] uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-gray-800">
+<th class="px-6 py-3 font-bold w-12"><input checked="" class="rounded border-gray-300 text-primary focus:ring-primary" type="checkbox"/></th>
+<th class="px-4 py-3 font-bold">Aluno</th>
+<th class="px-4 py-3 font-bold text-center">Nova Faixa</th>
+<th class="px-4 py-3 font-bold text-center">Média</th>
+<th class="px-4 py-3 font-bold text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-50 dark:divide-gray-800">
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<td class="px-6 py-4"><input checked="" class="rounded border-gray-300 text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-4 py-4">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-cover bg-center" data-alt="Avatar do aluno" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAnhHRA73MPqiXNHdyQ2Pl5HA5IrY2xrEXKqfrKVZGAjKFKwF6km4ttLEukVdHkCckiOO9nZRirI28YYePFRzRZ7CNCWZaEhmKiPgIsFdCjA6vg9zG5VpdBX3on8pzK1sHWDunXh3Uy9HK_DfjB-eNKO8fGOVn_e_SEEqiFvRbWYFIDaFYp2yjxNvz3Up0knvYgo5jHXv4Uq75CobrgXBSTo_UPy_cehsrWj3r-cPEAFGJBsKvN8jiWMCaRe0LowA9kXImecdKw36Vz');"></div>
+<div>
+<p class="text-sm font-bold text-secondary dark:text-white">Lucas Oliveira</p>
+<p class="text-[10px] text-gray-400">ID: #8829</p>
+</div>
+</div>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="px-2 py-1 bg-blue-600 text-white text-[10px] font-bold rounded uppercase">Azul</span>
+</td>
+<td class="px-4 py-4 text-center">
+<div class="flex items-center justify-center gap-1">
+<span class="text-sm font-bold text-secondary dark:text-gray-200">9.8</span>
+<span class="material-symbols-outlined text-yellow-500 text-sm fill-current">star</span>
+</div>
+</td>
+<td class="px-4 py-4 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg">visibility</span></button>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<td class="px-6 py-4"><input checked="" class="rounded border-gray-300 text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-4 py-4">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-cover bg-center" data-alt="Avatar do aluno" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCX7mrnJqngwXc7uLpxrEPGMO_9yAEiP8BSWZDfGswNXjPNeLD1XTZUjVrWoG1KKKvQZZ4u_w-ZUcku3bPjziNkqp9zzs9CWFBme9yLcns_ba5IOMnmr0MTdgc-VZnCUrcMblote8tzV_KSrO2o_CAxHE4yZEcH7xXHDyNAlf8clwRko-fIjCeScqHjqAK40mweI1xPYzZxfLwndxpsne6t67kPF3lllV_UnxQxLWBecNa2nP_-zq3LEiAmNpfo-3u_fwoFiesaBy-E');"></div>
+<div>
+<p class="text-sm font-bold text-secondary dark:text-white">Mariana Costa</p>
+<p class="text-[10px] text-gray-400">ID: #8841</p>
+</div>
+</div>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="px-2 py-1 bg-purple-600 text-white text-[10px] font-bold rounded uppercase">Roxa</span>
+</td>
+<td class="px-4 py-4 text-center">
+<div class="flex items-center justify-center gap-1">
+<span class="text-sm font-bold text-secondary dark:text-gray-200">8.5</span>
+</div>
+</td>
+<td class="px-4 py-4 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg">visibility</span></button>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<td class="px-6 py-4"><input class="rounded border-gray-300 text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-4 py-4 opacity-60">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-cover bg-center" data-alt="Avatar do aluno" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAl0GVvEtZUuXbd1ALzhzq_CgWpJgUdtPi_RL8yUv-aSy6SHshYVejyFwvZUMoWr2AYkx34ilL-bICzyGF59S6vCLWPs0XQxO2LjUDJwqtRdYgy-1mCdQWj9lD6aLzO_usx34J6UVegXo9ufAC1V1QHVxMUp0FQUuADlfMSMLNvpomRNTD_Fy-gjicWeAyqodMkafGNPmV1zx9XzjOQFDcnD6JWKfGDtUXnX4XlwFle1ieUujjtOxfJOvbo8HO_7o0cwBO1FcDdqNKN');"></div>
+<div>
+<p class="text-sm font-bold text-secondary dark:text-white">Ana Paula Silva</p>
+<p class="text-[10px] text-gray-400">ID: #8830</p>
+</div>
+</div>
+</td>
+<td class="px-4 py-4 text-center opacity-60">
+<span class="px-2 py-1 bg-gray-400 text-white text-[10px] font-bold rounded uppercase">Branca</span>
+</td>
+<td class="px-4 py-4 text-center opacity-60">
+<div class="flex items-center justify-center gap-1">
+<span class="text-sm font-bold text-secondary dark:text-gray-200">6.2</span>
+</div>
+</td>
+<td class="px-4 py-4 text-right">
+<span class="text-[10px] font-bold text-red-500 uppercase">Reprovado</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Options & Customization -->
+<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 flex flex-col gap-6">
+<h3 class="font-bold text-secondary dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">tune</span>
+                            2. Opções de Customização
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Template de Borda</label>
+<select class="w-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-primary">
+<option>Clássico Minimalista</option>
+<option>Borda Dourada Premium</option>
+<option>Modern Dojo Series</option>
+<option>Gamified Achievement</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Estilo da Caligrafia</label>
+<select class="w-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-primary">
+<option>Serif Classica (Tradicional)</option>
+<option>Modern Sans (Límpido)</option>
+<option>Script Elegante (Assinatura)</option>
+</select>
+</div>
+<div class="md:col-span-2 space-y-2">
+<label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Texto Adicional (Opcional)</label>
+<textarea class="w-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-primary placeholder:text-gray-400" placeholder="Ex: Por sua dedicação e disciplina exemplar durante o ciclo..." rows="2"></textarea>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="rounded border-gray-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm font-medium">Incluir Assinatura Digital</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="rounded border-gray-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm font-medium">Data Automática</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded border-gray-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm font-medium">Selo Holográfico</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Right: Live Preview -->
+<div class="xl:col-span-5 flex flex-col gap-4 sticky top-6">
+<div class="flex justify-between items-center px-2">
+<h3 class="font-bold text-secondary dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">visibility</span>
+                            Pré-visualização
+                        </h3>
+<span class="text-[10px] bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">Live</span>
+</div>
+<div class="certificate-preview rounded-lg p-10 flex flex-col items-center justify-between relative border-8 border-gray-100 dark:border-gray-800 dark:bg-white overflow-hidden">
+<!-- Certificate Content Mockup -->
+<div class="absolute inset-4 border-2 border-gray-200 pointer-events-none"></div>
+<div class="absolute inset-6 border border-gray-100 pointer-events-none"></div>
+<div class="flex flex-col items-center text-center">
+<div class="size-16 mb-4">
+<svg class="text-primary" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h4 class="text-secondary text-2xl font-black uppercase tracking-tighter mb-1">Certificado de Graduação</h4>
+<p class="text-gray-400 text-[10px] uppercase font-bold tracking-widest mb-6">Brazilian Jiu-Jitsu • ATJJ Dojo v4</p>
+<p class="text-gray-500 text-sm mb-2">Certificamos para os devidos fins que o aluno(a)</p>
+<h5 class="text-primary text-2xl font-bold mb-4 italic">Lucas Oliveira</h5>
+<p class="text-gray-500 text-sm mb-6 max-w-sm">
+                                Completou com êxito os requisitos técnicos e éticos exigidos para a graduação à categoria de:
+                            </p>
+<div class="flex flex-col items-center gap-2 mb-8">
+<span class="px-6 py-2 bg-blue-600 text-white text-lg font-black rounded-md shadow-md uppercase tracking-widest">Faixa Azul</span>
+<div class="flex gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-blue-600 opacity-30"></div>
+</div>
+</div>
+</div>
+<div class="w-full flex justify-around items-end pt-4">
+<div class="flex flex-col items-center">
+<div class="h-10 w-24 border-b border-gray-300 mb-1 flex items-center justify-center">
+<span class="text-sm font-display italic text-secondary opacity-80">Mestre Anderson</span>
+</div>
+<span class="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Assinatura do Mestre</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="h-10 w-24 border-b border-gray-300 mb-1 flex items-center justify-center">
+<span class="text-sm font-display text-secondary">24/11/2023</span>
+</div>
+<span class="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Data de Emissão</span>
+</div>
+</div>
+</div>
+<p class="text-center text-[10px] text-gray-400 font-medium">Preview baseado no aluno selecionado: <strong>Lucas Oliveira</strong></p>
+</div>
+</div>
+</main>
+</div>
+<!-- Floating Action Bar -->
+<div class="fixed bottom-0 left-0 lg:left-64 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-4 shadow-2xl flex flex-wrap justify-between items-center gap-4 z-40 transition-all">
+<div class="flex items-center gap-4">
+<div class="flex flex-col">
+<span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Selecionados</span>
+<span class="text-lg font-black text-secondary dark:text-white">08 Alunos</span>
+</div>
+<div class="h-8 w-px bg-gray-200 dark:bg-gray-700 mx-2"></div>
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-white dark:border-gray-900 bg-cover" data-alt="Miniatura de aluno" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBcP2pVkoSKvA7IZL0PCtv6YP1aZxbmPe9nJ2Aka7NRxPR2qyv-HWsBqQpDluxgQBqHxpJkR7STuuwMUW58hqJeh_mp7kfFS7TRefG8o_rtfa3ru-utPN4u7Q3zON9Lh-h6q4y4geGZBx9l6AvvoFtf1jB9HFq2SswPaSARGF6dyR3kvEpAfcH1zclU1AwsQuywr2SgjFAuuKWh2mfoWCb4YYKkfZL2LZ1wbaIx2o1KZCPGVs1YjqSSwYOL-0NtFQKzhfd5MqMaGJOe');"></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-gray-900 bg-cover" data-alt="Miniatura de aluno" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAv4dTc0vbCp8HvyDpTG88eP9lK7UwfvLOaSO6hhg_UoRtYsncXVrB09SiRB6ZKKo3y_7JgyzFOcitUTM7pNGuExYOWo6CTHhi2SdMHfPQVx7iL5lOnAQHGhZS-FTZClvj_q_rbyByWIWAsYGCOn6oL1rAYZHmQHcNMKfZ9kLdxvAG_Wwb7QQCOBgmfKh6OCm8nRw00Alppf6OK2oMLf3PBgY3NfmnQVV1FBiUo9PITdGpKtWsrOgVqcdZDWQPm-Ft7ufe0NuZJJm1x');"></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-gray-900 bg-cover" data-alt="Miniatura de aluno" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDtnR6gxN1TeLHu7K4QO7rjPvjhOG5dRZOU21j81CEr12ZrEjq78r7v2pCZPJgUDy7FmLbOmY79EVr6XPtcgsR-1zUwu7GljFXb8BTVlJ0d7EYcJtxA0cvbMNJnVG35v7spMqD6PRRz-CmznV_Q_U1WvMROZZ_UvFBoqwzndHnZz8lCgH3A3cjrONP3i6sPCthV7IlzeVhkQW9toS_SXng5wkjUEt1tdl-X9GPMhql57I4PJu2ZjpL7qSqEuJghgPXOG8nEdjmUW_I8');"></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-gray-900 bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-[10px] font-bold">+5</div>
+</div>
+</div>
+<div class="flex gap-2 sm:gap-4 flex-wrap">
+<button class="flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg font-bold text-sm transition-all group">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">alternate_email</span>
+<span class="hidden sm:inline">Enviar por E-mail</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg font-bold text-sm transition-all group">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">person_add</span>
+<span class="hidden sm:inline">Publicar nos Perfis</span>
+</button>
+<button class="flex items-center gap-3 px-6 py-3 bg-primary text-white rounded-xl font-black text-sm hover:bg-primary/90 shadow-lg shadow-primary/30 transition-all">
+<span class="material-symbols-outlined text-xl">picture_as_pdf</span>
+                Gerar PDFs em Lote
+            </button>
+</div>
+</div>
+<!-- Batch Progress Notification (Bottom Right) -->
+<div class="fixed bottom-24 right-6 w-80 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-2xl p-4 z-50 transform translate-y-2 opacity-0 pointer-events-none transition-all" id="progress-toast">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl animate-spin">sync</span>
+<span class="text-sm font-bold text-secondary dark:text-white">Gerando Certificados...</span>
+</div>
+<button class="text-gray-400 hover:text-red-500"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="w-full bg-gray-100 dark:bg-gray-800 h-2 rounded-full overflow-hidden mb-2">
+<div class="bg-primary h-full w-[65%] transition-all duration-500"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-[10px] text-gray-500 font-bold uppercase">6 de 8 processados</span>
+<span class="text-xs font-black text-primary">65%</span>
+</div>
+</div>
+</body></html>

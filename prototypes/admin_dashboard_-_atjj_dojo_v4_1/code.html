@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard Administrador - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --bg-body: #f4f4f4;
+            --sidebar-width: 280px;
+        }
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2c3e50",
+                        "secondary": "#3498db",
+                        "background-light": "#f4f4f4",
+                    },
+                    fontFamily: {
+                        "sans": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </style>
+<style>
+        body {
+            background-color: var(--bg-body);
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+        .sidebar-link:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+        .sidebar-link.active {
+            background-color: var(--secondary);
+            color: white;
+        }
+        .metric-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 10px;
+        }
+        .belt-blue { border-color: #3498db; color: #3498db; }
+        .belt-purple { border-color: #9b59b6; color: #9b59b6; }
+        .belt-brown { border-color: #795548; color: #795548; }
+        .belt-black { border-color: #1a1a1a; color: #1a1a1a; }
+        .table-zebra tbody tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-[var(--sidebar-width)] flex-shrink-0 bg-primary flex flex-col h-full z-40 text-slate-300">
+<div class="p-8 flex items-center gap-3">
+<div class="bg-secondary rounded-lg p-2 text-white shadow-lg">
+<span class="material-symbols-outlined text-[28px]">sports_martial_arts</span>
+</div>
+<div>
+<h1 class="text-white text-xl font-extrabold tracking-tight leading-none uppercase">ATJJ Dojo</h1>
+<p class="text-slate-400 text-[10px] font-bold tracking-[0.2em] mt-1">SISTEMA V4</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
+<p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Geral</p>
+<a class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined opacity-80">dashboard</span>
+                Painel Geral
+            </a>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined opacity-80">group</span>
+                Membros
+            </a>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined opacity-80">calendar_today</span>
+                Agenda de Aulas
+            </a>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined opacity-80">trophy</span>
+                Competições
+            </a>
+<p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 mt-8">Administrativo</p>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined opacity-80">payments</span>
+                Financeiro
+            </a>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined opacity-80">analytics</span>
+                Relatórios
+            </a>
+<a class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold" href="#">
+<span class="material-symbols-outlined opacity-80">settings</span>
+                Configurações
+            </a>
+</nav>
+<div class="p-6 border-t border-white/5">
+<div class="bg-white/5 rounded-2xl p-4">
+<p class="text-[11px] font-medium text-slate-400 mb-2">Plano Premium</p>
+<div class="h-1 w-full bg-white/10 rounded-full mb-3">
+<div class="h-full bg-secondary w-2/3 rounded-full"></div>
+</div>
+<button class="text-[10px] font-bold text-white uppercase tracking-wider">Ver detalhes</button>
+</div>
+</div>
+</aside>
+<div class="flex-1 flex flex-col relative overflow-hidden">
+<header class="h-18 flex items-center justify-between bg-white border-b border-slate-200 px-10 sticky top-0 z-30 py-4">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-secondary transition-colors">search</span>
+<input class="w-full bg-slate-50 border-none rounded-xl pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-secondary/20 focus:bg-white transition-all" placeholder="Pesquisar por alunos, graduações..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-2">
+<button class="p-2 text-slate-400 hover:bg-slate-50 rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-slate-50 rounded-full transition-colors">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+</div>
+<div class="h-8 w-px bg-slate-200"></div>
+<div class="flex items-center gap-3 pl-2">
+<div class="text-right">
+<p class="text-sm font-bold text-primary">Mestre Silva</p>
+<p class="text-[10px] text-secondary font-bold uppercase">Administrador</p>
+</div>
+<img alt="User" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdR_rYip1JZqYRefkGQm9GaJKZ8Cad7hdhZi9sZLamFJ0Of7VDRtVr_Z64DLoev5KIDFC_uLK043WEHDXLzkeueFp-LzM1pYN88kEckc4Mlnybnwox1ZUX6NNDCGbkMs31YankLnAWYfcAwjVOiKgs-b_W6crglye3QdBdqeHsy0YN5YPGxYHnpKwoE1uqnerCu-Sqjmod8kN3jx6NtH_X8o5wRRKsZrQxloBylC4eReqXl5aZLydCDMhg6eOkYYUG2IQhlcpiBHis"/>
+</div>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto p-10 custom-scrollbar">
+<div class="max-w-7xl mx-auto space-y-10">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="metric-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="flex justify-between items-center mb-4">
+<div class="bg-blue-50 p-2.5 rounded-xl text-blue-600">
+<span class="material-symbols-outlined text-[24px]">group</span>
+</div>
+<span class="text-[11px] font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-full">+12%</span>
+</div>
+<div>
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Total de Alunos</p>
+<h3 class="text-2xl font-extrabold text-primary mt-1">152</h3>
+</div>
+</div>
+<div class="metric-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="flex justify-between items-center mb-4">
+<div class="bg-purple-50 p-2.5 rounded-xl text-purple-600">
+<span class="material-symbols-outlined text-[24px]">sports_kabaddi</span>
+</div>
+<span class="text-[11px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full">ESTÁVEL</span>
+</div>
+<div>
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Aulas no Mês</p>
+<h3 class="text-2xl font-extrabold text-primary mt-1">42</h3>
+</div>
+</div>
+<div class="metric-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="flex justify-between items-center mb-4">
+<div class="bg-orange-50 p-2.5 rounded-xl text-orange-600">
+<span class="material-symbols-outlined text-[24px]">trending_up</span>
+</div>
+<span class="text-[11px] font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-full">+8%</span>
+</div>
+<div>
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Média de XP</p>
+<h3 class="text-2xl font-extrabold text-primary mt-1">1,240</h3>
+</div>
+</div>
+<div class="metric-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="flex justify-between items-center mb-4">
+<div class="bg-green-50 p-2.5 rounded-xl text-green-600">
+<span class="material-symbols-outlined text-[24px]">payments</span>
+</div>
+<span class="text-[11px] font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-full">+5%</span>
+</div>
+<div>
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Faturamento</p>
+<h3 class="text-2xl font-extrabold text-primary mt-1">R$ 24.5k</h3>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="text-2xl font-black text-primary tracking-tight">Mural de Destaques do Dojo</h2>
+<p class="text-slate-400 text-sm font-medium">Reconhecimento e conquistas da semana</p>
+</div>
+<button class="flex items-center gap-2 text-secondary font-bold text-sm bg-secondary/5 px-4 py-2 rounded-full hover:bg-secondary/10 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+                            Novo Destaque
+                        </button>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-6">
+<h3 class="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-500 text-sm">military_tech</span>
+                                Novos Graduados
+                            </h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="group relative flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-transparent hover:bg-white hover:border-slate-100 hover:shadow-lg transition-all">
+<div class="relative">
+<img alt="Sarah" class="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md ring-2 ring-blue-400/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnBBROuYduiOql-YXCBRTutObP0upXni6Wi8C1kTPbEee6-pKErpcU-FvnocYuICP8DTFN1sUwqE4LS3M_GKu9_feyZKPNpQ4jF71urYZDq8WDRMaZ1KQ7u8Lm2hLTq-QsxzDJ-vKLZp-ydrWrlyz8q8mx-GqKc0Lof_lXtK5rPGuYfKtB9Vrb5DN6qmnTgOykq5WxuR1NcbGi-EJLCkESumvWbDE6Nj8BbhMTvHkMQ4c3DgaFZsQyHym-FeGuBF8pq3o3RwjOMSHb"/>
+<div class="absolute -bottom-1 -right-1 bg-secondary text-white p-1 rounded-full border-2 border-white">
+<span class="material-symbols-outlined text-[12px] block">celebration</span>
+</div>
+</div>
+<div>
+<p class="font-bold text-primary text-sm">Sarah Jenkins</p>
+<span class="text-[10px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">Faixa Azul</span>
+</div>
+</div>
+<div class="group relative flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-transparent hover:bg-white hover:border-slate-100 hover:shadow-lg transition-all">
+<div class="relative">
+<img alt="Felipe" class="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md ring-2 ring-purple-400/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5oe-Q9EJLDrUqh1TgQhyCSho4ItznlGxcKTHGuP3odngXkijh_Qay3mjfXtahAFKP-2sWFymC1G7dIY5J5eOfzFNV1M7nNn-7GHJKbpt0YEhGSQsQ6G8bb1VOAWhFAKeSHhHhiqSxo-tVTuge1Kcshp9ko6z_vxjGooyhp1glrYWvRZFTwYlG2aJIYVEwN2KEQ-NqvUbNs5vbIoBCnfyGgJBGpBtdN8RBSvVu86IwmoGzCkmiKTkRfDv1pxPnmQMdZhwIyU3LJK81"/>
+<div class="absolute -bottom-1 -right-1 bg-purple-500 text-white p-1 rounded-full border-2 border-white">
+<span class="material-symbols-outlined text-[12px] block">celebration</span>
+</div>
+</div>
+<div>
+<p class="font-bold text-primary text-sm">Felipe Costa</p>
+<span class="text-[10px] font-black uppercase text-purple-500 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-100">Faixa Roxa</span>
+</div>
+</div>
+<div class="group relative flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-transparent hover:bg-white hover:border-slate-100 hover:shadow-lg transition-all">
+<div class="relative">
+<img alt="Thiago" class="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md ring-2 ring-amber-700/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdR_rYip1JZqYRefkGQm9GaJKZ8Cad7hdhZi9sZLamFJ0Of7VDRtVr_Z64DLoev5KIDFC_uLK043WEHDXLzkeueFp-LzM1pYN88kEckc4Mlnybnwox1ZUX6NNDCGbkMs31YankLnAWYfcAwjVOiKgs-b_W6crglye3QdBdqeHsy0YN5YPGxYHnpKwoE1uqnerCu-Sqjmod8kN3jx6NtH_X8o5wRRKsZrQxloBylC4eReqXl5aZLydCDMhg6eOkYYUG2IQhlcpiBHis"/>
+<div class="absolute -bottom-1 -right-1 bg-amber-700 text-white p-1 rounded-full border-2 border-white">
+<span class="material-symbols-outlined text-[12px] block">celebration</span>
+</div>
+</div>
+<div>
+<p class="font-bold text-primary text-sm">Thiago Neves</p>
+<span class="text-[10px] font-black uppercase text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100">Faixa Marrom</span>
+</div>
+</div>
+<div class="group relative flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-transparent hover:bg-white hover:border-slate-100 hover:shadow-lg transition-all">
+<div class="relative">
+<img alt="André" class="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md ring-2 ring-slate-900/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5oe-Q9EJLDrUqh1TgQhyCSho4ItznlGxcKTHGuP3odngXkijh_Qay3mjfXtahAFKP-2sWFymC1G7dIY5J5eOfzFNV1M7nNn-7GHJKbpt0YEhGSQsQ6G8bb1VOAWhFAKeSHhHhiqSxo-tVTuge1Kcshp9ko6z_vxjGooyhp1glrYWvRZFTwYlG2aJIYVEwN2KEQ-NqvUbNs5vbIoBCnfyGgJBGpBtdN8RBSvVu86IwmoGzCkmiKTkRfDv1pxPnmQMdZhwIyU3LJK81"/>
+<div class="absolute -bottom-1 -right-1 bg-slate-900 text-white p-1 rounded-full border-2 border-white">
+<span class="material-symbols-outlined text-[12px] block">celebration</span>
+</div>
+</div>
+<div>
+<p class="font-bold text-primary text-sm">André Alves</p>
+<span class="text-[10px] font-black uppercase text-slate-900 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">Faixa Preta</span>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-3">
+<h3 class="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-yellow-500 text-sm">stars</span>
+                                Aluno Destaque
+                            </h3>
+<div class="bg-gradient-to-br from-primary to-slate-800 rounded-3xl p-6 text-center text-white relative overflow-hidden h-full flex flex-col items-center justify-center">
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary opacity-20 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<div class="relative inline-block mb-4">
+<img alt="Marcus" class="w-20 h-20 rounded-full object-cover border-4 border-white shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5oe-Q9EJLDrUqh1TgQhyCSho4ItznlGxcKTHGuP3odngXkijh_Qay3mjfXtahAFKP-2sWFymC1G7dIY5J5eOfzFNV1M7nNn-7GHJKbpt0YEhGSQsQ6G8bb1VOAWhFAKeSHhHhiqSxo-tVTuge1Kcshp9ko6z_vxjGooyhp1glrYWvRZFTwYlG2aJIYVEwN2KEQ-NqvUbNs5vbIoBCnfyGgJBGpBtdN8RBSvVu86IwmoGzCkmiKTkRfDv1pxPnmQMdZhwIyU3LJK81"/>
+<div class="absolute -bottom-1 right-0 bg-yellow-400 text-primary font-black text-[9px] px-2 py-0.5 rounded-full border-2 border-primary">TOP #1</div>
+</div>
+<h4 class="text-lg font-bold">Marcus Aurelius</h4>
+<p class="text-secondary font-black text-[11px] uppercase tracking-wider mt-1">+2.450 XP</p>
+<div class="mt-4 flex gap-2 justify-center">
+<span class="bg-white/10 px-3 py-1 rounded-full text-[9px] font-bold">12 Aulas</span>
+<span class="bg-white/10 px-3 py-1 rounded-full text-[9px] font-bold">3 Medalhas</span>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-3">
+<h3 class="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-pink-500 text-sm">cake</span>
+                                Aniversariantes
+                            </h3>
+<div class="space-y-4">
+<div class="flex items-center gap-3 p-3 rounded-2xl border border-slate-100 hover:border-pink-200 transition-colors">
+<img alt="Lara" class="w-10 h-10 rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnBBROuYduiOql-YXCBRTutObP0upXni6Wi8C1kTPbEee6-pKErpcU-FvnocYuICP8DTFN1sUwqE4LS3M_GKu9_feyZKPNpQ4jF71urYZDq8WDRMaZ1KQ7u8Lm2hLTq-QsxzDJ-vKLZp-ydrWrlyz8q8mx-GqKc0Lof_lXtK5rPGuYfKtB9Vrb5DN6qmnTgOykq5WxuR1NcbGi-EJLCkESumvWbDE6Nj8BbhMTvHkMQ4c3DgaFZsQyHym-FeGuBF8pq3o3RwjOMSHb"/>
+<div>
+<p class="text-sm font-bold text-primary">Lara Silva</p>
+<p class="text-[10px] text-slate-400 font-medium">12 de Outubro</p>
+</div>
+<span class="material-symbols-outlined text-pink-400 text-lg ml-auto">celebration</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-2xl border border-slate-100 hover:border-pink-200 transition-colors">
+<img alt="Beto" class="w-10 h-10 rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdR_rYip1JZqYRefkGQm9GaJKZ8Cad7hdhZi9sZLamFJ0Of7VDRtVr_Z64DLoev5KIDFC_uLK043WEHDXLzkeueFp-LzM1pYN88kEckc4Mlnybnwox1ZUX6NNDCGbkMs31YankLnAWYfcAwjVOiKgs-b_W6crglye3QdBdqeHsy0YN5YPGxYHnpKwoE1uqnerCu-Sqjmod8kN3jx6NtH_X8o5wRRKsZrQxloBylC4eReqXl5aZLydCDMhg6eOkYYUG2IQhlcpiBHis"/>
+<div>
+<p class="text-sm font-bold text-primary">Beto Mendes</p>
+<p class="text-[10px] text-slate-400 font-medium">24 de Outubro</p>
+</div>
+<span class="material-symbols-outlined text-pink-400 text-lg ml-auto opacity-40">celebration</span>
+</div>
+<button class="w-full mt-2 py-3 bg-slate-50 text-slate-500 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-100 transition-colors">Calendário</button>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-10">
+<div class="xl:col-span-8 space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="text-xl font-black text-primary tracking-tight uppercase">Agenda do Dia</h2>
+<button class="text-secondary font-bold text-xs hover:underline">Acessar agenda completa</button>
+</div>
+<div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left table-zebra">
+<thead class="bg-slate-50/50 border-b border-slate-100">
+<tr>
+<th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Horário</th>
+<th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Modalidade</th>
+<th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Instrutor</th>
+<th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Lotação</th>
+<th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr>
+<td class="px-8 py-5 text-sm font-bold text-primary">10:00</td>
+<td class="px-8 py-5">
+<span class="px-2.5 py-1 bg-primary text-white text-[9px] font-black rounded-lg uppercase tracking-tight">Gi (Kimono)</span>
+</td>
+<td class="px-8 py-5 text-sm font-semibold text-slate-600">Mestre Silva</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-20 bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 80%;"></div>
+</div>
+<span class="text-[10px] font-bold text-primary">80%</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<span class="inline-flex items-center px-2 py-0.5 bg-green-100 text-green-700 text-[9px] font-bold rounded-full border border-green-200 uppercase">Em aula</span>
+</td>
+</tr>
+<tr>
+<td class="px-8 py-5 text-sm font-bold text-primary">14:30</td>
+<td class="px-8 py-5">
+<span class="px-2.5 py-1 bg-secondary text-white text-[9px] font-black rounded-lg uppercase tracking-tight">No-Gi</span>
+</td>
+<td class="px-8 py-5 text-sm font-semibold text-slate-600">Coach Miller</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-20 bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 45%;"></div>
+</div>
+<span class="text-[10px] font-bold text-primary">45%</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<span class="inline-flex items-center px-2 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-bold rounded-full border border-blue-200 uppercase">Em breve</span>
+</td>
+</tr>
+<tr>
+<td class="px-8 py-5 text-sm font-bold text-primary">18:00</td>
+<td class="px-8 py-5">
+<span class="px-2.5 py-1 bg-primary text-white text-[9px] font-black rounded-lg uppercase tracking-tight">Infantil</span>
+</td>
+<td class="px-8 py-5 text-sm font-semibold text-slate-600">Profa. Gabi</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-20 bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 100%;"></div>
+</div>
+<span class="text-[10px] font-bold text-primary">Lotado</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<span class="inline-flex items-center px-2 py-0.5 bg-slate-100 text-slate-600 text-[9px] font-bold rounded-full border border-slate-200 uppercase">Agendado</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="xl:col-span-4 space-y-6">
+<h2 class="text-xl font-black text-primary tracking-tight uppercase">Resumo Gamificado</h2>
+<div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+<div class="mb-10">
+<div class="flex justify-between items-end mb-3">
+<div>
+<p class="text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Progresso do Dojo</p>
+<h3 class="text-2xl font-black text-primary">Nível 42</h3>
+</div>
+<span class="text-[10px] font-bold text-slate-400 px-3 py-1 bg-slate-50 rounded-full">75% p/ Nv. 43</span>
+</div>
+<div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200/50">
+<div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full" style="width: 75%;"></div>
+</div>
+</div>
+<div>
+<h4 class="text-xs font-bold text-primary mb-6 flex items-center gap-2 uppercase tracking-widest border-b border-slate-50 pb-4">
+<span class="material-symbols-outlined text-yellow-500 text-lg">military_tech</span>
+                                    Top Rankings
+                                </h4>
+<div class="space-y-5">
+<div class="flex items-center justify-between group cursor-pointer hover:bg-slate-50 p-2 -mx-2 rounded-2xl transition-all">
+<div class="flex items-center gap-3">
+<div class="w-6 text-xs font-black text-yellow-500 italic">01</div>
+<img alt="Marcus" class="w-10 h-10 rounded-xl object-cover border-2 border-yellow-400 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5oe-Q9EJLDrUqh1TgQhyCSho4ItznlGxcKTHGuP3odngXkijh_Qay3mjfXtahAFKP-2sWFymC1G7dIY5J5eOfzFNV1M7nNn-7GHJKbpt0YEhGSQsQ6G8bb1VOAWhFAKeSHhHhiqSxo-tVTuge1Kcshp9ko6z_vxjGooyhp1glrYWvRZFTwYlG2aJIYVEwN2KEQ-NqvUbNs5vbIoBCnfyGgJBGpBtdN8RBSvVu86IwmoGzCkmiKTkRfDv1pxPnmQMdZhwIyU3LJK81"/>
+<div>
+<p class="text-sm font-bold text-primary">Marcus Aurelius</p>
+<p class="text-[9px] text-slate-400 font-bold uppercase">Faixa Preta</p>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="text-[10px] font-black text-white bg-primary px-3 py-1 rounded-lg">12.4k XP</span>
+</div>
+</div>
+<div class="flex items-center justify-between group cursor-pointer hover:bg-slate-50 p-2 -mx-2 rounded-2xl transition-all">
+<div class="flex items-center gap-3">
+<div class="w-6 text-xs font-black text-slate-400 italic">02</div>
+<img alt="Sarah" class="w-10 h-10 rounded-xl object-cover border-2 border-slate-200 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnBBROuYduiOql-YXCBRTutObP0upXni6Wi8C1kTPbEee6-pKErpcU-FvnocYuICP8DTFN1sUwqE4LS3M_GKu9_feyZKPNpQ4jF71urYZDq8WDRMaZ1KQ7u8Lm2hLTq-QsxzDJ-vKLZp-ydrWrlyz8q8mx-GqKc0Lof_lXtK5rPGuYfKtB9Vrb5DN6qmnTgOykq5WxuR1NcbGi-EJLCkESumvWbDE6Nj8BbhMTvHkMQ4c3DgaFZsQyHym-FeGuBF8pq3o3RwjOMSHb"/>
+<div>
+<p class="text-sm font-bold text-primary">Sarah Jenkins</p>
+<p class="text-[9px] text-slate-400 font-bold uppercase">Faixa Marrom</p>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="text-[10px] font-black text-slate-500 bg-slate-100 px-3 py-1 rounded-lg">11.2k XP</span>
+</div>
+</div>
+<div class="flex items-center justify-between group cursor-pointer hover:bg-slate-50 p-2 -mx-2 rounded-2xl transition-all">
+<div class="flex items-center gap-3">
+<div class="w-6 text-xs font-black text-amber-700/50 italic">03</div>
+<img alt="Felipe" class="w-10 h-10 rounded-xl object-cover border-2 border-slate-200 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5oe-Q9EJLDrUqh1TgQhyCSho4ItznlGxcKTHGuP3odngXkijh_Qay3mjfXtahAFKP-2sWFymC1G7dIY5J5eOfzFNV1M7nNn-7GHJKbpt0YEhGSQsQ6G8bb1VOAWhFAKeSHhHhiqSxo-tVTuge1Kcshp9ko6z_vxjGooyhp1glrYWvRZFTwYlG2aJIYVEwN2KEQ-NqvUbNs5vbIoBCnfyGgJBGpBtdN8RBSvVu86IwmoGzCkmiKTkRfDv1pxPnmQMdZhwIyU3LJK81"/>
+<div>
+<p class="text-sm font-bold text-primary">Felipe Costa</p>
+<p class="text-[9px] text-slate-400 font-bold uppercase">Faixa Roxa</p>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="text-[10px] font-black text-slate-500 bg-slate-100 px-3 py-1 rounded-lg">9.8k XP</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-3 bg-secondary/5 text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border border-secondary/10 hover:bg-secondary hover:text-white transition-all">
+                                    Ranking Completo
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

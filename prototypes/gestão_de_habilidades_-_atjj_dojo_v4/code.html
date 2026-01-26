@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão de Habilidades - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3398db",
+                        "secondary": "#2c3e50",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#121a20",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .sidebar-item-active { background-color: rgba(51, 152, 219, 0.1); border-left: 4px solid #3398db; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-secondary dark:text-gray-200">
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col fixed h-full z-50">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="bg-primary rounded-lg p-2 text-white">
+<span class="material-symbols-outlined">sports_martial_arts</span>
+</div>
+<div>
+<h1 class="text-secondary dark:text-white text-base font-bold leading-none">ATJJ Dojo v4</h1>
+<p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Gestão Marcial</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Alunos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 sidebar-item-active text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">swords</span>
+<span class="text-sm font-bold">Gestão de Habilidades</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-sm font-medium">Aulas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="text-sm font-medium">Graduações</span>
+</a>
+<div class="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Configurações</span>
+</a>
+</div>
+</nav>
+<div class="p-4">
+<button class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-all shadow-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+<span>Nova Aula</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 ml-64">
+<!-- Header -->
+<header class="h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-8 flex items-center justify-between sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<h2 class="text-lg font-bold text-secondary dark:text-white">Gestão de Habilidades e Critérios</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl">search</span>
+<input class="w-full bg-background-light dark:bg-gray-800 border-none rounded-lg pl-10 pr-4 py-1.5 text-sm focus:ring-2 focus:ring-primary/50 transition-all" placeholder="Buscar técnica..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-gray-900"></span>
+</button>
+<div class="h-8 w-[1px] bg-gray-200 dark:bg-gray-800 mx-1"></div>
+<div class="flex items-center gap-3 cursor-pointer">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold text-secondary dark:text-white leading-none">Prof. Anderson Silva</p>
+<p class="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Mestre Faixa Preta</p>
+</div>
+<img class="w-9 h-9 rounded-full border border-gray-200 dark:border-gray-700 object-cover" data-alt="Foto de perfil do professor de jiu-jitsu" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxvmwcfEeD6YbzR1iR47jFW2CtglQELEfumda2IGC4nrKX9wRILtP3GspN8otX1aOJZHCPBtb08fMyg94-cdMpnYaEo5kdOFBncFKOGCbPglhswUPBBntvlIbgyerZhpl1g4kEV9eXi72j3rmQBjMa5JqybgLQ-FXeADUy_x05D3zbSNXSV6c3taPkShh3wIbVhFZxL4-YqdI2C18L2oTiEW5WJslH6nRlZdVJuwzvpDBbhBD_ldxLvLFj3uSTVZtV0Oqq7zrI84IC"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Page Tabs -->
+<div class="border-b border-gray-200 dark:border-gray-800 overflow-x-auto">
+<nav class="flex gap-8">
+<button class="border-b-2 border-primary text-primary font-bold px-1 py-4 text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">category</span> Categorias
+                        </button>
+<button class="border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-secondary dark:hover:text-white font-medium px-1 py-4 text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">list_alt</span> Novo Critério
+                        </button>
+<button class="border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-secondary dark:hover:text-white font-medium px-1 py-4 text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">grid_on</span> Matriz de Avaliação
+                        </button>
+</nav>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column: Categories List -->
+<div class="space-y-4">
+<h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest px-1">Categorias Ativas</h3>
+<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 divide-y dark:divide-gray-800 overflow-hidden shadow-sm">
+<div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-orange-600 flex items-center justify-center font-bold">
+<span class="material-symbols-outlined">downhill_skiing</span>
+</div>
+<div>
+<p class="font-bold text-secondary dark:text-white text-sm">Quedas</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">12 técnicas cadastradas</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<div class="p-4 flex items-center justify-between bg-primary/5 border-l-4 border-l-primary cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center font-bold">
+<span class="material-symbols-outlined">shield</span>
+</div>
+<div>
+<p class="font-bold text-primary text-sm">Passagem de Guarda</p>
+<p class="text-xs text-primary/70">8 técnicas cadastradas</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary">chevron_right</span>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 flex items-center justify-center font-bold">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div>
+<p class="font-bold text-secondary dark:text-white text-sm">Finalizações</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">24 técnicas cadastradas</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 flex items-center justify-center font-bold">
+<span class="material-symbols-outlined">security</span>
+</div>
+<div>
+<p class="font-bold text-secondary dark:text-white text-sm">Defesa Pessoal</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">15 técnicas cadastradas</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Add New Skill Form -->
+<div class="lg:col-span-2 space-y-4">
+<h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest px-1">Novo Critério de Habilidade</h3>
+<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm">
+<form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-xs font-bold text-secondary dark:text-white uppercase tracking-wider">Nome da Habilidade</label>
+<input class="w-full bg-background-light dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary" placeholder="Ex: Passagem de Toureando" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-secondary dark:text-white uppercase tracking-wider">Dificuldade</label>
+<select class="w-full bg-background-light dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary">
+<option value="easy">Fácil (Iniciante)</option>
+<option value="medium">Médio (Intermediário)</option>
+<option value="hard">Difícil (Avançado)</option>
+</select>
+</div>
+<div class="space-y-2 md:col-span-2">
+<label class="text-xs font-bold text-secondary dark:text-white uppercase tracking-wider">Descrição Técnica</label>
+<textarea class="w-full bg-background-light dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2 text-sm focus:ring-primary focus:border-primary" placeholder="Descreva os detalhes e pontos chaves para a execução correta..." rows="3"></textarea>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-secondary dark:text-white uppercase tracking-wider flex items-center gap-1">
+                                        XP Base Atribuído <span class="material-symbols-outlined text-[14px] text-amber-500" style="font-variation-settings: 'FILL' 1">stars</span>
+</label>
+<div class="relative">
+<input class="w-full bg-background-light dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-lg pl-4 pr-12 py-2.5 text-sm font-bold text-primary focus:ring-primary focus:border-primary" placeholder="100" type="number"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-gray-400">XP</span>
+</div>
+</div>
+<div class="flex items-end">
+<button class="w-full bg-secondary hover:bg-gray-700 text-white font-bold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-all" type="button">
+<span class="material-symbols-outlined">add_task</span>
+                                        Adicionar à Lista
+                                    </button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<!-- Section: Evaluation Matrix -->
+<div class="space-y-4">
+<div class="flex items-center justify-between px-1">
+<h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest">Matriz de Competências p/ Graduação</h3>
+<div class="flex items-center gap-2">
+<span class="text-[10px] bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 font-bold px-2 py-1 rounded">Requisito Mínimo %</span>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-800">
+<th class="px-6 py-4 text-left text-[11px] font-bold text-gray-500 uppercase tracking-wider">Habilidade / Categoria</th>
+<th class="px-6 py-4 text-center">
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-2 rounded bg-white border border-gray-300"></div>
+<span class="text-[10px] font-bold text-gray-400 uppercase">Branca</span>
+</div>
+</th>
+<th class="px-6 py-4 text-center">
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-2 rounded bg-blue-600"></div>
+<span class="text-[10px] font-bold text-gray-400 uppercase">Azul</span>
+</div>
+</th>
+<th class="px-6 py-4 text-center">
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-2 rounded bg-purple-600"></div>
+<span class="text-[10px] font-bold text-gray-400 uppercase">Roxa</span>
+</div>
+</th>
+<th class="px-6 py-4 text-center">
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-2 rounded bg-amber-800"></div>
+<span class="text-[10px] font-bold text-gray-400 uppercase">Marrom</span>
+</div>
+</th>
+<th class="px-6 py-4 text-center">
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-2 rounded bg-black"></div>
+<span class="text-[10px] font-bold text-gray-400 uppercase">Preta</span>
+</div>
+</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-secondary dark:text-white">Quedas (Baiana/Double Leg)</span>
+<span class="text-[10px] text-gray-400">Nível: Médio • XP: 150</span>
+</div>
+</td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="30%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="60%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="80%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="95%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="100%"/></td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-secondary dark:text-white">Passagem Toureando</span>
+<span class="text-[10px] text-gray-400">Nível: Fácil • XP: 80</span>
+</div>
+</td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="50%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="80%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="90%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="100%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="100%"/></td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-secondary dark:text-white">Triângulo da Guarda</span>
+<span class="text-[10px] text-gray-400">Nível: Médio • XP: 120</span>
+</div>
+</td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="20%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="70%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="85%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="95%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="100%"/></td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-secondary dark:text-white">Chave de Braço (Arm-lock)</span>
+<span class="text-[10px] text-gray-400">Nível: Difícil • XP: 250</span>
+</div>
+</td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="10%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="50%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="80%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="90%"/></td>
+<td class="px-6 py-4"><input class="w-16 mx-auto bg-transparent border-none text-center text-sm font-bold text-primary focus:ring-0" type="text" value="100%"/></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bg-gray-50 dark:bg-gray-800/50 p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined text-base">info</span>
+                                Os percentuais definem o nível de domínio técnico exigido para cada faixa no exame de graduação.
+                            </div>
+<div class="flex gap-4 w-full md:w-auto">
+<button class="flex-1 md:flex-none border border-gray-300 dark:border-gray-700 hover:bg-white dark:hover:bg-gray-800 text-secondary dark:text-white font-bold py-2 px-6 rounded-lg text-sm transition-all">
+                                    Descartar Alterações
+                                </button>
+<button class="flex-1 md:flex-none bg-primary hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-lg text-sm transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">save</span>
+                                    Salvar Matriz de Competências
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Summary Card -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">model_training</span>
+</div>
+<div>
+<p class="text-[10px] font-bold text-gray-400 uppercase leading-none">Total de Técnicas</p>
+<p class="text-xl font-bold text-secondary dark:text-white mt-1">59</p>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
+<span class="material-symbols-outlined">stars</span>
+</div>
+<div>
+<p class="text-[10px] font-bold text-gray-400 uppercase leading-none">XP Médio/Técnica</p>
+<p class="text-xl font-bold text-secondary dark:text-white mt-1">145</p>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<div>
+<p class="text-[10px] font-bold text-gray-400 uppercase leading-none">Categorias</p>
+<p class="text-xl font-bold text-secondary dark:text-white mt-1">8</p>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+<span class="material-symbols-outlined">task_alt</span>
+</div>
+<div>
+<p class="text-[10px] font-bold text-gray-400 uppercase leading-none">Matriz Validada</p>
+<p class="text-xl font-bold text-secondary dark:text-white mt-1">V. 4.2</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

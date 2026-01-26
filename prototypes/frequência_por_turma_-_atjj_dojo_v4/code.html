@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Frequência por Turma - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f172a", // Deep Slate
+                        "surface-dark": "#1e293b",    // Component Surface
+                        "border-dark": "#334155",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .sticky-column {
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            background-color: inherit;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="border-b border-slate-200 dark:border-border-dark bg-white dark:bg-background-dark px-6 py-3 flex items-center justify-between sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-1.5 rounded-lg text-white">
+<svg class="size-6" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-xl font-black tracking-tight uppercase">ATJJ Dojo <span class="text-primary">v4</span></h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Alunos</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Turmas</a>
+<a class="text-sm font-bold text-primary border-b-2 border-primary pb-0.5" href="#">Frequência</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Financeiro</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="bg-slate-100 dark:bg-surface-dark border-none rounded-lg pl-10 pr-4 py-2 text-sm w-64 focus:ring-2 focus:ring-primary" placeholder="Buscar aluno..." type="text"/>
+</div>
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-cover bg-center border-2 border-primary" data-alt="Instructor profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD77zcv3s6GNMBQZ6uEQCagRuqnMrXDvVAxldVerYW64pLNQAp1ZDxJG5ZMDw_VhGxYXHj_ehR2MmRVEXtr5iOveoIev_s2nbvrR6vlNYvqciooL8a3inn6u5XpadTUcHx8av4DE4BoHF5tl0X6YBNVsR11KjEV8x8BZYq7rtfLZdJ08t8sAboKwrQGLWZqZLze3jw_bOEd6y9JIxLyveka_8FLkXfmWDVAG2JIzTaD1o0fWnRyp1OTYdZ-LtDQOH-J9fdppcZu7zGu');"></div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+<!-- Page Heading & Advanced Filters -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
+<div class="space-y-1">
+<h1 class="text-3xl font-black tracking-tight">Frequência por Turma</h1>
+<p class="text-slate-500 dark:text-slate-400">Gestão de presença e gamificação de engajamento.</p>
+</div>
+<div class="flex flex-wrap items-end gap-3">
+<div class="flex flex-col gap-1.5">
+<span class="text-xs font-bold uppercase text-slate-500 tracking-wider">Turma</span>
+<select class="bg-white dark:bg-surface-dark border-slate-200 dark:border-border-dark rounded-lg px-4 py-2 text-sm min-w-[160px] focus:ring-primary">
+<option>Adulto Avançado</option>
+<option>Adulto Iniciante</option>
+<option>Kids 1 (7-10 anos)</option>
+<option>Competição</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<span class="text-xs font-bold uppercase text-slate-500 tracking-wider">Mês</span>
+<select class="bg-white dark:bg-surface-dark border-slate-200 dark:border-border-dark rounded-lg px-4 py-2 text-sm focus:ring-primary">
+<option>Outubro</option>
+<option>Novembro</option>
+<option>Dezembro</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<span class="text-xs font-bold uppercase text-slate-500 tracking-wider">Ano</span>
+<select class="bg-white dark:bg-surface-dark border-slate-200 dark:border-border-dark rounded-lg px-4 py-2 text-sm focus:ring-primary">
+<option>2024</option>
+<option>2023</option>
+</select>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 shadow-lg shadow-primary/20 transition-all">
+<span class="material-symbols-outlined text-lg">download</span>
+                    Relatório PDF
+                </button>
+</div>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+<div class="bg-white dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-border-dark relative overflow-hidden group">
+<div class="relative z-10">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Média de Presença</p>
+<div class="flex items-end gap-2">
+<h3 class="text-3xl font-black">85.4%</h3>
+<span class="text-emerald-500 text-sm font-bold flex items-center mb-1">
+<span class="material-symbols-outlined text-sm">trending_up</span> 5.2%
+                        </span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-8xl">group</span>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-border-dark relative overflow-hidden group">
+<div class="relative z-10">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Aluno Mais Assíduo</p>
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center border-2 border-primary" data-alt="Student avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAAs3s95y3BTa9rV_ADbdJhpzWnXZcxe7FfAT4ExKJdXQgvDMvgjqehVpxdXI1eo1dpd8i2hLg6SrzFONvRjgpN9vgXtWeT5jKGSqTSK2GDuvYUgsRu-pFy22s5vmgwOQZ8sF8Uj6pslqSCpOUYAgS27YkiwH0z6wBLrwS4Kyhub_1tQXV5euv7bOJoqgGsm0ThGkZFbmDPOxsbrjuV-SYVJNcF6Q40gqhwtCV3SwnHn53eejMiahrYBQiJjfyTwuEOpR3gOd0SQm9Z');"></div>
+<div>
+<h3 class="text-xl font-bold">Gabriel Soares</h3>
+<p class="text-xs text-primary font-bold uppercase tracking-widest">100% de Presença</p>
+</div>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-8xl">military_tech</span>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-border-dark relative overflow-hidden group">
+<div class="relative z-10">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Total de Aulas no Mês</p>
+<div class="flex items-end gap-2">
+<h3 class="text-3xl font-black">22 Aulas</h3>
+<span class="text-slate-400 text-sm font-medium mb-1">Status: Concluído</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-8xl">calendar_month</span>
+</div>
+</div>
+</div>
+<!-- Attendance Matrix Table Section -->
+<div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-border-dark overflow-hidden shadow-xl">
+<div class="p-6 border-b border-slate-200 dark:border-border-dark flex items-center justify-between">
+<h2 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">grid_on</span>
+                    Matriz de Frequência - Outubro
+                </h2>
+<div class="flex gap-4 text-xs font-bold uppercase tracking-wider">
+<div class="flex items-center gap-1.5"><span class="size-2 rounded-full bg-emerald-500"></span> Presente</div>
+<div class="flex items-center gap-1.5"><span class="size-2 rounded-full bg-rose-500"></span> Falta</div>
+<div class="flex items-center gap-1.5"><span class="size-2 rounded-full bg-slate-500"></span> Sem Aula</div>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-900/50">
+<th class="sticky-column px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 border-r border-slate-200 dark:border-border-dark min-w-[200px] bg-slate-50 dark:bg-slate-900/50">
+                                Nome do Aluno
+                            </th>
+<!-- Day columns 1 to 20 (Simulated) -->
+<script>
+                                for(let i=1; i<=20; i++) {
+                                    document.write(`<th class="px-3 py-4 text-center text-xs font-bold text-slate-500 border-r border-slate-200 dark:border-border-dark min-w-[45px]">${i}</th>`);
+                                }
+                            </script>
+<th class="px-6 py-4 text-center text-xs font-bold uppercase tracking-wider text-slate-500 min-w-[80px]">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-border-dark">
+<!-- Student Row 1 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
+<td class="sticky-column px-6 py-4 border-r border-slate-200 dark:border-border-dark bg-white dark:bg-surface-dark">
+<button class="flex items-center gap-3 text-left w-full focus:outline-none">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Student avatar thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT_mUy4dc3Wyaz5yloAR6lt48zrfllY6cBW_TG2ug16U9Ob-yq8CnUVQpQuQyR2jHHr9lCMuL4pGeDotDeJlc6QjLADA0zSmLlRFehgtMcwF1dPqTe6Y2Fr57aKCsr5h42JrrIqEeCRB3kBsOWOXiMpcnCw3xkHJRAYlDSpm4vKMaYT8JsP_KhJ6Xc2w1KWA3zsU1QxPzLQGCXUzVRCotmgM2aupAjoA3UIJK42bz7uZoXAyBBzfcl9uBhhP6T5jha2_g0X66F0wGk"/>
+</div>
+<div>
+<p class="font-semibold text-sm group-hover:text-primary transition-colors">Gabriel Soares</p>
+<div class="flex items-center gap-1 text-[10px] text-amber-500 font-bold uppercase">
+<span class="material-symbols-outlined text-[10px]">workspace_premium</span> Faixa Azul
+                                        </div>
+</div>
+</button>
+</td>
+<!-- Attendance Cells (Simulated data) -->
+<script>
+                                for(let i=1; i<=20; i++) {
+                                    const state = i === 5 || i === 12 ? 'none' : (Math.random() > 0.1 ? 'present' : 'absent');
+                                    let content = '';
+                                    if(state === 'present') content = '<span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>';
+                                    else if(state === 'absent') content = '<span class="material-symbols-outlined text-rose-500 text-lg">cancel</span>';
+                                    else content = '<span class="material-symbols-outlined text-slate-600/30 text-lg">remove</span>';
+                                    
+                                    document.write(`<td class="px-2 py-4 text-center border-r border-slate-200 dark:border-border-dark">${content}</td>`);
+                                }
+                            </script>
+<td class="px-6 py-4 text-center font-bold text-sm">18/18</td>
+</tr>
+<!-- Student Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
+<td class="sticky-column px-6 py-4 border-r border-slate-200 dark:border-border-dark bg-white dark:bg-surface-dark">
+<button class="flex items-center gap-3 text-left w-full focus:outline-none">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Student avatar thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApajhQzlXKJRZ7X0hXuThnfJzKcVxQ9oeY4J9TJRDrSLY9LaBrbN5n4mprqK2gZ1EaxqR6vQZdLVaH3WlRHV9V05g3iutLYXGvnfGYKs8BqTQyDlMkmThTYxR_fF4HQo53xr3rwWigywSo1b_Qm5qzzTHNsMALfoGmsIb-7ftdxaFXDjf2Ya0l472lMQz5I0yMuK8ytY3CLYZGaF7FoU8CkZ0kZYmn_dDMEE_q-N4iBcT-BvzqMwOuGuKWsdnJQLIoMU3OTgFDGXBl"/>
+</div>
+<div>
+<p class="font-semibold text-sm group-hover:text-primary transition-colors">Mariana Lima</p>
+<div class="flex items-center gap-1 text-[10px] text-slate-400 font-bold uppercase">
+<span class="material-symbols-outlined text-[10px]">workspace_premium</span> Faixa Branca
+                                        </div>
+</div>
+</button>
+</td>
+<script>
+                                for(let i=1; i<=20; i++) {
+                                    const state = i === 5 || i === 12 ? 'none' : (Math.random() > 0.3 ? 'present' : 'absent');
+                                    let content = '';
+                                    if(state === 'present') content = '<span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>';
+                                    else if(state === 'absent') content = '<span class="material-symbols-outlined text-rose-500 text-lg">cancel</span>';
+                                    else content = '<span class="material-symbols-outlined text-slate-600/30 text-lg">remove</span>';
+                                    
+                                    document.write(`<td class="px-2 py-4 text-center border-r border-slate-200 dark:border-border-dark">${content}</td>`);
+                                }
+                            </script>
+<td class="px-6 py-4 text-center font-bold text-sm">14/18</td>
+</tr>
+<!-- Student Row 3 (Alert state) -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group bg-rose-500/5">
+<td class="sticky-column px-6 py-4 border-r border-slate-200 dark:border-border-dark bg-rose-50/50 dark:bg-rose-950/20">
+<button class="flex items-center gap-3 text-left w-full focus:outline-none">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Student avatar thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbJMbiaqNcDWZh9ENLzPBo47Aao6YVqoNRwEsr4KC5Ouy8ta0h77SbIi57WxWpYtV6xUf_ORhILCyFz03j-P-w4QQV2uq0bUEoN3UsDOUpRm5AW3BQoaaH4ttarUEVIRMkE6bRAIm4K4ourVFmEAQX8UKmuN_u2xoUjOH-193P1LkKbLAAclP6JrKHkV0xEyNcW7aQmc4TlFOPwggSDe-spnd1WGMZFZtOpsjGR-k48nAqUrvHb8sKoZXM0K-CYji_3EX4jvX64dEA"/>
+<div class="absolute inset-0 bg-rose-500/20"></div>
+</div>
+<div>
+<p class="font-semibold text-sm group-hover:text-rose-500 transition-colors">Ricardo Alves</p>
+<div class="flex items-center gap-1 text-[10px] text-rose-500 font-bold uppercase">
+<span class="material-symbols-outlined text-[10px]">warning</span> Alerta de Evasão
+                                        </div>
+</div>
+</button>
+</td>
+<script>
+                                for(let i=1; i<=20; i++) {
+                                    const state = i === 5 || i === 12 ? 'none' : (Math.random() > 0.7 ? 'present' : 'absent');
+                                    let content = '';
+                                    if(state === 'present') content = '<span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>';
+                                    else if(state === 'absent') content = '<span class="material-symbols-outlined text-rose-500 text-lg">cancel</span>';
+                                    else content = '<span class="material-symbols-outlined text-slate-600/30 text-lg">remove</span>';
+                                    
+                                    document.write(`<td class="px-2 py-4 text-center border-r border-slate-200 dark:border-border-dark">${content}</td>`);
+                                }
+                            </script>
+<td class="px-6 py-4 text-center font-bold text-sm text-rose-500">5/18</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-slate-50 dark:bg-slate-900/50 flex items-center justify-between border-t border-slate-200 dark:border-border-dark">
+<p class="text-xs text-slate-500">Mostrando 24 alunos nesta turma</p>
+<div class="flex gap-2">
+<button class="bg-surface-dark border border-border-dark px-3 py-1.5 rounded text-xs font-bold hover:bg-slate-800">Anterior</button>
+<button class="bg-surface-dark border border-border-dark px-3 py-1.5 rounded text-xs font-bold hover:bg-slate-800">Próximo</button>
+</div>
+</div>
+</div>
+<!-- Student Quick Card (Hidden by default, used for interaction reference) -->
+<div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 p-6 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-primary/20 p-3 rounded-full text-primary">
+<span class="material-symbols-outlined text-3xl">info</span>
+</div>
+<div>
+<h4 class="font-bold text-lg">Dica do Sensei</h4>
+<p class="text-sm text-slate-600 dark:text-slate-400">Clique no nome de um aluno para ver estatísticas individuais de XP e desempenho mensal.</p>
+</div>
+</div>
+<button class="bg-surface-dark hover:bg-slate-800 px-4 py-2 rounded-lg text-sm font-bold border border-border-dark transition-colors">Configurações</button>
+</div>
+<!-- Contextual Actions -->
+<div class="flex flex-col gap-3">
+<button class="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border border-rose-500/30 px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined">send</span>
+                    Enviar Alerta de Ausência
+                </button>
+<div class="bg-surface-dark p-4 rounded-xl border border-border-dark">
+<div class="flex items-center justify-between mb-4">
+<h5 class="text-sm font-bold uppercase tracking-widest text-slate-500">Atalho do Aluno</h5>
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative size-16 flex items-center justify-center">
+<svg class="size-full transform -rotate-90">
+<circle class="text-slate-200 dark:text-slate-800" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-dasharray="175.9" stroke-dashoffset="35.2" stroke-width="6"></circle>
+</svg>
+<span class="absolute text-xs font-black">80%</span>
+</div>
+<div>
+<p class="text-sm font-bold">Mariana Lima</p>
+<p class="text-[10px] text-slate-500 uppercase font-black">Nível 12 • 450 XP</p>
+<div class="flex gap-1 mt-1">
+<div class="size-4 bg-amber-500 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-white font-bold">star</span>
+</div>
+<div class="size-4 bg-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-white font-bold">bolt</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-12 py-8 border-t border-slate-200 dark:border-border-dark text-center">
+<p class="text-sm text-slate-500">© 2024 ATJJ Dojo v4. Dashboard de Gestão de Frequência.</p>
+</footer>
+</body></html>

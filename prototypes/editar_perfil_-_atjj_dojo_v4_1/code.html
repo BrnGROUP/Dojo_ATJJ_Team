@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão de Responsáveis - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3498db",
+                        "secondary": "#2c3e50",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111b21",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .form-input-custom {
+            @apply w-full rounded-lg border-[#e8eef3] dark:border-white/10 bg-transparent dark:text-white focus:border-primary focus:ring-1 focus:ring-primary py-2.5 px-4 outline-none transition-all;
+        }
+        .card-custom {
+            @apply bg-white dark:bg-white/5 rounded-xl p-6 shadow-sm border border-[#e8eef3] dark:border-white/10;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#2c3e50] dark:text-white antialiased min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 border-r border-[#e8eef3] dark:border-white/10 bg-white dark:bg-background-dark hidden md:flex flex-col justify-between p-4">
+<div class="flex flex-col gap-8">
+<div class="flex gap-3 items-center px-2">
+<div class="bg-primary rounded-lg p-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-white">sports_kabaddi</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-[#2c3e50] dark:text-white text-base font-bold leading-tight">ATJJ Dojo</h1>
+<p class="text-[#507b95] dark:text-gray-400 text-[10px] uppercase tracking-wider font-semibold">v4 Management</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#507b95] dark:text-gray-400 hover:bg-[#f0f4f8] dark:hover:bg-white/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#507b95] dark:text-gray-400 hover:bg-[#f0f4f8] dark:hover:bg-white/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Alunos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">family_restroom</span>
+<span class="text-sm font-bold">Responsáveis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#507b95] dark:text-gray-400 hover:bg-[#f0f4f8] dark:hover:bg-white/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-sm font-medium">Turmas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#507b95] dark:text-gray-400 hover:bg-[#f0f4f8] dark:hover:bg-white/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-sm font-medium">Financeiro</span>
+</a>
+</nav>
+</div>
+<div class="border-t border-[#e8eef3] dark:border-white/10 pt-4 px-2">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBEMkBMooxj8Dl_xz6q7ELIIlNBHRMWQFlcJa6pRCOPb_8hrU1uJk94EL7kwCgM8H13T_oGHKz2KzPT4oalb4MmMEaPbixHTbW3jN02_GB08ScGb5iIBQ-XwZYgoDMScwS0uvAKFhBuEuBiSP098yDU0qhjjbVLN1MrjivLXCAfzDYlsS3DVFN-H1nPjViz99tVo_-TriTOGEFIo43qc2fzQ7qR0469SqxDTO98PiJ4j-0hVrhIwLfnWO8KcJN1gquP14-i5zvHkIrM");'></div>
+<div class="flex flex-col">
+<p class="text-[#2c3e50] dark:text-white text-xs font-bold">Admin Professor</p>
+<p class="text-[#507b95] dark:text-gray-400 text-[10px]">Gestor</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark">
+<header class="sticky top-0 z-10 flex items-center justify-between bg-white dark:bg-background-dark border-b border-[#e8eef3] dark:border-white/10 px-8 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#2c3e50] dark:text-white">supervisor_account</span>
+<h2 class="text-[#2c3e50] dark:text-white text-lg font-bold">Gestão de Responsáveis</h2>
+</div>
+<div class="flex items-center gap-6">
+<button class="flex items-center justify-center p-2 rounded-full bg-[#f0f4f8] dark:bg-white/5 text-[#507b95] dark:text-gray-400">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<div class="max-w-4xl mx-auto p-4 md:p-8 space-y-6">
+<div class="flex items-center gap-2 text-sm">
+<a class="text-[#507b95] dark:text-gray-400 font-medium" href="#">Alunos</a>
+<span class="text-[#507b95] dark:text-gray-600">/</span>
+<span class="text-[#2c3e50] dark:text-white font-bold">Vincular Responsável</span>
+</div>
+<section class="card-custom border-l-4 border-l-primary">
+<div class="flex items-center gap-4">
+<div class="bg-primary/10 rounded-full p-3 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">child_care</span>
+</div>
+<div>
+<h3 class="text-xs uppercase tracking-wider font-bold text-[#507b95]">Aluno Vinculado</h3>
+<p class="text-xl font-bold text-[#2c3e50] dark:text-white">Gabriel Santos Souza</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="px-2 py-0.5 bg-secondary text-white rounded text-[10px] font-bold uppercase">Turma Kids - Manhã</span>
+<span class="text-[#507b95] text-xs">ID: #88291</span>
+</div>
+</div>
+</div>
+</section>
+<section class="card-custom">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">person_add</span>
+<h4 class="text-[#2c3e50] dark:text-white text-lg font-bold">Dados do Responsável</h4>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2 md:col-span-2">
+<label class="text-sm font-semibold text-[#2c3e50] dark:text-white">Nome Completo</label>
+<input class="form-input-custom" placeholder="Ex: Maria Oliveira Santos" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#2c3e50] dark:text-white">CPF</label>
+<input class="form-input-custom" placeholder="000.000.000-00" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#2c3e50] dark:text-white">Grau de Parentesco</label>
+<select class="form-input-custom">
+<option value="">Selecione...</option>
+<option value="pai">Pai</option>
+<option value="mae">Mãe</option>
+<option value="tutor">Tutor Legal</option>
+<option value="outro">Outro</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#2c3e50] dark:text-white">E-mail</label>
+<input class="form-input-custom" placeholder="email@exemplo.com.br" type="email"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#2c3e50] dark:text-white">Telefone / WhatsApp</label>
+<input class="form-input-custom" placeholder="(11) 99999-9999" type="text"/>
+</div>
+</div>
+</section>
+<section class="card-custom">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+<h4 class="text-[#2c3e50] dark:text-white text-lg font-bold">Autorizações e Termos</h4>
+</div>
+<div class="space-y-4">
+<label class="flex items-start gap-3 p-3 rounded-lg border border-transparent hover:bg-[#f0f4f8] dark:hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="pt-0.5">
+<input class="w-5 h-5 rounded border-[#e8eef3] text-primary focus:ring-primary" type="checkbox"/>
+</div>
+<div>
+<p class="text-sm font-bold text-[#2c3e50] dark:text-white">Autorização de Saída Sozinho</p>
+<p class="text-xs text-[#507b95]">Permitir que o aluno deixe o Dojo sem a presença do responsável após o treino.</p>
+</div>
+</label>
+<label class="flex items-start gap-3 p-3 rounded-lg border border-transparent hover:bg-[#f0f4f8] dark:hover:bg-white/5 transition-colors cursor-pointer">
+<div class="pt-0.5">
+<input checked="" class="w-5 h-5 rounded border-[#e8eef3] text-primary focus:ring-primary" type="checkbox"/>
+</div>
+<div>
+<p class="text-sm font-bold text-[#2c3e50] dark:text-white">Uso de Imagem e Voz</p>
+<p class="text-xs text-[#507b95]">Autoriza o uso da imagem do aluno em redes sociais e materiais promocionais do Dojo.</p>
+</div>
+</label>
+<label class="flex items-start gap-3 p-3 rounded-lg border border-transparent hover:bg-[#f0f4f8] dark:hover:bg-white/5 transition-colors cursor-pointer">
+<div class="pt-0.5">
+<input checked="" class="w-5 h-5 rounded border-[#e8eef3] text-primary focus:ring-primary" type="checkbox"/>
+</div>
+<div>
+<p class="text-sm font-bold text-[#2c3e50] dark:text-white">Contato de Emergência</p>
+<p class="text-xs text-[#507b95]">Este responsável é o contato principal em caso de acidentes ou emergências médicas.</p>
+</div>
+</label>
+</div>
+</section>
+<section class="card-custom">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">description</span>
+<h4 class="text-[#2c3e50] dark:text-white text-lg font-bold">Documentação</h4>
+</div>
+<div class="border-2 border-dashed border-[#e8eef3] dark:border-white/10 rounded-xl p-8 flex flex-col items-center justify-center text-center">
+<div class="bg-primary/5 p-4 rounded-full mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span>
+</div>
+<p class="text-[#2c3e50] dark:text-white font-bold text-sm">Upload de cópia do RG/CPF do responsável</p>
+<p class="text-[#507b95] text-xs mt-1">Arraste o arquivo ou clique para selecionar (PDF, JPG ou PNG)</p>
+<button class="mt-4 px-4 py-2 bg-white dark:bg-white/10 border border-[#e8eef3] dark:border-white/10 rounded-lg text-xs font-bold text-primary hover:bg-[#f0f4f8] transition-colors">
+                        Selecionar Arquivo
+                    </button>
+</div>
+</section>
+<div class="flex items-center justify-end gap-4 py-6">
+<button class="px-6 py-2.5 rounded-lg border-2 border-[#e8eef3] dark:border-white/10 text-[#507b95] dark:text-gray-400 text-sm font-bold hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                    Cancelar
+                </button>
+<button class="px-8 py-2.5 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">link</span>
+                    Vincular Responsável
+                </button>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

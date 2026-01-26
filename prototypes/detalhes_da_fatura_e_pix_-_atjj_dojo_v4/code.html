@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detalhes da Fatura e Pix - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f172a",
+                        "surface-dark": "#1e293b",
+                        "border-dark": "#334155",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-slate-900 dark:text-white font-display">
+<!-- Navbar Section -->
+<header class="border-b border-slate-200 dark:border-border-dark bg-white dark:bg-background-dark/50 sticky top-0 z-50 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">sports_kabaddi</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">ATJJ Dojo <span class="text-primary text-sm font-medium">v4</span></h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Alunos</a>
+<a class="text-sm font-medium text-primary" href="#">Financeiro</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Configurações</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-cover bg-center border-2 border-primary" data-alt="User profile picture of a student" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBQgE-XrwkKkaK6bnFzf2i73pDxYtAleffkK_nxyzeoE3aheF06MvsFqgzLgam8_PJ0a8Li61rp_qMmrTVFcj9E4S5G-JbjMqcmmbqAYvdkL-PsFyyv-2jhu-ttxHUeZ6J0WbZLTxxWNrYBMNICGeddlps81dQJ0dFwWwA6mAGhBYhQK26Cgh4FqStVZqHqk7DCLysZP8dzJOguMLAtfxkcCn4BoJqfkOrJzG0elltmvzoFYezVgNRwNBd7TunKBRpeylmhvBEmxuEM")'></div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-5xl mx-auto px-4 py-8">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 mb-6 text-sm">
+<a class="text-slate-500 hover:text-primary dark:text-slate-400" href="#">Financeiro</a>
+<span class="material-symbols-outlined text-sm text-slate-400">chevron_right</span>
+<span class="font-medium text-slate-900 dark:text-white">Fatura #8829</span>
+</nav>
+<!-- Page Heading -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div class="space-y-1">
+<div class="flex items-center gap-3">
+<h1 class="text-4xl font-black tracking-tight">Fatura #8829</h1>
+<span class="px-3 py-1 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-full text-xs font-bold uppercase tracking-wider">Pendente</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400">Vencimento em 15 de Outubro, 2023 • Emitida em 01 Out 2023</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-surface-dark hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors rounded-lg text-sm font-bold">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                    Baixar PDF
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-background-dark hover:bg-primary/90 transition-colors rounded-lg text-sm font-bold">
+<span class="material-symbols-outlined text-[20px]">upload_file</span>
+                    Enviar Comprovante
+                </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Main Content Area (2/3) -->
+<div class="lg:col-span-2 space-y-8">
+<!-- Central Pix Card -->
+<div class="bg-white dark:bg-surface-dark rounded-xl shadow-xl overflow-hidden border border-slate-200 dark:border-border-dark">
+<div class="p-6 md:p-8">
+<div class="flex flex-col md:flex-row gap-8 items-center">
+<!-- QR Code Container -->
+<div class="flex-shrink-0">
+<div class="bg-white p-4 rounded-xl shadow-inner inline-block border-4 border-primary/20">
+<div class="w-48 h-48 bg-cover bg-center" data-alt="QR Code for Pix payment checkout" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBfooJckslrlOu1JvgqxC-N5SMzroMcY1hxt4X9RSc7Iix0BVxv6Q2dA1arNFWOyd7uD_-f5-ox7QnwjlWNqB461pkX1mn7yoK8f0yqRfZMmgA3elhYVUi_vMMah9Fql2rtYibeCrgu4G9hsDlyRc9MYLfuGgbHKCdZXTj6gYHkd2EXNs_qNh1g49YDutokqWitYXL4lQwkZNfTbwVmtnbLCH4u3PWY_tDnP4TBD_XVRYjdyo7IzvAlhUIJnK62r7iHrqqozQuW-YiZ")'></div>
+</div>
+<p class="text-center text-xs mt-3 text-slate-500 font-medium">Escaneie com o app do seu banco</p>
+</div>
+<!-- Pix Instructions -->
+<div class="flex-1 space-y-5 text-center md:text-left">
+<div>
+<h3 class="text-2xl font-bold mb-2">Pagamento via Pix</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                                        Escaneie o QR Code ao lado ou utilize o código "Copia e Cola" abaixo para realizar o pagamento instantâneo. A confirmação é automática.
+                                    </p>
+</div>
+<div class="space-y-3">
+<div class="relative group">
+<input class="w-full bg-slate-50 dark:bg-background-dark/50 border border-slate-200 dark:border-border-dark rounded-lg py-3 px-4 text-xs font-mono text-slate-400 focus:ring-0 cursor-default" readonly="" type="text" value="00020101021226870014br.gov.bcb.pix0125atjjdojo@payment.com.br5204000053039865406200.005802BR5915ATJJ DOJO V4 6009SAO PAULO6207050388296304"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-3">
+<span class="material-symbols-outlined text-slate-400 text-sm">content_copy</span>
+</div>
+</div>
+<button class="w-full bg-primary text-background-dark py-3 px-6 rounded-lg font-bold flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">content_copy</span>
+                                        Copiar Código Pix (Copia e Cola)
+                                    </button>
+</div>
+<div class="flex items-center justify-center md:justify-start gap-2 text-xs font-medium text-emerald-500">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+</span>
+                                    Aguardando pagamento...
+                                </div>
+</div>
+</div>
+</div>
+<!-- Card Footer Summary -->
+<div class="bg-slate-50 dark:bg-slate-800/50 px-8 py-4 border-t border-slate-200 dark:border-border-dark flex justify-between items-center">
+<span class="text-slate-500 dark:text-slate-400 font-medium">Total a pagar:</span>
+<span class="text-2xl font-black text-primary">R$ 200,00</span>
+</div>
+</div>
+<!-- Invoice Summary -->
+<div class="space-y-4">
+<h2 class="text-xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">list_alt</span>
+                        Resumo da Fatura
+                    </h2>
+<div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-border-dark overflow-hidden">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-background-dark/30 text-xs uppercase tracking-wider text-slate-500">
+<tr>
+<th class="px-6 py-4 font-semibold">Descrição do Item</th>
+<th class="px-6 py-4 font-semibold text-right">Valor Unitário</th>
+<th class="px-6 py-4 font-semibold text-right">Subtotal</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-border-dark">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<p class="font-bold">Mensalidade - Outubro/2023</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Plano: Black Belt Premium</p>
+</td>
+<td class="px-6 py-4 text-right text-slate-600 dark:text-slate-300">R$ 150,00</td>
+<td class="px-6 py-4 text-right font-semibold">R$ 150,00</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<p class="font-bold">Taxa de Graduação</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Exame de faixa roxa</p>
+</td>
+<td class="px-6 py-4 text-right text-slate-600 dark:text-slate-300">R$ 50,00</td>
+<td class="px-6 py-4 text-right font-semibold">R$ 50,00</td>
+</tr>
+</tbody>
+<tfoot class="bg-slate-50 dark:bg-background-dark/30">
+<tr>
+<td class="px-6 py-4 text-right font-bold text-slate-500 uppercase text-xs" colspan="2">Valor Total Bruto</td>
+<td class="px-6 py-4 text-right font-black text-lg">R$ 200,00</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+</div>
+<!-- Sidebar Info (1/3) -->
+<div class="space-y-6">
+<!-- Student Info Card -->
+<div class="bg-white dark:bg-surface-dark rounded-xl p-6 border border-slate-200 dark:border-border-dark shadow-sm">
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">person</span>
+                        Informações do Aluno
+                    </h3>
+<div class="flex items-center gap-4 mb-6">
+<div class="size-14 rounded-full bg-cover bg-center border-2 border-primary/30" data-alt="Student profile avatar for Joao Silva" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDwuZBkk3hHx-rOiI56Mwk_aVbRdURgT1jrTqgx9QBBESBmnpUsYuKqGCAth3ECwYLVLb-FUXCe_9dni_LvgVhhhdlW3bzcm_VDN_Xm_qeBcAoiyTsyzD-nux_JlFLIKJZhq55o86ZtJ8FdDrHrNjLWlYq9YwTTTCJZD4fp-1_cckLduyECWihnkvkCjphXZ2yEleeIqVdeB5chp0W2tuETzCc_xT3FEnojGWgrzVbFZFSNv4QhG6kvQcbc9fwABgYFYEU3ocN2KPTx")'></div>
+<div>
+<p class="font-bold text-lg">João Silva</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Matrícula: #4429</p>
+</div>
+</div>
+<div class="space-y-4 border-t border-slate-100 dark:border-border-dark pt-4">
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1">CPF</p>
+<p class="text-sm font-medium">123.456.789-00</p>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Plano Vinculado</p>
+<p class="text-sm font-medium inline-flex items-center gap-2">
+<span class="size-2 rounded-full bg-primary"></span>
+                                Black Belt Premium
+                            </p>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Unidade</p>
+<p class="text-sm font-medium">Dojo Central - Matriz</p>
+</div>
+</div>
+</div>
+<!-- Support Card -->
+<div class="bg-primary/10 rounded-xl p-6 border border-primary/20">
+<div class="flex items-center gap-3 mb-3">
+<span class="material-symbols-outlined text-primary">help_outline</span>
+<h4 class="font-bold">Precisa de ajuda?</h4>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
+                        Se houver alguma divergência nos valores ou se você já realizou o pagamento, entre em contato com nosso suporte financeiro.
+                    </p>
+<a class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline" href="#">
+                        Abrir chamado de suporte
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Audit Log / Activity -->
+<div class="px-2">
+<h3 class="text-xs font-bold uppercase text-slate-500 mb-4">Histórico da Fatura</h3>
+<div class="space-y-4 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-200 dark:before:bg-border-dark">
+<div class="relative pl-6">
+<div class="absolute left-0 top-1 size-4 rounded-full bg-slate-200 dark:bg-border-dark flex items-center justify-center">
+<div class="size-2 rounded-full bg-slate-400"></div>
+</div>
+<p class="text-xs font-bold">Fatura Emitida</p>
+<p class="text-[10px] text-slate-500">01 Out, 2023 às 08:30</p>
+</div>
+<div class="relative pl-6">
+<div class="absolute left-0 top-1 size-4 rounded-full bg-primary/20 flex items-center justify-center">
+<div class="size-2 rounded-full bg-primary"></div>
+</div>
+<p class="text-xs font-bold">Visualizada pelo Aluno</p>
+<p class="text-[10px] text-slate-500">02 Out, 2023 às 14:15</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Section -->
+<footer class="mt-16 pt-8 border-t border-slate-200 dark:border-border-dark">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 dark:text-slate-400 text-xs">
+<p>© 2023 ATJJ Dojo v4 - Sistema de Gestão Gamificada</p>
+<div class="flex gap-6">
+<a class="hover:text-primary" href="#">Termos de Serviço</a>
+<a class="hover:text-primary" href="#">Privacidade</a>
+<a class="hover:text-primary" href="#">Suporte</a>
+</div>
+</div>
+</footer>
+</main>
+</body></html>

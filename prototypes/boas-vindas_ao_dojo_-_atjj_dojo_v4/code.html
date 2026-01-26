@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Boas-vindas ao Dojo - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f172a", // Deep Navy from prompt
+                        "card-dark": "#1e293b", // Slate card from prompt
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .confetti-pattern {
+            background-image: radial-gradient(circle, #0d7ff2 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white min-h-screen flex flex-col relative overflow-x-hidden">
+<!-- Background Decoration (Subtle Celebration) -->
+<div class="fixed inset-0 pointer-events-none confetti-pattern z-0"></div>
+<!-- TopNavBar (Modified from Component List) -->
+<header class="w-full border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-background-dark/50 backdrop-blur-md z-10">
+<div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<svg class="size-8" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold tracking-tight">ATJJ Dojo <span class="text-primary">v4</span></h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 rounded-full border-2 border-primary overflow-hidden">
+<div class="w-full h-full bg-slate-200 dark:bg-slate-700 bg-center bg-cover" data-alt="Avatar do novo aluno" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDNtkJWoPkOCZImNyeG7_QHN1NkSxD_Y49cO6pIVCviBE64yhzYhCK5X472BOITI04jPsgruwacJ-qHe4053PTpcS17QQtReoSrIuOI5sLeeiXfMuG0Z2bdmxmTpEuxqExEEr5CLR9YHrEuaKW_1SPZC2naNpGL_ZzpGghf9doBfW1miDQzQk5O-hJq-F47NeiRYe6RfGkZPnBJC2_VMpfxDdoVyMxA2cLiKNlcN3pBKjVDzf2uZze-fMShp2qP5FoJr4dX9EOOXDlJ");'></div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center px-6 py-12 relative z-10">
+<div class="max-w-3xl w-full flex flex-col items-center">
+<!-- Success Icon -->
+<div class="mb-8 relative">
+<div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-150"></div>
+<div class="relative bg-primary text-white rounded-full p-6 shadow-2xl shadow-primary/40 animate-bounce">
+<span class="material-symbols-outlined text-[64px] font-bold">check_circle</span>
+</div>
+</div>
+<!-- HeadlineText & TitleText -->
+<div class="text-center mb-10">
+<h1 class="text-white text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
+                    Matrícula Realizada com Sucesso!
+                </h1>
+<p class="text-slate-400 text-xl font-medium">
+                    Bem-vindo à família ATJJ Dojo. Seu caminho para a faixa preta começa agora.
+                </p>
+</div>
+<!-- Stats (Gamification Initial) -->
+<div class="w-full mb-8">
+<div class="bg-primary/10 border border-primary/20 rounded-xl p-6 flex items-center justify-between gap-4 max-w-lg mx-auto overflow-hidden relative">
+<div class="flex flex-col gap-1">
+<span class="text-primary text-xs font-bold uppercase tracking-widest">Recompensa Inicial</span>
+<p class="text-white text-lg">Parabéns! Você ganhou seus primeiros pontos.</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-primary tracking-tight text-3xl font-black">+100 XP</span>
+<div class="flex items-center gap-1 text-[#0bda5b] text-sm font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>Level 1</span>
+</div>
+</div>
+<!-- Decorative background element for the XP badge -->
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-8xl text-primary">military_tech</span>
+</div>
+</div>
+</div>
+<!-- Next Steps Card -->
+<div class="w-full max-w-xl bg-card-dark border border-slate-800 rounded-xl p-8 mb-10 shadow-xl">
+<h3 class="text-white text-lg font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">list_alt</span>
+                    Próximos Passos
+                </h3>
+<div class="space-y-6">
+<!-- Step 1 -->
+<div class="flex gap-4">
+<div class="flex-none w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm">1</div>
+<div class="flex flex-col">
+<h4 class="text-white font-semibold">Baixe o App</h4>
+<p class="text-slate-400 text-sm">Acompanhe sua evolução e registre seus treinos em qualquer lugar.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex gap-4">
+<div class="flex-none w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm">2</div>
+<div class="flex flex-col">
+<h4 class="text-white font-semibold">Complete seu perfil</h4>
+<p class="text-slate-400 text-sm">Adicione seu peso e altura para personalizarmos sua experiência.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex gap-4">
+<div class="flex-none w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm">3</div>
+<div class="flex flex-col">
+<h4 class="text-white font-semibold">Agende sua primeira aula</h4>
+<p class="text-slate-400 text-sm">Escolha o melhor horário e venha conhecer seu novo Dojo.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Images (Contextual Image) -->
+<div class="w-full max-w-xl mb-12 hidden md:block">
+<div class="aspect-video w-full overflow-hidden rounded-xl border border-slate-800 shadow-lg">
+<div class="w-full h-full bg-center bg-cover opacity-80" data-alt="Vista moderna do interior de um dojo de Jiu-Jitsu" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuARBgl0wfBEbyJQU1tjbVRqM6vhkSICqPva0EbWc_4P2tmGjJBu0PwxRyMwa75BsKwiJsrKMrSJ6W21b_0LENyEJPaVRQy-4FssRHIjiHqbiHCf_y-r9m2Jeb1AnnS0PoPoLFnZprGT0iAGGxWOAHnuAHz8XUr-ZbCBSFhhKQ-B1hGTk3Zwj_uoEqhTfPGEfF2WTJ7SX7Tc1CM8AO1n8G6Fd8dCJZoyBwLOFI18pvIB3suUlPjmcwjdbElJZ0Syy8sO1NGP821X2LUn");'></div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="w-full max-w-md">
+<button class="w-full bg-primary hover:bg-primary/90 transition-all transform hover:scale-[1.02] text-white font-bold py-4 px-8 rounded-xl flex items-center justify-center gap-3 text-lg shadow-lg shadow-primary/30">
+                    Acessar Meu Painel de Aluno
+                    <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<p class="text-slate-500 text-xs text-center mt-6">
+                    Dúvidas? Entre em contato com nosso <a class="text-primary hover:underline" href="#">suporte</a>.
+                </p>
+</div>
+</div>
+</main>
+<!-- Footer Decoration -->
+<footer class="py-8 text-center text-slate-600 dark:text-slate-500 text-sm relative z-10">
+        © 2024 ATJJ Dojo v4 - Sistema de Gestão Gamificada.
+    </footer>
+</body></html>

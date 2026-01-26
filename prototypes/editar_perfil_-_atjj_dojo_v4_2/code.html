@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editar Perfil - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2d9ce1",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111b21",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0e161b] dark:text-white antialiased min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 border-r border-[#e8eef3] dark:border-white/10 bg-white dark:bg-background-dark hidden md:flex flex-col justify-between p-4">
+<div class="flex flex-col gap-8">
+<div class="flex gap-3 items-center px-2">
+<div class="bg-primary rounded-lg p-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-white">sports_kabaddi</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-[#0e161b] dark:text-white text-base font-bold leading-tight">ATJJ Dojo</h1>
+<p class="text-[#507b95] dark:text-gray-400 text-[10px] uppercase tracking-wider font-semibold">v4 Management</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#507b95] dark:text-gray-400 hover:bg-[#f0f4f8] dark:hover:bg-white/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#507b95] dark:text-gray-400 hover:bg-[#f0f4f8] dark:hover:bg-white/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">sports_martial_arts</span>
+<span class="text-sm font-medium">Treinos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#507b95] dark:text-gray-400 hover:bg-[#f0f4f8] dark:hover:bg-white/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="text-sm font-medium">Graduação</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#507b95] dark:text-gray-400 hover:bg-[#f0f4f8] dark:hover:bg-white/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-sm font-medium">Financeiro</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">settings</span>
+<span class="text-sm font-bold">Configurações</span>
+</a>
+</nav>
+</div>
+<div class="border-t border-[#e8eef3] dark:border-white/10 pt-4 px-2">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary" data-alt="User profile avatar photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAfBcmAfI3pOIvE2WO-S1hO5DnSRuvneKX7kXtu_a30XcwGEGeN5ekKdB2RKkStwrfVb5TgJynAhipNeMpQZOEw1vSOTGWq5bTMCydQInf3iTGYz-nn0vDrxBOY-4EKM6Ggv43CwXdLUfDwXCIVhNdewTG0-wFECLofJjeb2QRnl-ArHhFZQYK8v9v2r12-QBD1yc8VrneaKMdh1oKDkERIRNGnQ40odfmeZ5nPOhgYYSIqIBzP8mLT_8F8AfTcy71008MsHLP8MiNH");'></div>
+<div class="flex flex-col">
+<p class="text-[#0e161b] dark:text-white text-xs font-bold">João Silva</p>
+<p class="text-[#507b95] dark:text-gray-400 text-[10px]">Faixa Azul</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark">
+<!-- Top Header -->
+<header class="sticky top-0 z-10 flex items-center justify-between bg-white dark:bg-background-dark border-b border-[#e8eef3] dark:border-white/10 px-8 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#0e161b] dark:text-white">edit</span>
+<h2 class="text-[#0e161b] dark:text-white text-lg font-bold">Editar Perfil</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden sm:flex items-center gap-4">
+<a class="text-[#507b95] dark:text-gray-400 text-sm font-medium hover:text-primary transition-colors" href="#">Início</a>
+<a class="text-[#507b95] dark:text-gray-400 text-sm font-medium hover:text-primary transition-colors" href="#">Ajuda</a>
+</div>
+<button class="flex items-center justify-center p-2 rounded-full bg-[#f0f4f8] dark:bg-white/5 text-[#507b95] dark:text-gray-400">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<div class="max-w-4xl mx-auto p-4 md:p-8 space-y-8">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 text-sm">
+<a class="text-[#507b95] dark:text-gray-400 font-medium" href="#">Configurações</a>
+<span class="text-[#507b95] dark:text-gray-600">/</span>
+<span class="text-[#0e161b] dark:text-white font-bold">Editar Perfil</span>
+</div>
+<!-- Profile Header -->
+<div class="bg-white dark:bg-white/5 rounded-xl p-6 shadow-sm border border-[#e8eef3] dark:border-white/10">
+<div class="flex flex-col md:flex-row items-center gap-6">
+<div class="relative group">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-32 border-4 border-primary/20" data-alt="Student profile photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC-tGyMNuiQe09v1D0rpWBGjzYC4t9pQETvvM2-EW30d2yJxDOXqqDDYSNHlk_AjyACXd92NgnortPxBG0IJWYxCvnw1rMvL4sbYQVKAQ-acqLOjnFGg4oMpd7oPrGVec2ZgLmot6F5PQIRzvvouFOSm3T4SDU8DW3H3oZVI2Fl_hOetpT4gvIc0JF-mCC1DL1w2rKHyrx-rMaH9oN7F9YR3DeIWy5ZPtYxba3kprf-iMHnfAhvBTM_t6thMJ9ltqyz2XY396hpDf2y");'></div>
+<button class="absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 shadow-lg hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+</button>
+</div>
+<div class="flex-1 text-center md:text-left">
+<div class="flex flex-col md:flex-row md:items-center gap-2">
+<h3 class="text-[#0e161b] dark:text-white text-2xl font-bold">João Silva</h3>
+<span class="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded text-[10px] font-bold uppercase self-center">Faixa Azul - 2º Grau</span>
+</div>
+<p class="text-[#507b95] dark:text-gray-400 text-sm">Membro desde Janeiro de 2023</p>
+<p class="text-[#507b95] dark:text-gray-400 text-sm italic mt-1">"A disciplina é a base de toda conquista."</p>
+</div>
+<div>
+<button class="px-6 py-2 rounded-lg bg-[#e8eef3] dark:bg-white/10 text-[#0e161b] dark:text-white text-sm font-bold hover:bg-[#d1dee6] dark:hover:bg-white/20 transition-colors">
+                                Alterar Foto
+                            </button>
+</div>
+</div>
+</div>
+<!-- Tabs -->
+<div class="border-b border-[#e8eef3] dark:border-white/10">
+<div class="flex gap-8">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3" href="#">
+<p class="text-sm font-bold">Informações Básicas</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-[#507b95] dark:text-gray-400 pb-3 hover:text-primary transition-colors" href="#">
+<p class="text-sm font-bold">Segurança</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-[#507b95] dark:text-gray-400 pb-3 hover:text-primary transition-colors" href="#">
+<p class="text-sm font-bold">Preferências</p>
+</a>
+</div>
+</div>
+<!-- Form Sections -->
+<div class="space-y-8 pb-20">
+<!-- Section 1: Informações Básicas -->
+<section class="bg-white dark:bg-white/5 rounded-xl p-6 shadow-sm border border-[#e8eef3] dark:border-white/10">
+<h4 class="text-[#0e161b] dark:text-white text-lg font-bold mb-6">Informações Básicas</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#0e161b] dark:text-white">Nome Completo</label>
+<input class="w-full rounded-lg border-[#e8eef3] dark:border-white/10 bg-transparent dark:text-white focus:border-primary focus:ring-1 focus:ring-primary py-2.5 px-4 outline-none" type="text" value="João Silva"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#0e161b] dark:text-white">E-mail</label>
+<input class="w-full rounded-lg border-[#e8eef3] dark:border-white/10 bg-transparent dark:text-white focus:border-primary focus:ring-1 focus:ring-primary py-2.5 px-4 outline-none" type="email" value="joao.silva@atjj.com.br"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#0e161b] dark:text-white">Telefone</label>
+<input class="w-full rounded-lg border-[#e8eef3] dark:border-white/10 bg-transparent dark:text-white focus:border-primary focus:ring-1 focus:ring-primary py-2.5 px-4 outline-none" placeholder="(11) 99999-9999" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#0e161b] dark:text-white">Data de Nascimento</label>
+<input class="w-full rounded-lg border-[#e8eef3] dark:border-white/10 bg-transparent dark:text-white focus:border-primary focus:ring-1 focus:ring-primary py-2.5 px-4 outline-none" type="date" value="1995-08-15"/>
+</div>
+<div class="flex flex-col gap-2 md:col-span-2">
+<label class="text-sm font-semibold text-[#0e161b] dark:text-white">Biografia Curta</label>
+<textarea class="w-full rounded-lg border-[#e8eef3] dark:border-white/10 bg-transparent dark:text-white focus:border-primary focus:ring-1 focus:ring-primary py-2.5 px-4 outline-none resize-none" placeholder="Conte um pouco sobre sua trajetória no Jiu-Jitsu..." rows="3"></textarea>
+<p class="text-right text-[10px] text-[#507b95] dark:text-gray-400">0 / 200 caracteres</p>
+</div>
+</div>
+</section>
+<!-- Section 2: Segurança -->
+<section class="bg-white dark:bg-white/5 rounded-xl p-6 shadow-sm border border-[#e8eef3] dark:border-white/10">
+<div class="flex items-center gap-2 mb-6">
+<h4 class="text-[#0e161b] dark:text-white text-lg font-bold">Segurança</h4>
+<span class="material-symbols-outlined text-sm text-[#507b95]">lock</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#0e161b] dark:text-white">Senha Atual</label>
+<input class="w-full rounded-lg border-[#e8eef3] dark:border-white/10 bg-transparent dark:text-white focus:border-primary focus:ring-1 focus:ring-primary py-2.5 px-4 outline-none" placeholder="••••••••" type="password"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#0e161b] dark:text-white">Nova Senha</label>
+<input class="w-full rounded-lg border-[#e8eef3] dark:border-white/10 bg-transparent dark:text-white focus:border-primary focus:ring-1 focus:ring-primary py-2.5 px-4 outline-none" placeholder="••••••••" type="password"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#0e161b] dark:text-white">Confirmar Nova Senha</label>
+<input class="w-full rounded-lg border-[#e8eef3] dark:border-white/10 bg-transparent dark:text-white focus:border-primary focus:ring-1 focus:ring-primary py-2.5 px-4 outline-none" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<p class="mt-4 text-xs text-[#507b95] dark:text-gray-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">info</span>
+                            A senha deve conter pelo menos 8 caracteres, uma letra maiúscula e um número.
+                        </p>
+</section>
+<!-- Section 3: Preferências -->
+<section class="bg-white dark:bg-white/5 rounded-xl p-6 shadow-sm border border-[#e8eef3] dark:border-white/10">
+<h4 class="text-[#0e161b] dark:text-white text-lg font-bold mb-6">Preferências &amp; Notificações</h4>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-[#0e161b] dark:text-white text-sm font-bold leading-normal">Notificações por E-mail</p>
+<p class="text-[#507b95] dark:text-gray-400 text-xs">Receber avisos de treinos e graduações via e-mail.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-[#e8eef3] dark:bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="text-[#0e161b] dark:text-white text-sm font-bold leading-normal">Notificações Push</p>
+<p class="text-[#507b95] dark:text-gray-400 text-xs">Receber notificações no navegador e celular.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-[#e8eef3] dark:bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="pt-4 border-t border-[#e8eef3] dark:border-white/10">
+<p class="text-[#0e161b] dark:text-white text-sm font-bold mb-4">Visibilidade do Perfil</p>
+<div class="flex gap-4">
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="text-primary focus:ring-primary border-[#e8eef3] dark:border-white/10 bg-transparent" name="visibility" type="radio"/>
+<span class="text-sm text-[#0e161b] dark:text-white">Público</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="text-primary focus:ring-primary border-[#e8eef3] dark:border-white/10 bg-transparent" name="visibility" type="radio"/>
+<span class="text-sm text-[#0e161b] dark:text-white">Privado (Apenas Mestres)</span>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- Actions -->
+<div class="flex items-center justify-end gap-4 py-6">
+<button class="px-6 py-2.5 rounded-lg border-2 border-[#e8eef3] dark:border-white/10 text-[#507b95] dark:text-gray-400 text-sm font-bold hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                            Cancelar
+                        </button>
+<button class="px-8 py-2.5 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 transition-colors">
+                            Salvar Alterações
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

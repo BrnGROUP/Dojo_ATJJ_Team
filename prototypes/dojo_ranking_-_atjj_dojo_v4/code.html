@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ranking do Dojo - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6a7d90",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#17191b",
+                        "gold": "#FFD700",
+                        "silver": "#C0C0C0",
+                        "bronze": "#CD7F32",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#131416] dark:text-white min-h-screen">
+<div class="flex flex-col min-h-screen">
+<header class="sticky top-0 z-50 bg-white dark:bg-[#1f2123] border-b border-solid border-[#ecedee] dark:border-white/10 px-4 md:px-10 py-3">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between gap-8">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8">
+<svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-[#131416] dark:text-white text-lg font-bold leading-tight tracking-tight">ATJJ Dojo v4</h2>
+</div>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-[#6c737a] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium" href="#">Dashboard</a>
+<a class="text-[#6c737a] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium" href="#">Treino</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-1" href="#">Ranking</a>
+<a class="text-[#6c737a] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium" href="#">Currículo</a>
+<a class="text-[#6c737a] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium" href="#">Agenda</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-4 items-center">
+<div class="hidden sm:flex relative max-w-xs w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#6c737a]">search</span>
+<input class="w-full h-10 pl-10 pr-4 rounded-lg border-none bg-[#ecedee] dark:bg-[#2d3034] text-[#131416] dark:text-white focus:ring-2 focus:ring-primary text-sm" placeholder="Buscar alunos..."/>
+</div>
+<button class="flex items-center justify-center rounded-lg size-10 bg-[#ecedee] dark:bg-[#2d3034] hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-[#131416] dark:text-white">notifications</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-cover bg-center border-2 border-primary" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBKxXVwpqGr2aXRputVq6Yl4n2qDd8Mq09RjA9ErhiQKdj0ybmy3gsW4FlCrjs0Ks5KoISRPjvG4Dssk201QhSYKsTU4OQUFS18TigtKCsyV-BLKhiGGVQUqil0fYw7wZjQQKzYpxqB-8w0f5LbEsisxklF_G-MWsUfSmEpnmzR3kiXxy1ahidOLZEk8i3mapma9gVVWOs0mbzE6dVQ1vi7XnN7V8rR4Vl2CRZx6q842qGQWflSGQ7o7L53_p7TWQtO954u9WDIV1d-");'></div>
+</div>
+</div>
+</header>
+<div class="flex-1 flex flex-row max-w-[1440px] w-full mx-auto">
+<aside class="hidden md:flex w-64 flex-col bg-white dark:bg-[#1f2123] border-r border-[#ecedee] dark:border-white/10 p-6 gap-8">
+<div class="flex flex-col">
+<h3 class="text-primary font-bold text-xs uppercase tracking-widest mb-4">Menu Principal</h3>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#6c737a] hover:bg-primary/10 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-sm font-medium">Início</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary transition-all" href="#">
+<span class="material-symbols-outlined fill-icon">trophy</span>
+<span class="text-sm font-bold">Rankings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#6c737a] hover:bg-primary/10 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-sm font-medium">Meu Progresso</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#6c737a] hover:bg-primary/10 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="text-sm font-medium">Medalhas</span>
+</a>
+</div>
+</div>
+<div class="mt-auto pt-6 border-t border-[#ecedee] dark:border-white/10">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#6c737a] hover:bg-primary/10 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Configurações</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 p-4 md:p-8 overflow-y-auto">
+<div class="max-w-5xl mx-auto flex flex-col gap-8">
+<div>
+<h1 class="text-[#131416] dark:text-white text-3xl font-bold tracking-tight">Ranking do Dojo - Temporada 4</h1>
+<p class="text-[#6c737a] dark:text-gray-400 text-sm mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">update</span>
+                        Última atualização: há 5 minutos
+                    </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end pt-4 pb-8">
+<div class="order-2 md:order-1 flex flex-col items-center">
+<div class="relative group">
+<div class="size-24 rounded-full border-4 border-silver p-1 mb-4 overflow-hidden bg-white dark:bg-[#2d3034] shadow-lg">
+<div class="size-full rounded-full bg-cover bg-center" data-alt="Helio Silva profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAY3DWtkiVXY3wt5-RicHATfsp_35H6GJulFxV8r0kd-UjRvnlylauGVOa5RcMSAvLFiO893FKjFvXKdlIncamjH6BoeDEYxOejzE6qEHwBj44HaVRQuyDKaJmDb81LOpD2zZhSHLgimD1BCPfWY3lnbAICLI2tcvu4kKTv1EgTbMINK2aHF51ihOvCTynrNi9etxzqMrRr1XcZ2fQIBaEMeHXKYOZXUADum2ohQNGsY1jM94qqYfHrXOBHY_tJ5SX3wO7Rtzjb_t9i");'></div>
+</div>
+<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-silver text-white text-[10px] font-bold px-3 py-0.5 rounded-full shadow-md">#2 PRATA</div>
+</div>
+<h3 class="font-bold text-lg mt-2">Helio Silva</h3>
+<div class="flex items-center gap-1 text-primary">
+<span class="text-xs font-semibold px-2 py-0.5 bg-black text-white rounded">Faixa Preta</span>
+</div>
+<p class="text-sm font-bold mt-1 text-[#6c737a]">11.200 XP</p>
+<div class="w-full bg-white/50 dark:bg-white/5 rounded-full h-2 mt-2 max-w-[120px]">
+<div class="bg-silver h-2 rounded-full w-[85%]"></div>
+</div>
+</div>
+<div class="order-1 md:order-2 flex flex-col items-center">
+<div class="relative transform hover:scale-105 transition-transform duration-300">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2">
+<span class="material-symbols-outlined text-gold text-4xl fill-icon">emoji_events</span>
+</div>
+<div class="size-32 rounded-full border-4 border-gold p-1 mb-4 overflow-hidden bg-white dark:bg-[#2d3034] shadow-2xl ring-4 ring-gold/20">
+<div class="size-full rounded-full bg-cover bg-center" data-alt="Carlos Gracie profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDj2o5eH9dDD6ZPS3-gSu54eeIFrcN_1eepdIGnAd3aFDkDUyk53kK7MvRV3dlFJVGaBD0GTN0ar71PScVu1B3O1Y-wr7gIUC7wJWj7HEoP5QAKNOCNWWIqVXoMFq5TbBKu-VQBYjwveKE2fkEPp0_Mp27e49J4d-oWZ3HrkL9_QXcQR0CP2K104MmcVkz5OcsiEV3RhHFfm0bUS5UDaSkK1StG1MUpr_nePSwFr6jBll7xTz0JOww0qw0HlOC82H4pup1S2x7-DHr1");'></div>
+</div>
+<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-gold text-[#131416] text-xs font-black px-4 py-1 rounded-full shadow-lg">#1 OURO</div>
+</div>
+<h3 class="font-black text-xl mt-2 tracking-tight">Carlos Gracie</h3>
+<div class="flex items-center gap-1 text-primary">
+<span class="text-xs font-semibold px-2 py-0.5 bg-black text-white rounded">Faixa Preta</span>
+</div>
+<p class="text-base font-black mt-1 text-primary">12.500 XP</p>
+<div class="w-full bg-white/50 dark:bg-white/5 rounded-full h-2.5 mt-2 max-w-[160px]">
+<div class="bg-gold h-2.5 rounded-full w-[95%]"></div>
+</div>
+</div>
+<div class="order-3 md:order-3 flex flex-col items-center">
+<div class="relative">
+<div class="size-20 rounded-full border-4 border-bronze p-1 mb-4 overflow-hidden bg-white dark:bg-[#2d3034] shadow-lg">
+<div class="size-full rounded-full bg-cover bg-center" data-alt="Mitsuyo Maeda profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCZrzhlDfj8H-jYuzOKxdSqlOLNmt6HKLvrpF1LX2kBgQYA0M0JlYH0dmr8EXdvFnG0_c7oWoBwjMtBlN-3HhRlMAf9CiOLsCTTE3_t0Y-GEE3hXCy2Pke7W4XnazSDeAkqqLJdf3FqPdQz3YJ8PEqBpY-sC6Rpo0m3_aY7NyB8yIQJvUIaDxEb0BUD2atjirnIaLu67oVAvgix-9kRJZXBv6GEMV1N94fmJH0cvHt6CQ7v5g5O0Us0PbWUX_TMkx06rORJnpRQdONJ");'></div>
+</div>
+<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-bronze text-white text-[10px] font-bold px-3 py-0.5 rounded-full shadow-md">#3 BRONZE</div>
+</div>
+<h3 class="font-bold text-lg mt-2">Mitsuyo Maeda</h3>
+<div class="flex items-center gap-1 text-primary">
+<span class="text-xs font-semibold px-2 py-0.5 bg-black text-white rounded">Faixa Preta</span>
+</div>
+<p class="text-sm font-bold mt-1 text-[#6c737a]">10.800 XP</p>
+<div class="w-full bg-white/50 dark:bg-white/5 rounded-full h-2 mt-2 max-w-[100px]">
+<div class="bg-bronze h-2 rounded-full w-[70%]"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-[#1f2123] p-4 rounded-xl shadow-sm border border-[#ecedee] dark:border-white/10">
+<div class="flex items-center gap-2">
+<span class="text-sm font-semibold text-[#6c737a] mr-2">Faixa:</span>
+<div class="flex gap-2">
+<button class="size-6 rounded-full bg-white border border-gray-300 shadow-sm hover:ring-2 hover:ring-primary"></button>
+<button class="size-6 rounded-full bg-blue-600 shadow-sm hover:ring-2 hover:ring-primary"></button>
+<button class="size-6 rounded-full bg-purple-700 shadow-sm hover:ring-2 hover:ring-primary"></button>
+<button class="size-6 rounded-full bg-[#5d4037] shadow-sm hover:ring-2 hover:ring-primary"></button>
+<button class="size-6 rounded-full bg-black shadow-sm hover:ring-2 hover:ring-primary"></button>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-[#ecedee] dark:bg-[#2d3034] rounded-lg text-sm font-medium text-[#131416] dark:text-white">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                            Sempre
+                        </button>
+</div>
+</div>
+<div class="overflow-hidden bg-white dark:bg-[#1f2123] rounded-xl shadow-sm border border-[#ecedee] dark:border-white/10">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-[#ecedee] dark:border-white/10 bg-gray-50 dark:bg-white/5">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#6c737a]">Posição</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#6c737a]">Aluno</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#6c737a]">Graduação</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#6c737a]">Nível</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#6c737a] text-right">Total de XP</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#ecedee] dark:divide-white/10">
+<tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<td class="px-6 py-4 font-bold text-gold">#1</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Carlos profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBRwxR5xfjBbB-8GUadyR1mY52MfuKVTkQaalOMl64HzOv9-mvWBMB-GJTbKhTltqm4toa-WItTLXjVpeK93XG6OsaZsg2kl776O-9MvD2C7mb1W2xZ1M0Ji5ArfWpVLoNgI6hQKwXzqmK_PPLq9amJmY6GOrOvVtiMishPYM4v5gFGS_gxYk3d329SuXA5UsprwEk93wu2GvNsyd4WtzIcjVIrjrHdVgnwLq1X3SGYPfwOH4_hIinjl59_iz6g0MKHJSspVUN0MhfU");'></div>
+<span class="font-semibold">Carlos Gracie</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded text-[10px] font-bold bg-black text-white uppercase border border-white/20">Faixa Preta</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1 w-24">
+<span class="text-xs font-medium">Nvl 45</span>
+<div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 95%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-bold">12.500</td>
+</tr>
+<tr class="bg-primary/5 dark:bg-primary/20 border-l-4 border-primary">
+<td class="px-6 py-4 font-bold">#4</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="You profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBpQ4enzeu6eaoG4v9_eAfo0wntLkzP36sMewDU_3nsG6GIp8dnTAj9EPVwTgmC0e4cR3Bze17VqpRylr6oW4ONxdLqTlEhlYXyEwtHnbapw-YT5Q8Ry05SkIMOCjWryf7zTiZWvTqmuO6ee7JVh-81q5bgdkKzQd8H3AJjPQf_0LILkZn6ofof6tOEUW9KLnPEm0E2Kp6-0em-g7XyaGQyL9lSgWce85MRALXAj4kYPocaorAIGy2_y7rAS1m4qapPBQi7Mlu1GBPU");'></div>
+<span class="font-bold text-primary">Você (Alex Johnson)</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded text-[10px] font-bold bg-purple-700 text-white uppercase border border-white/20">Faixa Roxa</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1 w-24">
+<span class="text-xs font-medium">Nvl 38</span>
+<div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 65%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-bold">9.420</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<td class="px-6 py-4 font-medium text-[#6c737a]">#5</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Student profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCnWWqWXuAj5JDiWJZq30vtPFfkRu7pcpM5LUgeb72jTZ7Y7FIfVd4EKn0hvP_3fmvj-75LHBvz0q6Pl7aDhNizCsq27OXqnPtiziMaq_bslHmBWg8e-rjvqugCXbsH2EvUKc5z6_AZlPXaRbVsm5rNnaix4CrVSqOvTy7B0x6j9gSzlJghYGCludyDEzgFQhCFPJHk4Cda_zHqqvJruZ4dQLn8adXrzFVCsGwg7O1o39nP2UtlnMmTxysufYPf0wELnZrCSPGy43f1");'></div>
+<span class="font-medium">Rickson Barret</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded text-[10px] font-bold bg-blue-600 text-white uppercase border border-white/20">Faixa Azul</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1 w-24">
+<span class="text-xs font-medium">Nvl 32</span>
+<div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 40%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-medium">8.150</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<td class="px-6 py-4 font-medium text-[#6c737a]">#6</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Student profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC8pYIv_0-dRDEDxs8ByR7FkSs1KQzJJjnkgFlNgRy6RzEX_QW53OssfWF_XU3Av5An4VuMNCth334QueD4ZOsEfQNknXy10RTUOieQla8B-ttI-nrtkOy5LhslVkvzo042srCoGzXc_SgxM4UQIkX4cAg5efjN4DyM17h_t3CvGZ2aq8xjn7qZ9odKhuspICa4SMnsAJHaTcG-6gA5EemdEy2GoujBsZG2ut-PxfVgQ7zDlvy_-iLea1nA01a5Ik-u3W0Q9SykNtPt");'></div>
+<span class="font-medium">Elena Lopez</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded text-[10px] font-bold bg-white text-black border border-gray-300 uppercase">Faixa Branca</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1 w-24">
+<span class="text-xs font-medium">Nvl 29</span>
+<div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 80%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-medium">7.900</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<td class="px-6 py-4 font-medium text-[#6c737a]">#7</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Student profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCRjE7dOCpAPWwMUApRLieLt-nd-KYtGU2IpkrHYqrvUe-J_ueI2BkcardSNV7L3ZeXXrhw_JF2o98x3LDqaAZSzJj7PNcb0Q01JlusWVNCQeSTE9ow164u3o5Ya2Rg3I9E7rklVZ2aUg8ppQeatbiuTF6Cwrrn5NHlKRQtMTr6N8EZZ5pCx1Qoh0lKsmIuWw_01w6yl-419X96lNuVmuROVkDWeontnuQzGPXgLAd8ae9LcyU-3TKmbGOKUryL6dLsr83tlLmo7GdP");'></div>
+<span class="font-medium">John Doe</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded text-[10px] font-bold bg-[#5d4037] text-white uppercase border border-white/20">Faixa Marrom</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1 w-24">
+<span class="text-xs font-medium">Nvl 25</span>
+<div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 30%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-medium">6.200</td>
+</tr>
+</tbody>
+</table>
+<div class="px-6 py-4 flex items-center justify-between border-t border-[#ecedee] dark:border-white/10 bg-gray-50 dark:bg-white/5">
+<span class="text-sm text-[#6c737a]">Mostrando os 50 melhores praticantes</span>
+<div class="flex gap-2">
+<button class="px-3 py-1 text-sm rounded bg-white dark:bg-[#2d3034] border border-gray-300 dark:border-white/10 text-[#6c737a] hover:bg-gray-50 transition-colors">Anterior</button>
+<button class="px-3 py-1 text-sm rounded bg-white dark:bg-[#2d3034] border border-gray-300 dark:border-white/10 text-[#6c737a] hover:bg-gray-50 transition-colors">Próximo</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

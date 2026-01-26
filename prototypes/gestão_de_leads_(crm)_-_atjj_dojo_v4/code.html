@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão de Leads (CRM) - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3398db",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#0f172a", // Specified deep blue-dark
+                        "surface-dark": "#1e293b",    // Card background
+                        "border-dark": "#334155",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .kanban-column { min-width: 300px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 border-b border-border-dark bg-background-dark/80 backdrop-blur-md px-6 py-3">
+<div class="max-w-[1600px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<h1 class="text-white text-xl font-bold tracking-tight">ATJJ Dojo <span class="text-primary">v4</span></h1>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Alunos</a>
+<a class="text-white border-b-2 border-primary pb-1 text-sm font-medium transition-colors" href="#">Leads (CRM)</a>
+<a class="text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Aulas</a>
+<a class="text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Financeiro</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="bg-surface-dark border-none rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder:text-slate-500 focus:ring-1 focus:ring-primary w-64" placeholder="Buscar lead..." type="text"/>
+</div>
+<button class="p-2 hover:bg-surface-dark rounded-full text-slate-400 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="size-10 rounded-full border-2 border-primary overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Profile picture of the sensei" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL_Xj7cgUYF266jRjq9jpxHl9wMpubyNwsMikmn_xEpgtzPOm6UhFnh6p1w8jsCI9uLLRqWGb_cCK-gNeuw4sOnElltAdDfHy9ZfYLmLpYDtzZ9Fhz0k5yJCyxzlLX-qHmNGJxrJDz2onoVf52YSppe1RgrFeTBSOdjSK4IMkEI9nJomWWqnAycEA13dIcwmOrlZDYTlGTXvki3Vnr3v85AukZ_Z-VD3LnlpTY_DEz7U4ZdANVYrK_4ZlhpXyxx8F6VtERQ6Ax_d5a"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-[1600px] mx-auto p-6">
+<!-- Page Heading & Filters -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
+<div class="space-y-1">
+<h2 class="text-3xl font-black text-white tracking-tight">Gestão de Leads</h2>
+<p class="text-slate-400">Acompanhe o funil de conversão de novos alunos em tempo real.</p>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<!-- Filters -->
+<div class="flex gap-2 p-1 bg-surface-dark rounded-xl border border-border-dark">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-border-dark text-white text-xs font-semibold">
+<span class="material-symbols-outlined text-sm">calendar_month</span>
+                        Este Mês
+                    </button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-border-dark text-slate-400 text-xs font-semibold transition-colors">
+<span class="material-symbols-outlined text-sm">filter_alt</span>
+                        Origem: Todas
+                    </button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-border-dark text-slate-400 text-xs font-semibold transition-colors">
+<span class="material-symbols-outlined text-sm">sort</span>
+                        Recentes
+                    </button>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">add</span>
+                    Novo Lead
+                </button>
+</div>
+</div>
+<div class="flex flex-col lg:flex-row gap-6">
+<!-- Kanban Funnel -->
+<div class="flex-1 overflow-x-auto custom-scrollbar pb-4">
+<div class="flex gap-5 min-w-max">
+<!-- Column: Novo Lead -->
+<div class="kanban-column w-80 space-y-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-blue-400"></span>
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Novo Lead</h3>
+<span class="bg-surface-dark text-slate-400 px-2 py-0.5 rounded text-[10px] font-bold">12</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer">more_horiz</span>
+</div>
+<!-- Lead Card 1 -->
+<div class="bg-surface-dark border border-border-dark rounded-xl p-4 shadow-sm hover:border-primary/50 transition-all group cursor-grab">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase px-2 py-0.5 rounded border border-blue-500/20">Landing Page</span>
+<span class="text-slate-500 text-[10px]">2h atrás</span>
+</div>
+<h4 class="text-white font-bold mb-1">Ricardo Almeida</h4>
+<p class="text-slate-400 text-xs mb-4">Interesse: Jiu-Jitsu Adulto</p>
+<div class="flex items-center justify-between pt-3 border-t border-border-dark">
+<div class="flex gap-2">
+<button class="size-8 flex items-center justify-center rounded-lg bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 transition-colors">
+<span class="material-symbols-outlined text-lg">chat</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded-lg bg-slate-700/50 text-slate-300 hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-lg">history</span>
+</button>
+</div>
+<button class="flex items-center gap-1 text-xs font-bold text-primary group-hover:translate-x-1 transition-transform">
+                                    Mover <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Lead Card 2 -->
+<div class="bg-surface-dark border border-border-dark rounded-xl p-4 shadow-sm hover:border-primary/50 transition-all group cursor-grab">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-purple-500/10 text-purple-400 text-[10px] font-bold uppercase px-2 py-0.5 rounded border border-purple-500/20">Instagram</span>
+<span class="text-slate-500 text-[10px]">5h atrás</span>
+</div>
+<h4 class="text-white font-bold mb-1">Beatriz Santos</h4>
+<p class="text-slate-400 text-xs mb-4">Interesse: Defesa Pessoal</p>
+<div class="flex items-center justify-between pt-3 border-t border-border-dark">
+<div class="flex gap-2">
+<button class="size-8 flex items-center justify-center rounded-lg bg-[#25D366]/10 text-[#25D366]">
+<span class="material-symbols-outlined text-lg">chat</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded-lg bg-slate-700/50 text-slate-300">
+<span class="material-symbols-outlined text-lg">history</span>
+</button>
+</div>
+<button class="flex items-center gap-1 text-xs font-bold text-primary transition-transform">
+                                    Mover <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Column: Contatado -->
+<div class="kanban-column w-80 space-y-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-yellow-400"></span>
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Contatado</h3>
+<span class="bg-surface-dark text-slate-400 px-2 py-0.5 rounded text-[10px] font-bold">8</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer">more_horiz</span>
+</div>
+<div class="bg-surface-dark border border-border-dark rounded-xl p-4 shadow-sm">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase px-2 py-0.5 rounded border border-emerald-500/20">Indicação</span>
+<span class="text-slate-500 text-[10px]">Ontem</span>
+</div>
+<h4 class="text-white font-bold mb-1">Carlos Eduardo</h4>
+<p class="text-slate-400 text-xs mb-4">Interesse: Kids (7-10 anos)</p>
+<div class="flex items-center justify-between pt-3 border-t border-border-dark">
+<div class="flex gap-2">
+<button class="size-8 flex items-center justify-center rounded-lg bg-[#25D366]/10 text-[#25D366]">
+<span class="material-symbols-outlined text-lg">chat</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded-lg bg-slate-700/50 text-slate-300">
+<span class="material-symbols-outlined text-lg">history</span>
+</button>
+</div>
+<button class="flex items-center gap-1 text-xs font-bold text-primary">
+                                    Agendar <span class="material-symbols-outlined text-sm">calendar_add_on</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Column: Aula Agendada -->
+<div class="kanban-column w-80 space-y-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-primary"></span>
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Aula Agendada</h3>
+<span class="bg-surface-dark text-slate-400 px-2 py-0.5 rounded text-[10px] font-bold">5</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer">more_horiz</span>
+</div>
+<div class="bg-primary/5 border border-primary/20 rounded-xl p-4 shadow-sm">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-blue-500 text-white text-[9px] font-black uppercase px-2 py-0.5 rounded">HOJE às 19:00</span>
+<span class="text-slate-500 text-[10px]">2 dias atrás</span>
+</div>
+<h4 class="text-white font-bold mb-1">Mariana Oliveira</h4>
+<p class="text-slate-400 text-xs mb-4">Interesse: Jiu-Jitsu Feminino</p>
+<div class="flex items-center justify-between pt-3 border-t border-primary/10">
+<div class="flex gap-2">
+<button class="size-8 flex items-center justify-center rounded-lg bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded-lg bg-slate-700/50 text-slate-300">
+<span class="material-symbols-outlined text-lg">history</span>
+</button>
+</div>
+<button class="flex items-center gap-1 text-xs font-bold text-primary">
+                                    Matricular <span class="material-symbols-outlined text-sm">edit_note</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Column: Matrícula Pendente -->
+<div class="kanban-column w-80 space-y-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-emerald-500"></span>
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Matrícula Pendente</h3>
+<span class="bg-surface-dark text-slate-400 px-2 py-0.5 rounded text-[10px] font-bold">3</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer">more_horiz</span>
+</div>
+<div class="bg-surface-dark border border-border-dark rounded-xl p-4 shadow-sm border-l-4 border-l-emerald-500">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-slate-700 text-slate-300 text-[10px] font-bold uppercase px-2 py-0.5 rounded">Aguardando Pagto</span>
+</div>
+<h4 class="text-white font-bold mb-1">Fernando Costa</h4>
+<p class="text-slate-400 text-xs mb-4">Interesse: Plano Semestral</p>
+<div class="flex items-center justify-between pt-3 border-t border-border-dark">
+<div class="flex gap-2">
+<button class="size-8 flex items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
+<span class="material-symbols-outlined text-lg">receipt_long</span>
+</button>
+</div>
+<button class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded text-xs font-bold transition-colors">
+                                    Concluir
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Summary -->
+<aside class="w-full lg:w-80 space-y-6">
+<!-- Stats Cards -->
+<div class="bg-surface-dark border border-border-dark rounded-2xl p-6">
+<h3 class="text-white font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+                        Resumo do Mês
+                    </h3>
+<div class="space-y-6">
+<div class="flex items-end justify-between">
+<div class="space-y-1">
+<p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Taxa de Conversão</p>
+<p class="text-3xl font-black text-white">12.5%</p>
+</div>
+<span class="text-emerald-400 text-sm font-bold bg-emerald-400/10 px-2 py-1 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                2.1%
+                            </span>
+</div>
+<div class="flex items-end justify-between">
+<div class="space-y-1">
+<p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Leads do Mês</p>
+<p class="text-3xl font-black text-white">48</p>
+</div>
+<span class="text-emerald-400 text-sm font-bold bg-emerald-400/10 px-2 py-1 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                5%
+                            </span>
+</div>
+<div class="pt-6 border-t border-border-dark">
+<p class="text-slate-400 text-xs font-bold mb-3 uppercase tracking-wider">Meta Mensal (Matrículas)</p>
+<div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden mb-2">
+<div class="bg-primary h-full rounded-full" style="width: 65%"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] font-bold">
+<span class="text-primary">13 Matrículas</span>
+<span class="text-slate-500">Meta: 20</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent History Widget -->
+<div class="bg-surface-dark/50 border border-border-dark rounded-2xl p-6">
+<h3 class="text-white font-bold mb-4 text-sm">Atividade Recente</h3>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="size-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 shrink-0">
+<span class="material-symbols-outlined text-lg">person_add</span>
+</div>
+<div>
+<p class="text-xs text-white">Novo lead <strong>Ricardo</strong> entrou via LP.</p>
+<p class="text-[10px] text-slate-500">Há 2 horas</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="size-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-500 shrink-0">
+<span class="material-symbols-outlined text-lg">done_all</span>
+</div>
+<div>
+<p class="text-xs text-white"><strong>Fernando</strong> enviou comprovante.</p>
+<p class="text-[10px] text-slate-500">Há 4 horas</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 text-center text-xs font-bold text-slate-500 hover:text-white transition-colors">Ver histórico completo</button>
+</div>
+</aside>
+</div>
+</main>
+<!-- Floating Action Button for Mobile -->
+<button class="lg:hidden fixed bottom-6 right-6 size-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</body></html>

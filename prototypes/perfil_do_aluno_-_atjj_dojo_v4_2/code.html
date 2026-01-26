@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Perfil do Aluno com Gráfico de Radar - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#319bdd",
+                        "secondary": "#3498db",
+                        "background-light": "#f4f4f4",
+                        "sidebar-dark": "#2c3e50",
+                        "background-dark": "#121b20",
+                        "card-dark": "#1c2a33",
+                        "border-dark": "#263945",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }.custom-sidebar {
+            background-color: #2c3e50;
+        }
+        .radar-label {
+            font-size: 10px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-[#f4f4f4] dark:bg-background-dark text-slate-900 dark:text-white antialiased min-h-screen">
+<div class="flex h-full min-h-screen">
+<aside class="w-64 fixed inset-y-0 left-0 custom-sidebar border-r border-slate-700/30 hidden lg:flex flex-col z-20">
+<div class="flex flex-col h-full p-4">
+<div class="flex gap-3 mb-8">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBsenUaI2vZ5L8ub2Dk26xwcPuOg9A6o5YEo9h5gJ33PqfDYo6kenSZkAj4Y5wzHnC-18iPfHRCci-4D_vzhPztkJ-m3IYGyX7C-8TJ712SdalkYw00Kl_EbmYkM_HIb-mFgk_bOEjTMyuN6RYevLKyUm2jIsf_y9kJ1Ch0mUqdu0Ft5jO2PaoDz0LZphdlac3ZCQlhsbDaxVBGd0kuFq5der5g-KIiG8r6H4J37TG4JFD0A-kpIC32V2ia2FXXfaxaLrakdShfp99j");'></div>
+<div class="flex flex-col text-white">
+<h1 class="text-base font-bold leading-normal">ATJJ Dojo v4</h1>
+<p class="text-slate-300 text-xs font-normal leading-normal">Gestão de Jiu-Jitsu</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2 flex-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700/50 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/20 text-white" href="#">
+<span class="material-symbols-outlined fill">person</span>
+<p class="text-sm font-medium">Perfil</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700/50 transition-colors" href="#">
+<span class="material-symbols-outlined">sports_martial_arts</span>
+<p class="text-sm font-medium">Aulas</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700/50 transition-colors" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<p class="text-sm font-medium">Graduações</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700/50 transition-colors" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<p class="text-sm font-medium">Ranking</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700/50 transition-colors mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium">Configurações</p>
+</a>
+</nav>
+<button class="mt-4 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-wide">
+<span>Nova Aula</span>
+</button>
+</div>
+</aside>
+<main class="flex-1 lg:ml-64 flex flex-col min-h-screen">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-slate-200 dark:border-border-dark px-6 py-3 bg-white dark:bg-background-dark sticky top-0 z-10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-slate-900 dark:text-white">
+<h2 class="text-lg font-bold leading-tight tracking-tight">Perfil do Aluno</h2>
+</div>
+<div class="hidden md:flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-100 dark:bg-border-dark">
+<div class="text-slate-500 dark:text-[#96b3c5] flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full border-none bg-transparent focus:ring-0 text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-[#96b3c5] px-4 text-sm" placeholder="Buscar no sistema..." value=""/>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-white">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-white">
+<span class="material-symbols-outlined">forum</span>
+</button>
+</div>
+<div class="h-10 w-10 rounded-full bg-cover bg-center border-2 border-primary" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDsayTAbP3vMBJin_Z4rGhpsBcF5Wrus7gdw9DeY2rsxBlcAukvuUqAUaiEeHT66cOlbCm6sxFIZEM7DAjwNdthN2RgurH3AgsYEmvoyd4Sz_7iqsPROHrOlLgy_IewYBUpllTQ56cwNFEXz88OpeJ7vDEemsd2YhD5AW1WIeAQqRKNRLephwlVmnN-T7Da5SuuWTbla3wG_y42ekRBl2GkDZtF3q2sXoW73_PU1D2jtRWnODCn59gG4ao-EThFs63wAEmfPYF_-Dxo");'></div>
+</div>
+</header>
+<div class="p-6 max-w-7xl mx-auto w-full">
+<div class="flex flex-wrap gap-2 mb-6">
+<a class="text-slate-500 dark:text-[#96b3c5] text-sm font-medium flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">home</span> Início
+                </a>
+<span class="text-slate-400 dark:text-[#96b3c5] text-sm">/</span>
+<span class="text-slate-900 dark:text-white text-sm font-medium">Meu Perfil</span>
+</div>
+<div class="bg-white dark:bg-card-dark rounded-xl p-6 shadow-sm border border-slate-200 dark:border-border-dark mb-6">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="flex items-center gap-6">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-24 w-24 border-4 border-primary" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC7Ndf5Vk45vtT1tLTJK1G648s06ASklbYTdVzUVUlu23x89GREL7jS1zI7aiVlkruJ01acOnTzv-arfbSBEcztaFynEetTEN8FXyphQTnx_gCs9XGJvr9nIBEmwugsyofDX5xEkSoFYdhLZIr5RNTmO04-PJLeCYEZ-GYrLAvfi4IF8Bnccoe76cAuFv5_OTvEQ6y8wVTLwkGmdWnRLK1kFh8_XxqQTDCyABtZAxsoJWejkoKr0b_nR--94hZaqXIcqzw5IngpgyKI");'></div>
+<div class="absolute -bottom-2 -right-2 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full border-2 border-white dark:border-card-dark uppercase">Nível 15</div>
+</div>
+<div class="flex flex-col">
+<h3 class="text-slate-900 dark:text-white text-2xl font-bold leading-tight">João Silva</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-block w-4 h-2 bg-blue-600 rounded"></span>
+<p class="text-slate-600 dark:text-[#96b3c5] text-base font-medium">Faixa Azul - 1º Grau</p>
+</div>
+<p class="text-slate-400 dark:text-[#96b3c5]/70 text-sm mt-1">Membro desde Março 2023</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex flex-1 md:flex-none items-center justify-center gap-2 rounded-lg h-11 px-6 bg-slate-100 dark:bg-border-dark text-slate-900 dark:text-white text-sm font-bold">
+<span class="material-symbols-outlined text-lg">edit</span>
+                            Editar Perfil
+                        </button>
+<button class="flex flex-1 md:flex-none items-center justify-center gap-2 rounded-lg h-11 px-6 bg-primary text-white text-sm font-bold">
+<span class="material-symbols-outlined text-lg">share</span>
+                            Compartilhar
+                        </button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<div class="lg:col-span-8 space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-white dark:bg-card-dark rounded-xl p-6 border border-slate-200 dark:border-border-dark flex flex-col items-center">
+<h4 class="text-slate-900 dark:text-white text-md font-bold mb-4 w-full">Progresso de Graduação</h4>
+<div class="relative flex items-center justify-center mb-4">
+<svg class="size-40 transform -rotate-90">
+<circle class="text-slate-100 dark:text-border-dark" cx="80" cy="80" fill="transparent" r="72" stroke="currentColor" stroke-width="10"></circle>
+<circle class="text-primary" cx="80" cy="80" fill="transparent" r="72" stroke="currentColor" stroke-dasharray="452.39" stroke-dashoffset="113.10" stroke-width="10"></circle>
+</svg>
+<div class="absolute flex flex-col items-center justify-center">
+<span class="text-3xl font-black text-slate-900 dark:text-white">75%</span>
+<span class="text-[10px] text-slate-500 dark:text-[#96b3c5] font-medium">CONCLUÍDO</span>
+</div>
+</div>
+<div class="w-full">
+<div class="flex justify-between mb-2">
+<span class="text-xs font-bold text-slate-900 dark:text-white">850 / 1000 XP</span>
+<span class="text-xs font-medium text-primary">Faltam 150 XP</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-border-dark rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 75%"></div>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-card-dark rounded-xl p-6 border border-slate-200 dark:border-border-dark flex flex-col items-center">
+<h4 class="text-slate-900 dark:text-white text-md font-bold mb-2 w-full">Equilíbrio Técnico</h4>
+<div class="relative w-full aspect-square max-w-[240px]">
+<svg class="w-full h-full overflow-visible" viewBox="0 0 100 100">
+<polygon class="stroke-slate-100 dark:stroke-border-dark" fill="none" points="50,10 84.6,30 84.6,70 50,90 15.4,70 15.4,30" stroke-width="0.5"></polygon>
+<polygon class="stroke-slate-100 dark:stroke-border-dark" fill="none" points="50,23.3 73.1,36.7 73.1,63.3 50,76.7 26.9,63.3 26.9,36.7" stroke-width="0.5"></polygon>
+<polygon class="stroke-slate-100 dark:stroke-border-dark" fill="none" points="50,36.7 61.5,43.3 61.5,56.7 50,63.3 38.5,56.7 38.5,43.3" stroke-width="0.5"></polygon>
+<line class="stroke-slate-200 dark:stroke-border-dark" stroke-width="0.5" x1="50" x2="50" y1="50" y2="10"></line>
+<line class="stroke-slate-200 dark:stroke-border-dark" stroke-width="0.5" x1="50" x2="84.6" y1="50" y2="30"></line>
+<line class="stroke-slate-200 dark:stroke-border-dark" stroke-width="0.5" x1="50" x2="84.6" y1="50" y2="70"></line>
+<line class="stroke-slate-200 dark:stroke-border-dark" stroke-width="0.5" x1="50" x2="50" y1="50" y2="90"></line>
+<line class="stroke-slate-200 dark:stroke-border-dark" stroke-width="0.5" x1="50" x2="15.4" y1="50" y2="70"></line>
+<line class="stroke-slate-200 dark:stroke-border-dark" stroke-width="0.5" x1="50" x2="15.4" y1="50" y2="30"></line>
+<polygon fill="#3498db" fill-opacity="0.3" points="50,22 79.4,33 70.8,62 50,86 24,66 22,34" stroke="#3498db" stroke-width="2"></polygon>
+<text class="radar-label fill-slate-500 dark:fill-[#96b3c5]" text-anchor="middle" x="50" y="6">Quedas</text>
+<text class="radar-label fill-slate-500 dark:fill-[#96b3c5]" text-anchor="start" x="88" y="28">Passagens</text>
+<text class="radar-label fill-slate-500 dark:fill-[#96b3c5]" text-anchor="start" x="88" y="74">Guarda</text>
+<text class="radar-label fill-slate-500 dark:fill-[#96b3c5]" text-anchor="middle" x="50" y="98">Finalizações</text>
+<text class="radar-label fill-slate-500 dark:fill-[#96b3c5]" text-anchor="end" x="12" y="74">Defesa</text>
+<text class="radar-label fill-slate-500 dark:fill-[#96b3c5]" text-anchor="end" x="12" y="28">Condic.</text>
+</svg>
+</div>
+<p class="text-[11px] text-slate-500 dark:text-[#96b3c5] text-center mt-4 px-2 italic">
+                                Gráfico de radar representando o equilíbrio atual entre os pilares fundamentais do seu jogo.
+                            </p>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="bg-white dark:bg-card-dark rounded-xl p-5 border border-slate-200 dark:border-border-dark">
+<div class="flex items-center gap-3 mb-3">
+<div class="size-10 rounded-lg bg-orange-100 dark:bg-orange-500/10 text-orange-600 dark:text-orange-500 flex items-center justify-center">
+<span class="material-symbols-outlined fill">fitness_center</span>
+</div>
+<span class="text-sm font-medium text-slate-500 dark:text-[#96b3c5]">Total Aulas</span>
+</div>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">124</p>
+</div>
+<div class="bg-white dark:bg-card-dark rounded-xl p-5 border border-slate-200 dark:border-border-dark">
+<div class="flex items-center gap-3 mb-3">
+<div class="size-10 rounded-lg bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-500 flex items-center justify-center">
+<span class="material-symbols-outlined fill">local_fire_department</span>
+</div>
+<span class="text-sm font-medium text-slate-500 dark:text-[#96b3c5]">Consistência</span>
+</div>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">12 dias</p>
+</div>
+<div class="bg-white dark:bg-card-dark rounded-xl p-5 border border-slate-200 dark:border-border-dark">
+<div class="flex items-center gap-3 mb-3">
+<div class="size-10 rounded-lg bg-blue-100 dark:bg-blue-500/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined fill">stars</span>
+</div>
+<span class="text-sm font-medium text-slate-500 dark:text-[#96b3c5]">Total XP</span>
+</div>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">15.400</p>
+</div>
+</div>
+<div class="bg-white dark:bg-card-dark rounded-xl p-6 border border-slate-200 dark:border-border-dark">
+<div class="flex items-center justify-between mb-6">
+<h4 class="text-slate-900 dark:text-white text-lg font-bold">Vitrine de Insígnias</h4>
+<a class="text-primary text-sm font-bold" href="#">Ver todas</a>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="flex flex-col items-center p-4 rounded-xl bg-slate-50 dark:bg-border-dark/50 border border-slate-100 dark:border-border-dark group cursor-help">
+<div class="size-16 mb-3 rounded-full bg-gradient-to-tr from-yellow-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/20">
+<span class="material-symbols-outlined text-white text-3xl fill">shield</span>
+</div>
+<p class="text-xs font-bold text-slate-900 dark:text-white text-center">Guerreiro de Ferro</p>
+<p class="text-[10px] text-slate-500 dark:text-[#96b3c5] text-center mt-1">100 treinos</p>
+</div>
+<div class="flex flex-col items-center p-4 rounded-xl bg-slate-50 dark:bg-border-dark/50 border border-slate-100 dark:border-border-dark group cursor-help">
+<div class="size-16 mb-3 rounded-full bg-gradient-to-tr from-primary to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/20">
+<span class="material-symbols-outlined text-white text-3xl fill">workspace_premium</span>
+</div>
+<p class="text-xs font-bold text-slate-900 dark:text-white text-center">Presença VIP</p>
+<p class="text-[10px] text-slate-500 dark:text-[#96b3c5] text-center mt-1">30 dias seguidos</p>
+</div>
+<div class="flex flex-col items-center p-4 rounded-xl bg-slate-50 dark:bg-border-dark/50 border border-slate-100 dark:border-border-dark group cursor-help opacity-75">
+<div class="size-16 mb-3 rounded-full bg-gradient-to-tr from-slate-400 to-slate-600 flex items-center justify-center shadow-lg shadow-slate-500/20">
+<span class="material-symbols-outlined text-white text-3xl fill">psychology</span>
+</div>
+<p class="text-xs font-bold text-slate-900 dark:text-white text-center">Técnico</p>
+<p class="text-[10px] text-slate-500 dark:text-[#96b3c5] text-center mt-1">Aprendeu 50 técnicas</p>
+</div>
+<div class="flex flex-col items-center p-4 rounded-xl bg-slate-50 dark:bg-border-dark/50 border border-slate-100 dark:border-border-dark group cursor-help grayscale">
+<div class="size-16 mb-3 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-700 flex items-center justify-center shadow-lg shadow-purple-500/20">
+<span class="material-symbols-outlined text-white text-3xl fill">trophy</span>
+</div>
+<p class="text-xs font-bold text-slate-900 dark:text-white text-center">Competidor</p>
+<p class="text-[10px] text-slate-500 dark:text-[#96b3c5] text-center mt-1">1º Pódio</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-4">
+<div class="bg-white dark:bg-card-dark rounded-xl p-6 border border-slate-200 dark:border-border-dark h-full">
+<h4 class="text-slate-900 dark:text-white text-lg font-bold mb-6">Linha do Tempo</h4>
+<div class="relative space-y-6 before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-primary before:via-slate-200 dark:before:via-border-dark before:to-transparent">
+<div class="relative flex items-center gap-4">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border border-white dark:border-card-dark bg-primary text-white shadow shrink-0 z-[2]">
+<span class="material-symbols-outlined text-sm fill">done</span>
+</div>
+<div class="flex-1 p-4 rounded-lg bg-slate-50 dark:bg-border-dark/30">
+<div class="flex items-center justify-between gap-2 mb-1">
+<div class="font-bold text-sm text-slate-900 dark:text-white">Faixa Azul</div>
+<time class="text-[10px] font-medium text-primary">12/05/2023</time>
+</div>
+<div class="text-slate-500 dark:text-[#96b3c5] text-[11px]">Graduado pelo Professor Carlos Lima.</div>
+</div>
+</div>
+<div class="relative flex items-center gap-4">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border border-white dark:border-card-dark bg-white dark:bg-border-dark text-slate-400 shadow shrink-0 z-[2]">
+<span class="material-symbols-outlined text-sm fill">done</span>
+</div>
+<div class="flex-1 p-4 rounded-lg bg-slate-50 dark:bg-border-dark/30">
+<div class="flex items-center justify-between gap-2 mb-1">
+<div class="font-bold text-sm text-slate-900 dark:text-white">4º Grau - Branca</div>
+<time class="text-[10px] font-medium text-slate-500">10/01/2023</time>
+</div>
+<div class="text-slate-500 dark:text-[#96b3c5] text-[11px]">Exame de grau técnico realizado.</div>
+</div>
+</div>
+<div class="relative flex items-center gap-4">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border border-white dark:border-card-dark bg-white dark:bg-border-dark text-slate-400 shadow shrink-0 z-[2]">
+<span class="material-symbols-outlined text-sm fill">done</span>
+</div>
+<div class="flex-1 p-4 rounded-lg bg-slate-50 dark:bg-border-dark/30">
+<div class="flex items-center justify-between gap-2 mb-1">
+<div class="font-bold text-sm text-slate-900 dark:text-white">3º Grau - Branca</div>
+<time class="text-[10px] font-medium text-slate-500">15/09/2022</time>
+</div>
+</div>
+</div>
+<div class="relative flex items-center gap-4">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border border-white dark:border-card-dark bg-white dark:bg-border-dark text-slate-400 shadow shrink-0 z-[2]">
+<span class="material-symbols-outlined text-sm fill">done</span>
+</div>
+<div class="flex-1 p-4 rounded-lg bg-slate-50 dark:bg-border-dark/30">
+<div class="flex items-center justify-between gap-2 mb-1">
+<div class="font-bold text-sm text-slate-900 dark:text-white">Faixa Branca</div>
+<time class="text-[10px] font-medium text-slate-500">01/03/2022</time>
+</div>
+<div class="text-slate-500 dark:text-[#96b3c5] text-[11px]">Início da jornada no ATJJ Dojo.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-auto p-6 text-center text-slate-400 dark:text-[#96b3c5]/50 text-xs">
+            © 2024 ATJJ Dojo v4 - Sistema de Gestão Gamificada para Artes Marciais.
+        </footer>
+</main>
+</div>
+
+</body></html>

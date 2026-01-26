@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6a7d90",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#17191b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display text-[#131416] dark:text-white">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-neutral-200 dark:border-neutral-800 bg-white dark:bg-background-dark px-10 py-3">
+<div class="flex items-center gap-4 text-neutral-900 dark:text-white">
+<div class="size-6 text-primary">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">ATJJ Dojo v4</h2>
+</div>
+</header>
+<main class="flex-1 flex items-center justify-center px-4 py-12">
+<div class="layout-content-container flex flex-col max-w-[480px] w-full bg-white dark:bg-neutral-900 shadow-xl rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800">
+<div class="relative h-32 bg-primary/10 flex items-center justify-center border-b border-neutral-100 dark:border-neutral-800">
+<div class="bg-white dark:bg-neutral-800 p-4 rounded-full shadow-sm border border-neutral-200 dark:border-neutral-700">
+<span class="material-symbols-outlined text-primary text-5xl">sports_kabaddi</span>
+</div>
+</div>
+<div class="p-8">
+<h1 class="text-[#131416] dark:text-white tracking-light text-2xl font-bold leading-tight text-center pb-6">Acesse sua conta</h1>
+<div class="mb-6 @container">
+<div class="flex flex-col items-start justify-between gap-3 rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-900/50 p-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-red-600 dark:text-red-400">error</span>
+<div class="flex flex-col gap-1">
+<p class="text-red-800 dark:text-red-300 text-sm font-bold leading-tight">Credenciais inválidas. Por favor, tente novamente.</p>
+<p class="text-red-700 dark:text-red-400 text-xs font-normal leading-normal">Verifique seu e-mail e senha e tente novamente.</p>
+</div>
+</div>
+</div>
+</div>
+<form class="space-y-4">
+<div class="flex flex-col gap-1">
+<label class="flex flex-col w-full">
+<p class="text-[#131416] dark:text-neutral-300 text-sm font-medium leading-normal pb-1.5">E-mail</p>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xl">mail</span>
+<input class="form-input flex w-full rounded-lg text-[#131416] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 h-12 placeholder:text-[#6c737a] pl-10 pr-4 text-sm font-normal" placeholder="ex: sensei@atjjdojo.com" type="email"/>
+</div>
+</label>
+</div>
+<div class="flex flex-col gap-1">
+<label class="flex flex-col w-full">
+<p class="text-[#131416] dark:text-neutral-300 text-sm font-medium leading-normal pb-1.5">Senha</p>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xl">lock</span>
+<input class="form-input flex w-full rounded-lg text-[#131416] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 h-12 placeholder:text-[#6c737a] pl-10 pr-4 text-sm font-normal" placeholder="••••••••" type="password"/>
+</div>
+</label>
+</div>
+<div class="flex justify-end">
+<a class="text-primary hover:text-primary/80 text-sm font-medium transition-colors" href="#">Esqueceu sua senha?</a>
+</div>
+<div class="pt-4">
+<button class="w-full flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary hover:bg-primary/90 text-white text-base font-bold transition-colors shadow-md" type="submit">
+<span class="truncate">Entrar</span>
+</button>
+</div>
+</form>
+<div class="mt-8 pt-6 border-t border-neutral-100 dark:border-neutral-800 text-center">
+<p class="text-neutral-500 dark:text-neutral-400 text-sm">
+                        Novo no Dojo? <a class="text-primary font-semibold hover:underline" href="#">Entre em contato com a administração</a>
+</p>
+</div>
+</div>
+</div>
+</main>
+<footer class="py-6 text-center text-neutral-400 dark:text-neutral-600 text-xs">
+        © 2024 ATJJ Dojo v4 Sistema de Gestão. Todos os direitos reservados.
+    </footer>
+
+</body></html>

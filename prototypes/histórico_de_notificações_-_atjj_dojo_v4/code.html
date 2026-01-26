@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Histórico de Notificações - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "sidebar-dark": "#2c3e50",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#0d141b] dark:text-slate-200">
+<div class="flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-64 bg-sidebar-dark flex flex-col fixed h-full z-20">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="bg-primary size-10 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">sports_kabaddi</span>
+</div>
+<div>
+<h1 class="text-white text-base font-bold leading-none">ATJJ Dojo v4</h1>
+<p class="text-slate-400 text-xs mt-1">Management System</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-300 hover:bg-white/10 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-300 hover:bg-white/10 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">exercise</span>
+<span class="text-sm font-medium">Treinos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-300 hover:bg-white/10 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">military_tech</span>
+<span class="text-sm font-medium">Graduação</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-white bg-primary rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px] fill-current">notifications</span>
+<span class="text-sm font-medium">Notificações</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-300 hover:bg-white/10 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-medium">Configurações</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-4 border-t border-white/10">
+<button class="w-full bg-primary hover:bg-primary/90 text-white rounded-lg py-2.5 px-4 text-sm font-bold flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Novo Check-in
+            </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 ml-64 flex flex-col min-w-0">
+<!-- Top Navigation -->
+<header class="h-16 bg-white dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-slate-500 text-sm">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-slate-900 dark:text-white font-medium">Notificações</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary" placeholder="Pesquisar..." type="text"/>
+</div>
+<div class="flex items-center gap-3 border-l pl-6 border-slate-200 dark:border-slate-800">
+<div class="text-right">
+<p class="text-sm font-bold leading-none">Carlos Gracie Jr.</p>
+<p class="text-xs text-slate-500 mt-1">Faixa Preta - 4º Grau</p>
+</div>
+<div class="size-10 rounded-full bg-slate-200 overflow-hidden border-2 border-primary/20">
+<img alt="Avatar do usuário logado" data-alt="Perfil de um lutador de jiu-jitsu" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfzbLo3Xp4dOIFBrKxqw3Sz0ytkrth4GzH6utE2G7b2fmx7OydrEYSck1aouyUPlc6S1sZ-ENxmCxn6WwlAxN2mib9NNPLG2oqUx4Gnx2doBoanDzQoKF3gTXcIljH-6yApjOioMOFwH45VGEIobNYqaVTmQJLeJgDbWkBOEp9oOr-iahcPJg-_XjqtlLB2fHjJ_TbivyDUfFvwkQl-KabVbS331AJEOe0OWrFLehVysfT1Sr9kUABM11VS9vKa6gLY0mW2DL98N8H"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Heading & Tabs -->
+<div class="p-8 max-w-5xl mx-auto w-full">
+<div class="flex flex-wrap justify-between items-end gap-6 mb-8">
+<div>
+<h2 class="text-3xl font-black tracking-tight mb-2">Histórico de Notificações</h2>
+<p class="text-slate-500">Acompanhe suas conquistas, presenças e avisos do sistema.</p>
+</div>
+<button class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">done_all</span>
+                    Marcar todas como lidas
+                </button>
+</div>
+<!-- Filter Tabs -->
+<div class="border-b border-slate-200 dark:border-slate-800 flex gap-8 mb-8">
+<a class="pb-4 border-b-2 border-primary text-primary font-bold text-sm transition-all" href="#">Todas</a>
+<a class="pb-4 border-b-2 border-transparent text-slate-500 hover:text-slate-700 font-bold text-sm transition-all" href="#">Não lidas</a>
+<a class="pb-4 border-b-2 border-transparent text-slate-500 hover:text-slate-700 font-bold text-sm transition-all" href="#">Conquistas</a>
+<a class="pb-4 border-b-2 border-transparent text-slate-500 hover:text-slate-700 font-bold text-sm transition-all" href="#">Presenças</a>
+</div>
+<!-- Notifications List -->
+<div class="space-y-10">
+<!-- Group: Hoje -->
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-3">
+                        Hoje
+                        <span class="h-px bg-slate-200 dark:bg-slate-800 flex-1"></span>
+</h3>
+<div class="space-y-3">
+<!-- Notification Card 1 (Achievement) -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex items-start gap-4 hover:shadow-md transition-shadow relative">
+<div class="absolute top-4 right-4 text-[10px] text-slate-400 font-medium uppercase">10:30</div>
+<div class="bg-amber-100 text-amber-600 size-12 rounded-full flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">emoji_events</span>
+</div>
+<div class="flex-1 pr-12">
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-bold text-slate-900 dark:text-white">Nova Insígnia: Samurai de Ferro</h4>
+<span class="size-2 bg-primary rounded-full" title="Não lida"></span>
+</div>
+<p class="text-sm text-slate-500 leading-relaxed mb-3">Parabéns! Você completou 10 aulas seguidas sem faltas este mês. Continue assim!</p>
+<button class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                                    Ver Insígnia
+                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Notification Card 2 (System) -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex items-start gap-4 hover:shadow-md transition-shadow relative opacity-75">
+<div class="absolute top-4 right-4 text-[10px] text-slate-400 font-medium uppercase">08:15</div>
+<div class="bg-blue-100 text-primary size-12 rounded-full flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">event_available</span>
+</div>
+<div class="flex-1 pr-12">
+<h4 class="font-bold text-slate-900 dark:text-white mb-1">Presença Confirmada</h4>
+<p class="text-sm text-slate-500 leading-relaxed mb-3">Seu check-in na aula de "Fundamentos BJJ" das 07:00 foi registrado com sucesso.</p>
+<button class="text-xs font-bold text-slate-400 hover:text-slate-600 flex items-center gap-1">
+                                    Ver Detalhes da Aula
+                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Group: Ontem -->
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-3">
+                        Ontem
+                        <span class="h-px bg-slate-200 dark:bg-slate-800 flex-1"></span>
+</h3>
+<div class="space-y-3">
+<!-- Notification Card 3 (Alert) -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex items-start gap-4 hover:shadow-md transition-shadow relative">
+<div class="absolute top-4 right-4 text-[10px] text-slate-400 font-medium uppercase">19:45</div>
+<div class="bg-rose-100 text-rose-600 size-12 rounded-full flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">priority_high</span>
+</div>
+<div class="flex-1 pr-12">
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-bold text-slate-900 dark:text-white">Aviso de Graduação</h4>
+<span class="size-2 bg-primary rounded-full" title="Não lida"></span>
+</div>
+<p class="text-sm text-slate-500 leading-relaxed mb-3">Faltam apenas 3 aulas e a análise técnica do mestre para você receber seu 5º grau na faixa preta.</p>
+<button class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                                    Ver Requisitos
+                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Group: Anteriores -->
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-3">
+                        Anteriores
+                        <span class="h-px bg-slate-200 dark:bg-slate-800 flex-1"></span>
+</h3>
+<div class="space-y-3">
+<!-- Notification Card 4 -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex items-start gap-4 opacity-60 relative">
+<div class="absolute top-4 right-4 text-[10px] text-slate-400 font-medium uppercase">15 Out</div>
+<div class="bg-slate-100 text-slate-500 size-12 rounded-full flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">credit_card</span>
+</div>
+<div class="flex-1 pr-12">
+<h4 class="font-bold text-slate-900 dark:text-white mb-1">Pagamento Processado</h4>
+<p class="text-sm text-slate-500 leading-relaxed">A mensalidade referente ao mês de Outubro foi confirmada.</p>
+</div>
+</div>
+<!-- Notification Card 5 -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex items-start gap-4 opacity-60 relative">
+<div class="absolute top-4 right-4 text-[10px] text-slate-400 font-medium uppercase">12 Out</div>
+<div class="bg-emerald-100 text-emerald-600 size-12 rounded-full flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">campaign</span>
+</div>
+<div class="flex-1 pr-12">
+<h4 class="font-bold text-slate-900 dark:text-white mb-1">Seminário com Mestre Rickson</h4>
+<p class="text-sm text-slate-500 leading-relaxed">As inscrições para o seminário anual estão abertas. Vagas limitadas!</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Load More -->
+<div class="pt-6 text-center">
+<button class="text-slate-400 hover:text-primary font-bold text-sm flex items-center gap-2 mx-auto transition-colors">
+<span class="material-symbols-outlined">expand_more</span>
+                        Carregar mais notificações
+                    </button>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto py-8 px-8 border-t border-slate-200 dark:border-slate-800 text-center">
+<p class="text-xs text-slate-400">© 2024 ATJJ Dojo Management v4.0.1 - Desenvolvido para campeões.</p>
+</footer>
+</main>
+</div>
+</body></html>

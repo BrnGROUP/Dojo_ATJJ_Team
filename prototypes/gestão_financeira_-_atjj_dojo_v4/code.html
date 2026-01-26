@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão Financeira - ATJJ Dojo v4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f172a",
+                        "card-dark": "#1e293b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">
+<!-- Main Navigation Bar -->
+<nav class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-card-dark px-6 py-3 flex items-center justify-between sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<div class="bg-primary p-1.5 rounded-lg">
+<span class="material-icons-round text-white text-2xl">sports_kabaddi</span>
+</div>
+<div>
+<h1 class="font-bold text-lg tracking-tight">ATJJ Dojo <span class="text-primary">v4</span></h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">Sistema de Gestão Gamificada</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center bg-slate-100 dark:bg-slate-900 rounded-full px-4 py-1.5 border border-slate-200 dark:border-slate-700">
+<span class="material-icons-round text-primary text-sm mr-2">stars</span>
+<span class="text-sm font-semibold italic text-slate-700 dark:text-slate-300">Level 42 Master Dojo</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-icons-round">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+<img class="h-full w-full rounded-full object-cover" data-alt="User profile avatar portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWAMaj1QCto2Vp85dvO2MHb5MXN7JlCmtQd38IevsierLS-h8xvjpBpxfhRmG3ycfI8z2ijIQ3rbJQjxVdCLIxW-DbRWt7NiIgxoGuLp3SeDH84BuZOAOjyJUM82CXttFykXXLCeGFiQ1lpcx7GtcNUfiWlJcjlz3_JHGSiZMiMZTKRZFXHnl65Puv7q-_NuvVNJVHy0nxgX5QD8-vDNDXFwv5oycXBkgy6wEh9nymJwtknEH6jo0eV7Drurz8sT_odejyo6TKaPpJ"/>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-[1600px] mx-auto p-6 space-y-6">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h2 class="text-2xl font-bold">Gestão Financeira</h2>
+<p class="text-slate-500 dark:text-slate-400">Visão geral da saúde financeira do seu Dojo</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center bg-white dark:bg-card-dark border border-slate-200 dark:border-slate-700 rounded-lg p-1">
+<button class="px-4 py-1.5 text-sm font-medium bg-primary text-white rounded shadow-sm">Mensal</button>
+<button class="px-4 py-1.5 text-sm font-medium text-slate-500 hover:text-primary transition-colors">Trimestral</button>
+<button class="px-4 py-1.5 text-sm font-medium text-slate-500 hover:text-primary transition-colors">Anual</button>
+</div>
+<button class="flex items-center gap-2 bg-white dark:bg-card-dark border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-icons-round text-sm">calendar_today</span>
+                    Outubro 2023
+                </button>
+</div>
+</div>
+<!-- Summary Metric Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Total Revenue -->
+<div class="bg-white dark:bg-card-dark p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-emerald-500/10 text-emerald-500 rounded-lg">
+<span class="material-icons-round">payments</span>
+</div>
+<span class="flex items-center text-xs font-bold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full">
+<span class="material-icons-round text-xs mr-1">trending_up</span> +12%
+                    </span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Receita Total</p>
+<h3 class="text-2xl font-bold mt-1">R$ 24.580,00</h3>
+</div>
+<!-- Open Invoices -->
+<div class="bg-white dark:bg-card-dark p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 text-primary rounded-lg">
+<span class="material-icons-round">pending_actions</span>
+</div>
+<span class="flex items-center text-xs font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full">
+                        85 faturas
+                    </span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Mensalidades em Aberto</p>
+<h3 class="text-2xl font-bold mt-1">R$ 8.420,00</h3>
+</div>
+<!-- Defaulters -->
+<div class="bg-white dark:bg-card-dark p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-rose-500/10 text-rose-500 rounded-lg">
+<span class="material-icons-round">person_off</span>
+</div>
+<span class="flex items-center text-xs font-bold text-rose-500 bg-rose-500/10 px-2 py-1 rounded-full">
+<span class="material-icons-round text-xs mr-1">warning</span> 4.2%
+                    </span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Alunos Inadimplentes</p>
+<h3 class="text-2xl font-bold mt-1">12 Alunos</h3>
+</div>
+<!-- Monthly Forecast -->
+<div class="bg-white dark:bg-card-dark p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-amber-500/10 text-amber-500 rounded-lg">
+<span class="material-icons-round">insights</span>
+</div>
+<span class="flex items-center text-xs font-bold text-amber-500 bg-amber-500/10 px-2 py-1 rounded-full">
+                        Meta 95%
+                    </span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Previsão do Mês</p>
+<h3 class="text-2xl font-bold mt-1">R$ 33.000,00</h3>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+<!-- Main Content Area (Chart + Table) -->
+<div class="lg:col-span-3 space-y-6">
+<!-- Cash Flow Chart Container -->
+<div class="bg-white dark:bg-card-dark p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h3 class="font-bold text-lg">Fluxo de Caixa</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Entradas vs Saídas (Últimos 6 meses)</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-xs font-medium">Entradas</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-slate-400"></span>
+<span class="text-xs font-medium">Saídas</span>
+</div>
+</div>
+</div>
+<!-- Simplified Visual Chart using Tailwind -->
+<div class="h-64 flex items-end justify-between gap-4 px-2">
+<!-- May -->
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex items-end justify-center gap-1 h-48">
+<div class="w-1/3 bg-primary/40 rounded-t h-[60%]"></div>
+<div class="w-1/3 bg-slate-400/40 rounded-t h-[30%]"></div>
+</div>
+<span class="text-xs text-slate-500">Mai</span>
+</div>
+<!-- Jun -->
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex items-end justify-center gap-1 h-48">
+<div class="w-1/3 bg-primary/40 rounded-t h-[75%]"></div>
+<div class="w-1/3 bg-slate-400/40 rounded-t h-[40%]"></div>
+</div>
+<span class="text-xs text-slate-500">Jun</span>
+</div>
+<!-- Jul -->
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex items-end justify-center gap-1 h-48">
+<div class="w-1/3 bg-primary/40 rounded-t h-[65%]"></div>
+<div class="w-1/3 bg-slate-400/40 rounded-t h-[35%]"></div>
+</div>
+<span class="text-xs text-slate-500">Jul</span>
+</div>
+<!-- Aug -->
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex items-end justify-center gap-1 h-48">
+<div class="w-1/3 bg-primary/40 rounded-t h-[80%]"></div>
+<div class="w-1/3 bg-slate-400/40 rounded-t h-[25%]"></div>
+</div>
+<span class="text-xs text-slate-500">Ago</span>
+</div>
+<!-- Sep -->
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex items-end justify-center gap-1 h-48">
+<div class="w-1/3 bg-primary/40 rounded-t h-[90%]"></div>
+<div class="w-1/3 bg-slate-400/40 rounded-t h-[50%]"></div>
+</div>
+<span class="text-xs text-slate-500">Set</span>
+</div>
+<!-- Oct -->
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex items-end justify-center gap-1 h-48">
+<div class="w-1/3 bg-primary rounded-t h-[85%]"></div>
+<div class="w-1/3 bg-slate-400 rounded-t h-[30%]"></div>
+</div>
+<span class="text-xs font-bold text-primary">Out</span>
+</div>
+</div>
+</div>
+<!-- Receivables Table -->
+<div class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<h3 class="font-bold text-lg">Recebimentos Recentes</h3>
+<div class="flex flex-wrap items-center gap-3">
+<div class="relative">
+<span class="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary w-full md:w-64" placeholder="Buscar aluno..." type="text"/>
+</div>
+<button class="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-icons-round text-sm text-slate-400">filter_list</span>
+                                    Filtros
+                                </button>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4">Aluno</th>
+<th class="px-6 py-4 text-right">Valor</th>
+<th class="px-6 py-4">Vencimento</th>
+<th class="px-6 py-4">Forma de Pagto</th>
+<th class="px-6 py-4 text-center">Status</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-9 h-9 rounded-full object-cover" data-alt="Student avatar portrait male" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVzNDa-vpSu058csFyMxNRSUX4229tI8FQWw2MpHNs8fntt6qIt5ldCOdjC6PPR1b993vFVXudBPZ_EOOPvpuMmdPVnKK9Nimotbz3tObk0bxQnPdFSbDdpB3v1a41YU6CRQU51pvopoSRTLrW36uvjhyGqm-4HMvwUWWkR1E2r4-qAra5CuZFB6xUAJlPiGVRWwNgOHFsINRRYtU9Rae3gHGfNwWp-iMlnlDLSSqAt2JaYVslyLkaaxTpmn-bEKu3kDdG0CCw-aQ4"/>
+<div class="absolute -bottom-1 -right-1 bg-purple-600 w-4 h-4 rounded-full border-2 border-white dark:border-card-dark"></div>
+</div>
+<div>
+<div class="font-semibold">Ricardo Almeida</div>
+<div class="text-xs text-slate-500">Faixa Roxa • Level 24</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-medium">R$ 280,00</td>
+<td class="px-6 py-4 text-slate-500">12 Out, 2023</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-icons-round text-sm text-slate-400">credit_card</span>
+<span>Cartão Crédito</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="bg-emerald-500/10 text-emerald-500 px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide">Pago</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary"><span class="material-icons-round">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-9 h-9 rounded-full object-cover" data-alt="Student avatar portrait female" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJe_fzDnicq0T5uLOLs1ug_gYI4eKRlLItJHU9KCRM6dLIlatwWuSDy188YWlDLLdlwbDWVtNpMSgk_-Zi8Ocy4aC60al2d4lrfHCLMPLzSm6rdxX82_7QNmKWdNxsDJl7js6retgEXMMEVBtwu_j-G6RXpGD1JrkP1Cxqj3-y8DvD8IStizOtN6zs7C6dk3tQwhA_TVsqQY4S0NB7-gtKOuTLQlejqNpWwvZ8RY0Xzcx2-ujFQ0whmNRgMuizAvrZAAnp30Ad9D_6"/>
+<div class="absolute -bottom-1 -right-1 bg-blue-600 w-4 h-4 rounded-full border-2 border-white dark:border-card-dark"></div>
+</div>
+<div>
+<div class="font-semibold">Beatriz Costa</div>
+<div class="text-xs text-slate-500">Faixa Azul • Level 18</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-medium">R$ 310,00</td>
+<td class="px-6 py-4 text-slate-500">14 Out, 2023</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-icons-round text-sm text-slate-400">qr_code_2</span>
+<span>Pix</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="bg-amber-500/10 text-amber-500 px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide">Pendente</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary"><span class="material-icons-round">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-9 h-9 rounded-full object-cover" data-alt="Student avatar portrait male brown belt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC-pgE6-a6ZbUQJKojvjdYJ95tnBp2QVrY3p5V_2ID5_Me8fPQqip8cdP7X0MXrqd6FNyuG8E2BWDGJdmRH2LJEEV0n6hw7VFNckaJ28bGHoI0GfDvqCHWd7BjPQj-dolJ9B11jERBjJDy-wbEPFHLCT0Mvgl2W0HQgmTn-KbHca4ioaOsv494cJY8wyfurK1pztlYAE0ph7KZkbprW5o6zB_9Hf3xDi7Hf12pxYju4kgZ1UPZIUmyXROumVSn3SKCWHOcaEOsQCmD"/>
+<div class="absolute -bottom-1 -right-1 bg-amber-900 w-4 h-4 rounded-full border-2 border-white dark:border-card-dark"></div>
+</div>
+<div>
+<div class="font-semibold">Marcos Silva</div>
+<div class="text-xs text-slate-500">Faixa Marrom • Level 39</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-medium">R$ 280,00</td>
+<td class="px-6 py-4 text-slate-500">08 Out, 2023</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-icons-round text-sm text-slate-400">receipt_long</span>
+<span>Boleto</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="bg-rose-500/10 text-rose-500 px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide">Atrasado</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary"><span class="material-icons-round">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-500">JC</div>
+<div class="absolute -bottom-1 -right-1 bg-white border-white dark:border-card-dark w-4 h-4 rounded-full border-2 bg-slate-200"></div>
+</div>
+<div>
+<div class="font-semibold">Julio Cesar</div>
+<div class="text-xs text-slate-500">Faixa Branca • Level 4</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-medium">R$ 250,00</td>
+<td class="px-6 py-4 text-slate-500">15 Out, 2023</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-icons-round text-sm text-slate-400">account_balance</span>
+<span>Transferência</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="bg-amber-500/10 text-amber-500 px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide">Pendente</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary"><span class="material-icons-round">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<span class="text-sm text-slate-500 dark:text-slate-400">Mostrando 4 de 142 lançamentos</span>
+<div class="flex gap-2">
+<button class="p-2 border border-slate-200 dark:border-slate-800 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50" disabled="">
+<span class="material-icons-round text-sm">chevron_left</span>
+</button>
+<button class="p-2 border border-slate-200 dark:border-slate-800 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="material-icons-round text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Actions Section -->
+<div class="space-y-6">
+<!-- Quick Actions Card -->
+<div class="bg-white dark:bg-card-dark p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h3 class="font-bold text-lg mb-4">Ações Rápidas</h3>
+<div class="space-y-3">
+<button class="w-full flex items-center justify-between p-3 bg-primary hover:bg-primary/90 text-white rounded-lg font-medium transition-all group">
+<div class="flex items-center gap-3">
+<span class="material-icons-round">add_circle</span>
+<span>Nova Cobrança</span>
+</div>
+<span class="material-icons-round opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg font-medium transition-all group">
+<div class="flex items-center gap-3">
+<span class="material-icons-round text-slate-500">assessment</span>
+<span>Relatórios Detalhados</span>
+</div>
+<span class="material-icons-round opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg font-medium transition-all group">
+<div class="flex items-center gap-3">
+<span class="material-icons-round text-slate-500">outbound</span>
+<span>Contas a Pagar</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="bg-rose-500 w-2 h-2 rounded-full animate-pulse"></span>
+<span class="material-icons-round opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</div>
+</button>
+</div>
+</div>
+<!-- Financial Health Gamified Indicator -->
+<div class="bg-gradient-to-br from-primary to-blue-700 p-6 rounded-xl text-white shadow-lg relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-bold text-lg mb-1">Status do Dojo</h4>
+<p class="text-primary-100 text-xs mb-4 opacity-80">Saúde financeira consolidada</p>
+<div class="flex items-end gap-2 mb-2">
+<span class="text-3xl font-bold">Excelente</span>
+<span class="material-icons-round text-yellow-300 mb-1">workspace_premium</span>
+</div>
+<div class="w-full bg-white/20 h-2 rounded-full mb-2">
+<div class="bg-white h-full rounded-full" style="width: 88%"></div>
+</div>
+<p class="text-[10px] uppercase font-bold tracking-widest opacity-80">Eficiência de Cobrança: 88%</p>
+</div>
+<!-- Decorative Icon -->
+<span class="material-icons-round absolute -right-6 -bottom-6 text-9xl text-white/10 rotate-12">trending_up</span>
+</div>
+<!-- Recent Alerts -->
+<div class="bg-white dark:bg-card-dark p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h3 class="font-bold text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4">Alertas do Dia</h3>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-rose-500/10 flex items-center justify-center flex-shrink-0">
+<span class="material-icons-round text-rose-500 text-sm">priority_high</span>
+</div>
+<div>
+<p class="text-sm font-medium">3 Vencimentos hoje</p>
+<p class="text-xs text-slate-500">Total: R$ 840,00</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+<span class="material-icons-round text-amber-500 text-sm">sync</span>
+</div>
+<div>
+<p class="text-sm font-medium">Conciliação pendente</p>
+<p class="text-xs text-slate-500">12 transações no banco</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Footer Info -->
+<footer class="mt-12 border-t border-slate-200 dark:border-slate-800 p-6 flex flex-col md:flex-row justify-between items-center text-slate-500 dark:text-slate-400 text-xs gap-4">
+<div>© 2023 ATJJ Dojo v4. Todos os direitos reservados.</div>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" href="#">Termos de Uso</a>
+<a class="hover:text-primary transition-colors" href="#">Políticas de Privacidade</a>
+<a class="hover:text-primary transition-colors" href="#">Suporte Financeiro</a>
+</div>
+</footer>
+</body></html>
