@@ -84,12 +84,12 @@ export function Agenda() {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-main/50 border-b border-border-slate">
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Data / Horário</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Aula</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Instrutor</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Lotação</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">Tipo</th>
-                                <th className="px-6 py-4 text-slate-400 text-xs font-bold uppercase tracking-wider text-right">Ações</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Horário</th>
+                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden sm:table-cell">Aula</th>
+                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden lg:table-cell">Instrutor</th>
+                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden md:table-cell">Lotação</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">Tipo</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-400 text-xs font-bold uppercase tracking-wider text-right">Ações</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border-slate/50">
@@ -106,15 +106,16 @@ export function Agenda() {
                                     const occupancy = Math.round((cls.enrolled_count / cls.max_students) * 100);
                                     return (
                                         <tr key={cls.id} className="hover:bg-main/30 transition-colors group">
-                                            <td className="px-6 py-4">
+                                            <td className="px-4 md:px-6 py-4">
                                                 <div className="flex flex-col">
-                                                    <span className="text-white text-sm font-bold">{formatTime(cls.start_time)} - {formatTime(cls.end_time)}</span>
-                                                    <span className="text-muted text-xs">{formatDate(cls.start_time)}</span>
+                                                    <span className="text-white text-sm font-bold">{formatTime(cls.start_time)}</span>
+                                                    <span className="text-muted text-[10px]">{formatDate(cls.start_time)}</span>
+                                                    <span className="text-primary text-[10px] sm:hidden font-bold mt-1 uppercase">{cls.title}</span>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4 text-white text-sm font-semibold">{cls.title}</td>
-                                            <td className="px-6 py-4 text-slate-400 text-sm">{cls.instructor}</td>
-                                            <td className="px-6 py-4">
+                                            <td className="px-6 py-4 text-white text-sm font-semibold hidden sm:table-cell">{cls.title}</td>
+                                            <td className="px-6 py-4 text-slate-400 text-sm hidden lg:table-cell">{cls.instructor}</td>
+                                            <td className="px-6 py-4 hidden md:table-cell">
                                                 <div className="w-full max-w-[120px] space-y-1">
                                                     <div className="flex justify-between text-[10px] text-muted font-bold">
                                                         <span>{cls.enrolled_count}/{cls.max_students}</span>
@@ -125,21 +126,21 @@ export function Agenda() {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4 text-center">
-                                                <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase border ${cls.type === 'Gi' ? 'bg-white/5 border-white/10 text-white' :
+                                            <td className="px-4 md:px-6 py-4 text-center">
+                                                <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase border ${cls.type === 'Gi' ? 'bg-white/5 border-white/10 text-white' :
                                                     cls.type === 'No-Gi' ? 'bg-primary/10 border-primary/20 text-primary' :
                                                         'bg-green-500/10 border-green-500/20 text-green-500'
                                                     }`}>
                                                     {cls.type}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <div className="flex justify-end gap-2 text-slate-400 group-hover:text-slate-300 transition-colors">
+                                            <td className="px-4 md:px-6 py-4 text-right">
+                                                <div className="flex justify-end gap-1 md:gap-2 text-slate-400">
                                                     <button className="p-1 hover:text-primary transition-colors" title="Editar">
-                                                        <span className="material-symbols-outlined text-[20px]">edit</span>
+                                                        <span className="material-symbols-outlined text-[18px] md:text-[20px]">edit</span>
                                                     </button>
                                                     <button className="p-1 hover:text-red-500 transition-colors" title="Cancelar Aula">
-                                                        <span className="material-symbols-outlined text-[20px]">delete</span>
+                                                        <span className="material-symbols-outlined text-[18px] md:text-[20px]">delete</span>
                                                     </button>
                                                 </div>
                                             </td>

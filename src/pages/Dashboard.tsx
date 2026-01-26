@@ -127,7 +127,7 @@ export function Dashboard() {
     return (
         <div className="max-w-7xl mx-auto space-y-10">
             {/* KPI Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="dashboard-card p-6 rounded-2xl flex flex-col justify-between bg-card">
                     <div className="flex justify-between items-start mb-6">
                         <p className="text-muted text-xs font-semibold uppercase tracking-wider">Total de Alunos</p>
@@ -170,13 +170,13 @@ export function Dashboard() {
                 </div>
             </div>
 
-            <div className="bg-card rounded-3xl p-8 border border-border-slate">
-                <div className="flex items-center justify-between mb-8">
+            <div className="bg-card rounded-3xl p-4 sm:p-8 border border-border-slate">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                     <div>
-                        <h2 className="text-2xl font-black text-white tracking-tight">Mural de Destaques</h2>
-                        <p className="text-muted text-sm font-medium">Reconhecimento e conquistas da semana</p>
+                        <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Mural de Destaques</h2>
+                        <p className="text-muted text-xs sm:text-sm font-medium">Reconhecimento e conquistas da semana</p>
                     </div>
-                    <button className="flex items-center gap-2 text-white font-bold text-sm bg-primary px-5 py-2.5 rounded-xl hover:bg-primary-hover transition-all shadow-[0_0_15px_rgba(215,38,56,0.3)]">
+                    <button className="flex items-center justify-center gap-2 text-white font-bold text-xs bg-primary px-5 py-2.5 rounded-xl hover:bg-primary-hover transition-all shadow-[0_0_15px_rgba(215,38,56,0.3)] w-full sm:w-auto">
                         <span className="material-symbols-outlined text-[18px]">add_circle</span>
                         Novo Destaque
                     </button>
@@ -273,11 +273,11 @@ export function Dashboard() {
                             <table className="w-full text-left">
                                 <thead className="bg-main/40 border-b border-border-slate">
                                     <tr>
-                                        <th className="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest">Horário</th>
-                                        <th className="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest">Modalidade</th>
-                                        <th className="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest">Instrutor</th>
-                                        <th className="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest">Lotação</th>
-                                        <th className="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest text-right">Status</th>
+                                        <th className="px-4 md:px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest">Horário</th>
+                                        <th className="px-4 md:px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest">Aula</th>
+                                        <th className="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest hidden md:table-cell">Instrutor</th>
+                                        <th className="px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest hidden lg:table-cell">Lotação</th>
+                                        <th className="px-4 md:px-8 py-5 text-[10px] font-black text-muted uppercase tracking-widest text-right">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-border-slate/50">
@@ -286,14 +286,14 @@ export function Dashboard() {
                                         const occupancy = Math.round((c.enrolled_count / c.max_students) * 100);
                                         return (
                                             <tr key={c.id} className="hover:bg-main/20 transition-colors">
-                                                <td className="px-8 py-5 text-sm font-bold text-white">{startTime}</td>
-                                                <td className="px-8 py-5">
-                                                    <span className={`px-2.5 py-1 ${c.type === 'No-Gi' ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-white/5 border-white/10 text-white'} border text-[9px] font-black rounded-lg uppercase`}>
+                                                <td className="px-4 md:px-8 py-5 text-sm font-bold text-white">{startTime}</td>
+                                                <td className="px-4 md:px-8 py-5">
+                                                    <span className={`px-2 py-0.5 ${c.type === 'No-Gi' ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-white/5 border-white/10 text-white'} border text-[9px] font-black rounded-lg uppercase`}>
                                                         {c.title}
                                                     </span>
                                                 </td>
-                                                <td className="px-8 py-5 text-sm font-semibold text-muted">{c.instructor}</td>
-                                                <td className="px-8 py-5">
+                                                <td className="px-8 py-5 text-sm font-semibold text-muted hidden md:table-cell">{c.instructor}</td>
+                                                <td className="px-8 py-5 hidden lg:table-cell">
                                                     <div className="flex items-center gap-3">
                                                         <div className="w-20 bg-main h-1.5 rounded-full overflow-hidden">
                                                             <div className="bg-primary h-full shadow-[0_0_8px_#d72638]" style={{ width: `${occupancy}%` }}></div>
@@ -301,7 +301,7 @@ export function Dashboard() {
                                                         <span className="text-[10px] font-bold text-white">{occupancy}%</span>
                                                     </div>
                                                 </td>
-                                                <td className="px-8 py-5 text-right">
+                                                <td className="px-4 md:px-8 py-5 text-right">
                                                     <span className="inline-flex items-center px-2 py-0.5 bg-primary/10 text-primary text-[9px] font-bold rounded-full border border-primary/20 uppercase">{c.status}</span>
                                                 </td>
                                             </tr>

@@ -214,7 +214,7 @@ export function MemberForm() {
                         </label>
                         <label className="flex flex-col w-full">
                             <p className="text-white text-sm font-semibold leading-normal pb-2">Faixa Atual</p>
-                            <div className="grid grid-cols-5 gap-2">
+                            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                                 <button
                                     onClick={() => handleBeltSelect('White')}
                                     type="button"

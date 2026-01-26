@@ -135,12 +135,12 @@ export function Finance() {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-main/50 border-b border-border-slate">
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Aluno</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Descrição</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Vencimento</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Valor</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">Status</th>
-                                <th className="px-6 py-4 text-slate-400 text-xs font-bold uppercase tracking-wider text-right">Ações</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Aluno</th>
+                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden sm:table-cell">Descrição</th>
+                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden lg:table-cell">Vencimento</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Valor</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">Status</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-400 text-xs font-bold uppercase tracking-wider text-right">Ações</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border-slate/50">
@@ -155,27 +155,30 @@ export function Finance() {
                             ) : (
                                 payments.map((pay) => (
                                     <tr key={pay.id} className="hover:bg-main/30 transition-colors">
-                                        <td className="px-6 py-4">
-                                            <span className="text-white text-sm font-bold">{pay.members?.full_name || 'Aluno Removido'}</span>
+                                        <td className="px-4 md:px-6 py-4">
+                                            <div className="flex flex-col">
+                                                <span className="text-white text-sm font-bold truncate max-w-[120px] sm:max-w-none">{pay.members?.full_name || 'Aluno Removido'}</span>
+                                                <span className="text-[10px] text-muted sm:hidden uppercase font-bold tracking-wider">{pay.description}</span>
+                                            </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-6 py-4 hidden sm:table-cell">
                                             <span className="text-slate-300 text-sm">{pay.description}</span>
-                                            <span className="block text-[10px] text-muted uppercase">{pay.type}</span>
+                                            <span className="block text-[10px] text-muted uppercase tracking-wider">{pay.type}</span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-6 py-4 hidden lg:table-cell">
                                             <span className="text-slate-300 text-sm font-medium">{formatDate(pay.due_date)}</span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 md:px-6 py-4">
                                             <span className="text-white text-sm font-bold">{formatCurrency(pay.amount)}</span>
+                                            <span className="block text-[9px] text-muted lg:hidden font-bold">{formatDate(pay.due_date)}</span>
                                         </td>
-                                        <td className="px-6 py-4 text-center">
-                                            <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase border ${getStatusColor(pay.status)}`}>
+                                        <td className="px-4 md:px-6 py-4 text-center">
+                                            <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase border ${getStatusColor(pay.status)}`}>
                                                 {getStatusLabel(pay.status)}
                                             </span>
-                                            {pay.paid_date && <div className="text-[10px] text-emerald-500 mt-1">Pago em {formatDate(pay.paid_date)}</div>}
                                         </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <button className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Editar</button>
+                                        <td className="px-4 md:px-6 py-4 text-right">
+                                            <button className="text-slate-400 hover:text-white transition-colors text-[18px] md:text-[20px] font-bold material-symbols-outlined">edit</button>
                                         </td>
                                     </tr>
                                 ))

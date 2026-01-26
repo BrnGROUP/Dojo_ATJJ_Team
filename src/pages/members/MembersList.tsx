@@ -97,12 +97,12 @@ export function MembersList() {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-main/50 border-b border-border-slate">
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Nome do Aluno</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden md:table-cell">E-mail</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Turma</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Faixa</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">Status</th>
-                                <th className="px-6 py-4 text-slate-400 text-xs font-bold uppercase tracking-wider text-right">Ações</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Aluno</th>
+                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden xl:table-cell">E-mail</th>
+                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden lg:table-cell">Turma</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden sm:table-cell">Faixa</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">Status</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-400 text-xs font-bold uppercase tracking-wider text-right">Ações</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border-slate/50">
@@ -117,26 +117,26 @@ export function MembersList() {
                             ) : (
                                 members.map((member) => (
                                     <tr key={member.id} className="hover:bg-main/30 transition-colors group">
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 md:px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">
+                                                <div className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs shrink-0">
                                                     {getInitials(member.full_name)}
                                                 </div>
-                                                <span className="text-white text-sm font-semibold">{member.full_name}</span>
+                                                <div className="flex flex-col">
+                                                    <span className="text-white text-sm font-semibold truncate max-w-[120px] sm:max-w-none">{member.full_name}</span>
+                                                    <span className="text-[10px] text-muted sm:hidden">Faixa {member.belt}</span>
+                                                </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 hidden md:table-cell">
+                                        <td className="px-6 py-4 hidden xl:table-cell">
                                             <span className="text-slate-400 text-sm">{member.email || '-'}</span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-6 py-4 hidden lg:table-cell">
                                             <div className="flex flex-wrap gap-1">
                                                 {member.enrolled_classes && member.enrolled_classes.length > 0 ? (
                                                     member.enrolled_classes.map((cls, idx) => (
                                                         <span key={idx} className="px-2 py-0.5 rounded-md bg-main border border-border-slate text-slate-300 text-[10px] font-medium">
-                                                            {cls === 'fundamentals' ? 'Fundamentos' :
-                                                                cls === 'advanced' ? 'Avançado' :
-                                                                    cls === 'nogi' ? 'No-Gi' :
-                                                                        cls === 'kids' ? 'Kids' : cls}
+                                                            {cls}
                                                         </span>
                                                     ))
                                                 ) : (
@@ -144,29 +144,29 @@ export function MembersList() {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 md:px-6 py-4 hidden sm:table-cell">
                                             <div className="flex items-center gap-2">
                                                 <span className={`size-3 rounded-full shadow-sm border border-zinc-700 ${getBeltBg(member.belt)}`}></span>
                                                 <span className={`${getBeltColor(member.belt)} text-xs font-bold`}>
-                                                    {member.belt} {member.stripes > 0 ? `(${member.stripes} graus)` : ''}
+                                                    {member.belt}
                                                 </span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-center">
-                                            <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${member.status === 'Active' ? 'bg-emerald-900/30 text-emerald-400' :
+                                        <td className="px-4 md:px-6 py-4 text-center">
+                                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${member.status === 'Active' ? 'bg-emerald-900/30 text-emerald-400' :
                                                 member.status === 'Paused' ? 'bg-yellow-900/30 text-yellow-400' :
                                                     'bg-red-900/30 text-red-400'
                                                 }`}>
                                                 {member.status === 'Active' ? 'Ativo' : member.status === 'Paused' ? 'Pausado' : 'Inativo'}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <div className="flex justify-end gap-2 text-slate-400 group-hover:text-slate-300 transition-colors">
+                                        <td className="px-4 md:px-6 py-4 text-right">
+                                            <div className="flex justify-end gap-1 md:gap-2 text-slate-400">
                                                 <Link to={`/members/${member.id}`} className="p-1 hover:text-primary transition-colors" title="Editar">
-                                                    <span className="material-symbols-outlined text-[20px]">edit</span>
+                                                    <span className="material-symbols-outlined text-[18px] md:text-[20px]">edit</span>
                                                 </Link>
-                                                <button className="p-1 hover:text-primary transition-colors" title="Desativar">
-                                                    <span className="material-symbols-outlined text-[20px]">do_not_disturb_on</span>
+                                                <button className="p-1 hover:text-red-500 transition-colors" title="Desativar">
+                                                    <span className="material-symbols-outlined text-[18px] md:text-[20px]">do_not_disturb_on</span>
                                                 </button>
                                             </div>
                                         </td>
