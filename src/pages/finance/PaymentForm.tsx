@@ -16,13 +16,13 @@ export function PaymentForm() {
     });
 
     useEffect(() => {
+        async function fetchMembers() {
+            const { data } = await supabase.from('members').select('id, full_name').order('full_name');
+            if (data) setMembers(data);
+        }
+
         fetchMembers();
     }, []);
-
-    async function fetchMembers() {
-        const { data } = await supabase.from('members').select('id, full_name').order('full_name');
-        if (data) setMembers(data);
-    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;

@@ -20,30 +20,30 @@ export function Agenda() {
     const [filter, setFilter] = useState('all'); // all, today, week
 
     useEffect(() => {
+        async function fetchClasses() {
+            setLoading(true);
+            let query = supabase
+                .from('classes')
+                .select('*')
+                .order('start_time', { ascending: true });
+
+            if (filter === 'today') {
+                const today = new Date().toISOString().split('T')[0];
+                query = query.gte('start_time', `${today}T00:00:00`).lte('start_time', `${today}T23:59:59`);
+            }
+
+            const { data, error } = await query;
+
+            if (error) {
+                console.error('Error fetching classes:', error);
+            } else {
+                setClasses(data || []);
+            }
+            setLoading(false);
+        }
+
         fetchClasses();
     }, [filter]);
-
-    async function fetchClasses() {
-        setLoading(true);
-        let query = supabase
-            .from('classes')
-            .select('*')
-            .order('start_time', { ascending: true });
-
-        if (filter === 'today') {
-            const today = new Date().toISOString().split('T')[0];
-            query = query.gte('start_time', `${today}T00:00:00`).lte('start_time', `${today}T23:59:59`);
-        }
-
-        const { data, error } = await query;
-
-        if (error) {
-            console.error('Error fetching classes:', error);
-        } else {
-            setClasses(data || []);
-        }
-        setLoading(false);
-    }
 
     const formatTime = (dateStr: string) => {
         return new Date(dateStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -127,8 +127,8 @@ export function Agenda() {
                                             </td>
                                             <td className="px-6 py-4 text-center">
                                                 <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase border ${cls.type === 'Gi' ? 'bg-white/5 border-white/10 text-white' :
-                                                        cls.type === 'No-Gi' ? 'bg-primary/10 border-primary/20 text-primary' :
-                                                            'bg-green-500/10 border-green-500/20 text-green-500'
+                                                    cls.type === 'No-Gi' ? 'bg-primary/10 border-primary/20 text-primary' :
+                                                        'bg-green-500/10 border-green-500/20 text-green-500'
                                                     }`}>
                                                     {cls.type}
                                                 </span>

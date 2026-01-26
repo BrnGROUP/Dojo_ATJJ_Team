@@ -26,48 +26,48 @@ export function GroupForm() {
     ];
 
     useEffect(() => {
+        async function fetchGroup() {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('groups')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error) {
+                console.error('Error fetching group:', error);
+                navigate('/groups');
+            } else if (data) {
+                setFormData({
+                    name: data.name || '',
+                    description: data.description || '',
+                    schedule_description: data.schedule_description || '',
+                    color: data.color || 'white',
+                    selectedDays: [], // We might parse this from description if possible, but for now reset or keep simple
+                    time: '',
+                });
+
+                // Try to parse existing schedule string if it follows pattern "Seg/Qua 19:00"
+                if (data.schedule_description) {
+                    const parts = data.schedule_description.split(' ');
+                    if (parts.length >= 2) {
+                        const days = parts[0].split('/');
+                        const time = parts[1];
+                        setFormData(prev => ({
+                            ...prev,
+                            selectedDays: days.filter((d: string) => daysOfWeek.some(dow => dow.id === d)),
+                            time: time
+                        }));
+                    }
+                }
+            }
+            setLoading(false);
+        }
+
         if (id) {
             fetchGroup();
         }
-    }, [id]);
-
-    async function fetchGroup() {
-        setLoading(true);
-        const { data, error } = await supabase
-            .from('groups')
-            .select('*')
-            .eq('id', id)
-            .single();
-
-        if (error) {
-            console.error('Error fetching group:', error);
-            navigate('/groups');
-        } else if (data) {
-            setFormData({
-                name: data.name || '',
-                description: data.description || '',
-                schedule_description: data.schedule_description || '',
-                color: data.color || 'white',
-                selectedDays: [], // We might parse this from description if possible, but for now reset or keep simple
-                time: '',
-            });
-
-            // Try to parse existing schedule string if it follows pattern "Seg/Qua 19:00"
-            if (data.schedule_description) {
-                const parts = data.schedule_description.split(' ');
-                if (parts.length >= 2) {
-                    const days = parts[0].split('/');
-                    const time = parts[1];
-                    setFormData(prev => ({
-                        ...prev,
-                        selectedDays: days.filter((d: string) => daysOfWeek.some(dow => dow.id === d)),
-                        time: time
-                    }));
-                }
-            }
-        }
-        setLoading(false);
-    }
+    }, [id, navigate]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;

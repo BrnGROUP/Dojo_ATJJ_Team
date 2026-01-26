@@ -24,39 +24,41 @@ export function MemberForm() {
             fetchMember();
         }
         fetchGroups();
-    }, [id]);
 
-    async function fetchGroups() {
-        const { data } = await supabase.from('groups').select('id, name');
-        if (data) setGroups(data);
-    }
-
-    async function fetchMember() {
-        setLoading(true);
-        const { data, error } = await supabase
-            .from('members')
-            .select('*')
-            .eq('id', id)
-            .single();
-
-        if (error) {
-            console.error('Error fetching member:', error);
-            navigate('/members');
-        } else if (data) {
-            setFormData({
-                full_name: data.full_name || '',
-                email: data.email || '',
-                phone: data.phone || '',
-                birth_date: data.birth_date || '',
-                plan: data.plan || '',
-                enrolled_classes: data.enrolled_classes || [],
-                belt: data.belt || 'White',
-                stripes: data.stripes || 0,
-                status: data.status || 'Active',
-            });
+        async function fetchGroups() {
+            const { data } = await supabase.from('groups').select('id, name');
+            if (data) setGroups(data);
         }
-        setLoading(false);
-    }
+
+        async function fetchMember() {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('members')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error) {
+                console.error('Error fetching member:', error);
+                navigate('/members');
+            } else if (data) {
+                setFormData({
+                    full_name: data.full_name || '',
+                    email: data.email || '',
+                    phone: data.phone || '',
+                    birth_date: data.birth_date || '',
+                    plan: data.plan || '',
+                    enrolled_classes: data.enrolled_classes || [],
+                    belt: data.belt || 'White',
+                    stripes: data.stripes || 0,
+                    status: data.status || 'Active',
+                });
+            }
+            setLoading(false);
+        }
+    }, [id, navigate]);
+
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
