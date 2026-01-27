@@ -19,10 +19,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
     const menuItems = [
         { label: 'Painel Geral', icon: 'dashboard', path: '/' },
+        { label: 'Frequência', icon: 'how_to_reg', path: '/attendance' },
         { label: 'Membros', icon: 'group', path: '/members' },
         { label: 'Agenda de Aulas', icon: 'calendar_today', path: '/agenda' },
         { label: 'Turmas', icon: 'groups', path: '/groups' },
         { label: 'Competições', icon: 'trophy', path: '/competitions' },
+    ];
+
+    const gamificationItems = [
+        { label: 'Faixas & Graduação', icon: 'military_tech', path: '/belts' },
+        { label: 'Insígnias (Badges)', icon: 'workspace_premium', path: '/badges' },
     ];
 
     const adminItems = [
@@ -48,8 +54,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             )}>
                 <div className="p-8 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="bg-gradient-to-br from-primary to-primary-hover rounded-lg p-2 text-white shadow-[0_0_15px_rgba(215,38,56,0.3)]">
-                            <span className="material-symbols-outlined text-[28px]">sports_martial_arts</span>
+                        <div className="bg-white rounded-lg p-1 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                            <img src="/logo.png" alt="ATJJ Logo" className="w-10 h-10 object-contain" />
                         </div>
                         <div>
                             <h1 className="text-white text-xl font-extrabold tracking-tight leading-none uppercase">ATJJ Dojo</h1>
@@ -78,6 +84,24 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                             )}
                         >
                             <span className={cn("material-symbols-outlined", location.pathname === item.path && "fill-current")}>{item.icon}</span>
+                            {item.label}
+                        </Link>
+                    ))}
+
+                    <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 mt-8 opacity-50">Gamificação</p>
+                    {gamificationItems.map((item) => (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            onClick={handleLinkClick}
+                            className={cn(
+                                "sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200",
+                                (location.pathname === item.path || location.pathname.startsWith(`${item.path}/`))
+                                    ? "bg-primary/10 text-primary hover:bg-primary/20"
+                                    : "text-muted hover:bg-white/5 hover:text-white"
+                            )}
+                        >
+                            <span className={cn("material-symbols-outlined", (location.pathname === item.path || location.pathname.startsWith(`${item.path}/`)) && "fill-current")}>{item.icon}</span>
                             {item.label}
                         </Link>
                     ))}

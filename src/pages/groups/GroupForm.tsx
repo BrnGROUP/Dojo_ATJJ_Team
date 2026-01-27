@@ -10,7 +10,7 @@ export function GroupForm() {
         name: '',
         description: '',
         schedule_description: '',
-        color: 'white',
+        color: '#ffffff',
         selectedDays: [] as string[],
         time: '19:00',
     });
@@ -74,10 +74,6 @@ export function GroupForm() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleColorSelect = (color: string) => {
-        setFormData((prev) => ({ ...prev, color }));
-    };
-
     const handleDayToggle = (dayId: string) => {
         setFormData(prev => {
             const current = prev.selectedDays;
@@ -92,6 +88,7 @@ export function GroupForm() {
             return { ...prev, selectedDays: updated };
         });
     };
+
 
     // Update schedule_description whenever days or time changes
     useEffect(() => {
@@ -126,14 +123,6 @@ export function GroupForm() {
             navigate('/groups');
         }
     };
-
-    const colors = [
-        { id: 'white', label: 'Padrão (Branco)', class: 'bg-white' },
-        { id: 'blue', label: 'Azul', class: 'bg-blue-500' },
-        { id: 'purple', label: 'Roxo', class: 'bg-purple-500' },
-        { id: 'green', label: 'Verde', class: 'bg-emerald-500' },
-        { id: 'orange', label: 'Laranja', class: 'bg-amber-500' },
-    ];
 
     return (
         <div className="max-w-[768px] w-full mx-auto space-y-6">
@@ -217,6 +206,7 @@ export function GroupForm() {
                                 />
                             </label>
 
+
                             <label className="flex flex-col w-full">
                                 <p className="text-white text-sm font-semibold leading-normal pb-2">Resumo (Automático)</p>
                                 <input
@@ -231,22 +221,41 @@ export function GroupForm() {
                         </div>
                     </div>
 
-                    <label className="flex flex-col w-full">
+                    <div className="flex flex-col w-full">
                         <p className="text-white text-sm font-semibold leading-normal pb-2">Cor Identificadora</p>
-                        <div className="flex flex-wrap gap-3">
-                            {colors.map(c => (
-                                <button
-                                    key={c.id}
-                                    type="button"
-                                    onClick={() => handleColorSelect(c.id)}
-                                    className={`w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all ${formData.color === c.id ? 'border-white scale-110' : 'border-transparent hover:scale-105'} ${c.class}`}
-                                    title={c.label}
-                                >
-                                    {formData.color === c.id && <span className="material-symbols-outlined text-white text-sm">check</span>}
-                                </button>
-                            ))}
+                        <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-border-slate shadow-inner">
+                            <div className="relative group cursor-pointer hover:scale-105 transition-transform">
+                                <div
+                                    className="w-14 h-14 rounded-2xl border-2 border-white/10 shadow-lg ring-4 ring-black/20"
+                                    style={{ backgroundColor: formData.color } as React.CSSProperties}
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span className="material-symbols-outlined text-white text-xl drop-shadow-md">palette</span>
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-1 flex-1">
+                                <div className="relative">
+                                    <input
+                                        type="color"
+                                        name="color"
+                                        id="group-color"
+                                        value={formData.color.startsWith('#') ? formData.color : '#ffffff'}
+                                        onChange={handleChange}
+                                        title="Selecione a cor da turma"
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    />
+                                    <div className="w-full h-11 rounded-xl bg-main border border-border-slate flex items-center px-4 gap-3 pointer-events-none group-hover:border-primary transition-colors">
+                                        <span className="text-muted text-xs font-mono uppercase tracking-widest">{formData.color}</span>
+                                        <div className="ml-auto flex items-center gap-1 text-[10px] font-bold text-primary uppercase">
+                                            <span>Mudar Cor</span>
+                                            <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label htmlFor="group-color" className="text-[10px] text-muted italic ml-1">Esta cor será usada nos ícones e destaques visuais da turma.</label>
+                            </div>
                         </div>
-                    </label>
+                    </div>
                 </div>
 
                 <div className="flex justify-end gap-4 mt-4 pt-6 border-t border-border-slate">

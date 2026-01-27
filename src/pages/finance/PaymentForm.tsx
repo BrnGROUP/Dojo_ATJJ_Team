@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { maskCurrency } from '../../lib/masks';
 
 export function PaymentForm() {
     const navigate = useNavigate();
@@ -26,7 +27,11 @@ export function PaymentForm() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        let maskedValue = value;
+
+        if (name === 'amount') maskedValue = maskCurrency(value);
+
+        setFormData((prev) => ({ ...prev, [name]: maskedValue }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -37,7 +42,7 @@ export function PaymentForm() {
             {
                 member_id: formData.member_id,
                 description: formData.description,
-                amount: parseFloat(formData.amount),
+                amount: parseFloat(formData.amount.replace("R$ ", "").replace(/\./g, "").replace(",", ".")),
                 due_date: formData.due_date,
                 type: formData.type,
                 status: formData.status,
@@ -118,9 +123,8 @@ export function PaymentForm() {
                             onChange={handleChange}
                             required
                             className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-base font-normal transition-all outline-none"
-                            placeholder="0.00"
-                            type="number"
-                            step="0.01"
+                            placeholder="R$ 0,00"
+                            type="text"
                         />
                     </label>
 

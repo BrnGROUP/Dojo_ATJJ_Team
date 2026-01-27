@@ -11,6 +11,7 @@ interface Member {
     plan: string;
     enrolled_classes: string[];
     status: string;
+    xp: number;
 }
 
 export function MembersList() {
@@ -37,26 +38,31 @@ export function MembersList() {
     }
 
     const getBeltColor = (belt: string) => {
-        switch (belt?.toLowerCase()) {
-            case 'white': return 'text-white';
-            case 'blue': return 'text-blue-500';
-            case 'purple': return 'text-purple-500';
-            case 'brown': return 'text-amber-700';
-            case 'black': return 'text-white'; // Should distinguish or keep white
-            default: return 'text-slate-300';
-        }
+        const b = belt?.toLowerCase() || '';
+        if (b.includes('azul')) return 'text-blue-500';
+        if (b.includes('roxa')) return 'text-purple-500';
+        if (b.includes('marrom')) return 'text-amber-700';
+        if (b.includes('preta')) return 'text-white drop-shadow-[0_0_2px_rgba(255,255,255,0.5)]';
+        if (b.includes('cinza')) return 'text-slate-400';
+        if (b.includes('amarela')) return 'text-yellow-400';
+        if (b.includes('laranja')) return 'text-orange-500';
+        if (b.includes('verde')) return 'text-green-500';
+        return 'text-slate-200';
     };
 
     const getBeltBg = (belt: string) => {
-        switch (belt?.toLowerCase()) {
-            case 'white': return 'bg-white';
-            case 'blue': return 'bg-blue-600';
-            case 'purple': return 'bg-purple-600';
-            case 'brown': return 'bg-[#422e25]';
-            case 'black': return 'bg-neutral-900 border-red-600 border-l-2';
-            default: return 'bg-slate-300';
-        }
-    }
+        const b = belt?.toLowerCase() || '';
+        if (b.includes('branca')) return 'bg-white';
+        if (b.includes('azul')) return 'bg-blue-600';
+        if (b.includes('roxa')) return 'bg-purple-600';
+        if (b.includes('marrom')) return 'bg-[#422e25]';
+        if (b.includes('preta')) return 'bg-black border-red-600 border-r-4';
+        if (b.includes('cinza')) return 'bg-slate-500';
+        if (b.includes('amarela')) return 'bg-yellow-400';
+        if (b.includes('laranja')) return 'bg-orange-500';
+        if (b.includes('verde')) return 'bg-green-600';
+        return 'bg-slate-200';
+    };
 
     const getInitials = (name: string) => {
         return name
@@ -101,6 +107,7 @@ export function MembersList() {
                                 <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden xl:table-cell">E-mail</th>
                                 <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden lg:table-cell">Turma</th>
                                 <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden sm:table-cell">Faixa</th>
+                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">XP</th>
                                 <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">Status</th>
                                 <th className="px-4 md:px-6 py-4 text-slate-400 text-xs font-bold uppercase tracking-wider text-right">Ações</th>
                             </tr>
@@ -150,6 +157,12 @@ export function MembersList() {
                                                 <span className={`${getBeltColor(member.belt)} text-xs font-bold`}>
                                                     {member.belt}
                                                 </span>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 md:px-6 py-4 text-center">
+                                            <div className="flex items-center justify-center gap-1">
+                                                <span className="material-symbols-outlined text-primary text-[16px]">bolt</span>
+                                                <span className="text-white text-xs font-black">{member.xp || 0}</span>
                                             </div>
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-center">

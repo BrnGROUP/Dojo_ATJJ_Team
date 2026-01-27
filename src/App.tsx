@@ -12,6 +12,10 @@ import { GroupList } from './pages/groups/GroupList';
 import { GroupForm } from './pages/groups/GroupForm';
 import { Finance } from './pages/finance/Finance';
 import { PaymentForm } from './pages/finance/PaymentForm';
+import { Attendance } from './pages/attendance/Attendance';
+import { BadgeManagement } from './pages/gamification/BadgeManagement';
+import { BeltManagement } from './pages/gamification/BeltManagement';
+import { Settings } from './pages/Settings';
 
 function App() {
   return (
@@ -24,16 +28,20 @@ function App() {
           <Route path="members/new" element={<MemberForm />} />
           <Route path="members/:id" element={<MemberForm />} />
 
+          <Route path="attendance" element={<Attendance />} />
           <Route path="agenda" element={<Agenda />} />
           <Route path="agenda/new" element={<ClassForm />} />
+          <Route path="agenda/edit/:id" element={<ClassForm />} />
           <Route path="groups" element={<GroupList />} />
           <Route path="groups/new" element={<GroupForm />} />
           <Route path="groups/:id" element={<GroupForm />} />
+          <Route path="belts" element={<BeltManagement />} />
+          <Route path="badges" element={<BadgeManagement />} />
           <Route path="competitions" element={<PlaceholderPage title="Competições" />} />
           <Route path="finance" element={<Finance />} />
           <Route path="finance/new" element={<PaymentForm />} />
           <Route path="reports" element={<PlaceholderPage title="Relatórios" />} />
-          <Route path="settings" element={<PlaceholderPage title="Configurações" />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </BrowserRouter>

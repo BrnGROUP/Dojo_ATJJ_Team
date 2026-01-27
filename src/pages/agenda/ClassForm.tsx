@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 
 export function ClassForm() {
+    const { id } = useParams();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -19,7 +20,39 @@ export function ClassForm() {
 
     useEffect(() => {
         fetchGroups();
-    }, []);
+        if (id) {
+            fetchClass();
+        }
+    }, [id]);
+
+    async function fetchClass() {
+        setLoading(true);
+        const { data, error } = await supabase
+            .from('classes')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        if (error) {
+            console.error('Error fetching class:', error);
+            navigate('/agenda');
+        } else if (data) {
+            const startDate = new Date(data.start_time);
+            const endDate = new Date(data.end_time);
+
+            setFormData({
+                group_id: '', // Group ID isn't stored in classes table directly based on insert
+                title: data.title,
+                instructor: data.instructor,
+                date: startDate.toISOString().split('T')[0],
+                start_time: startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+                end_time: endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+                max_students: data.max_students,
+                type: data.type,
+            });
+        }
+        setLoading(false);
+    }
 
     async function fetchGroups() {
         const { data } = await supabase.from('groups').select('id, name');
@@ -51,17 +84,19 @@ export function ClassForm() {
         const startDateTime = new Date(`${formData.date}T${formData.start_time}:00`);
         const endDateTime = new Date(`${formData.date}T${formData.end_time}:00`);
 
-        const { error } = await supabase.from('classes').insert([
-            {
-                title: formData.title,
-                instructor: formData.instructor,
-                start_time: startDateTime.toISOString(),
-                end_time: endDateTime.toISOString(),
-                max_students: Number(formData.max_students),
-                type: formData.type,
-                status: 'Scheduled',
-            },
-        ]);
+        const classData = {
+            title: formData.title,
+            instructor: formData.instructor,
+            start_time: startDateTime.toISOString(),
+            end_time: endDateTime.toISOString(),
+            max_students: Number(formData.max_students),
+            type: formData.type,
+            status: 'Scheduled',
+        };
+
+        const { error } = id
+            ? await supabase.from('classes').update(classData).eq('id', id)
+            : await supabase.from('classes').insert([classData]);
 
         setLoading(false);
 
@@ -78,13 +113,13 @@ export function ClassForm() {
             <div className="flex flex-wrap gap-2 mb-2">
                 <Link to="/agenda" className="text-muted hover:text-primary text-sm font-medium leading-normal">Agenda</Link>
                 <span className="text-muted text-sm font-medium leading-normal">/</span>
-                <span className="text-white text-sm font-medium leading-normal">Nova Aula</span>
+                <span className="text-white text-sm font-medium leading-normal">{id ? 'Editar Aula' : 'Nova Aula'}</span>
             </div>
 
             <div className="flex flex-wrap justify-between items-end gap-3 mb-8">
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Agendar Aula</h1>
-                    <p className="text-muted text-base font-normal leading-normal">Configure os detalhes da nova sessão de treinamento.</p>
+                    <h1 className="text-white text-3xl font-black leading-tight tracking-tight">{id ? 'Editar Aula' : 'Agendar Aula'}</h1>
+                    <p className="text-muted text-base font-normal leading-normal">{id ? 'Modifique os detalhes da sessão de treinamento.' : 'Configure os detalhes da nova sessão de treinamento.'}</p>
                 </div>
                 <Link to="/agenda" className="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary/10 text-primary hover:bg-primary/20 text-sm font-bold leading-normal transition-all">
                     <span className="material-symbols-outlined mr-2 text-lg">arrow_back</span>
@@ -215,7 +250,7 @@ export function ClassForm() {
                         type="submit"
                     >
                         <span className="material-symbols-outlined mr-2">save</span>
-                        {loading ? 'Agendando...' : 'Agendar Aula'}
+                        {loading ? 'Salvando...' : (id ? 'Salvar Alterações' : 'Agendar Aula')}
                     </button>
                 </div>
             </form>
