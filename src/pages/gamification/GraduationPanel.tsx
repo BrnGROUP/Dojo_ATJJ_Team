@@ -22,8 +22,6 @@ interface Belt {
 }
 
 export function GraduationPanel() {
-    const [members, setMembers] = useState<Member[]>([]);
-    const [belts, setBelts] = useState<Belt[]>([]);
     const [loading, setLoading] = useState(true);
     const [eligibleMembers, setEligibleMembers] = useState<{ member: Member, currentBelt: Belt, nextBelt: Belt }[]>([]);
     const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
@@ -50,9 +48,6 @@ export function GraduationPanel() {
 
             if (membersRes.error) throw membersRes.error;
             if (beltsRes.error) throw beltsRes.error;
-
-            setMembers(membersRes.data || []);
-            setBelts(beltsRes.data || []);
 
             calculateEligibility(membersRes.data || [], beltsRes.data || []);
             setSelectedMembers([]);
