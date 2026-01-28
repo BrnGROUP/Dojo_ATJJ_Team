@@ -19,7 +19,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
     const menuItems = [
         { label: 'Painel Geral', icon: 'dashboard', path: '/' },
-        { label: 'Frequência', icon: 'how_to_reg', path: '/attendance' },
         { label: 'Membros', icon: 'group', path: '/members' },
         { label: 'Agenda de Aulas', icon: 'calendar_today', path: '/agenda' },
         { label: 'Turmas', icon: 'groups', path: '/groups' },
@@ -29,6 +28,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     const gamificationItems = [
         { label: 'Faixas & Graduação', icon: 'military_tech', path: '/belts' },
         { label: 'Insígnias (Badges)', icon: 'workspace_premium', path: '/badges' },
+        { label: 'Ranking', icon: 'trophy', path: '/gamification/leaderboard' },
+        { label: 'Graduação', icon: 'upgrade', path: '/gamification/graduation' },
     ];
 
     const adminItems = [

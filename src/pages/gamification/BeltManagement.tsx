@@ -160,8 +160,8 @@ export function BeltManagement() {
                                     <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Cor Principal</span>
                                     <div className="flex items-center gap-4 h-12">
                                         <div
-                                            className="w-12 h-12 rounded-xl border border-border-slate shadow-inner"
-                                            style={{ backgroundColor: formData.color } as React.CSSProperties}
+                                            className="w-12 h-12 rounded-xl border border-border-slate shadow-inner bg-dynamic-color"
+                                            style={{ '--dynamic-color': formData.color } as React.CSSProperties}
                                         />
                                         <input
                                             type="color"
@@ -179,8 +179,8 @@ export function BeltManagement() {
                                     <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Cor Secundária (Opcional)</span>
                                     <div className="flex items-center gap-4 h-12">
                                         <div
-                                            className="w-12 h-12 rounded-xl border border-border-slate shadow-inner relative overflow-hidden"
-                                            style={{ backgroundColor: formData.color_secondary || 'transparent' } as React.CSSProperties}
+                                            className="w-12 h-12 rounded-xl border border-border-slate shadow-inner relative overflow-hidden bg-dynamic-color"
+                                            style={{ '--dynamic-color': formData.color_secondary || 'transparent' } as React.CSSProperties}
                                         >
                                             {!formData.color_secondary && (
                                                 <div className="absolute inset-0 flex items-center justify-center">

@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { cn } from '../../lib/utils';
 import { maskPhone, maskCPF } from '../../lib/masks';
+import { EvaluationsList } from './EvaluationsList';
 
 export function MemberForm() {
     const { id } = useParams();
@@ -366,7 +367,14 @@ export function MemberForm() {
                     </div>
                 </div>
 
-                <div className="lg:col-span-2 flex justify-end gap-4 mt-4 pt-6 border-t border-border-slate">
+                {/* Evaluations Section (Only when editing) */}
+                {id && (
+                    <div className="lg:col-span-2 mt-8 animate-fade-in">
+                        <EvaluationsList memberId={id} currentBelt={formData.belt} />
+                    </div>
+                )}
+
+                <div className="lg:col-span-2 flex justify-end gap-4 mt-8 pt-6 border-t border-border-slate">
                     <Link to="/members" className="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-12 px-6 bg-card text-white text-sm font-bold leading-normal hover:bg-card/80 transition-all border border-border-slate">
                         Cancelar
                     </Link>
@@ -379,7 +387,7 @@ export function MemberForm() {
                         {loading ? 'Salvando...' : 'Salvar Aluno'}
                     </button>
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 }

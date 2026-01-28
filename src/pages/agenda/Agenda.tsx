@@ -122,7 +122,10 @@ export function Agenda() {
                                                         <span>{occupancy}%</span>
                                                     </div>
                                                     <div className="w-full bg-main h-1.5 rounded-full overflow-hidden">
-                                                        <div className={`h-full rounded-full ${occupancy > 90 ? 'bg-red-500' : 'bg-primary'}`} style={{ width: `${occupancy}%` }}></div>
+                                                        <div
+                                                            className={`h-full rounded-full ${occupancy > 90 ? 'bg-red-500' : 'bg-primary'}`}
+                                                            style={{ width: `${occupancy}%` }}
+                                                        ></div>
                                                     </div>
                                                 </div>
                                             </td>
