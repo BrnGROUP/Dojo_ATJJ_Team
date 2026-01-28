@@ -11,24 +11,99 @@ interface Member {
     photo_url?: string;
 }
 
+type RankingType = 'xp_all_time' | 'xp_month' | 'frequency';
+
 export function Leaderboard() {
     const [members, setMembers] = useState<Member[]>([]);
     const [loading, setLoading] = useState(true);
+    const [rankingType, setRankingType] = useState<RankingType>('xp_all_time');
 
     useEffect(() => {
         fetchLeaderboard();
-    }, []);
+    }, [rankingType]);
 
     const fetchLeaderboard = async () => {
+        setLoading(true);
         try {
-            const { data, error } = await supabase
-                .from('members')
-                .select('id, full_name, belt, xp, photo_url')
-                .order('xp', { ascending: false })
-                .limit(50);
+            if (rankingType === 'xp_all_time') {
+                // All-time XP ranking
+                const { data, error } = await supabase
+                    .from('members')
+                    .select('id, full_name, belt, xp, photo_url')
+                    .order('xp', { ascending: false })
+                    .limit(50);
 
-            if (error) throw error;
-            setMembers(data || []);
+                if (error) throw error;
+                setMembers(data || []);
+
+            } else if (rankingType === 'xp_month') {
+                // XP gained in last 30 days
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+                const { data: logs } = await supabase
+                    .from('xp_logs')
+                    .select('member_id, amount')
+                    .gte('created_at', thirtyDaysAgo.toISOString());
+
+                const xpByMember = logs?.reduce((acc, log) => {
+                    acc[log.member_id] = (acc[log.member_id] || 0) + log.amount;
+                    return acc;
+                }, {} as Record<string, number>) || {};
+
+                const memberIds = Object.keys(xpByMember);
+                if (memberIds.length === 0) {
+                    setMembers([]);
+                    return;
+                }
+
+                const { data: membersData } = await supabase
+                    .from('members')
+                    .select('id, full_name, belt, photo_url')
+                    .in('id', memberIds);
+
+                const rankedMembers = membersData?.map(m => ({
+                    ...m,
+                    xp: xpByMember[m.id] || 0
+                }))
+                    .sort((a, b) => b.xp - a.xp)
+                    .slice(0, 50) || [];
+
+                setMembers(rankedMembers);
+
+            } else if (rankingType === 'frequency') {
+                // Most frequent attendees in last 30 days
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+                const { data: attendance } = await supabase
+                    .from('attendance')
+                    .select('member_id')
+                    .gte('created_at', thirtyDaysAgo.toISOString());
+
+                const attendanceByMember = attendance?.reduce((acc, att) => {
+                    acc[att.member_id] = (acc[att.member_id] || 0) + 1;
+                    return acc;
+                }, {} as Record<string, number>) || {};
+
+                const memberIds = Object.keys(attendanceByMember);
+                if (memberIds.length === 0) {
+                    setMembers([]);
+                    return;
+                }
+
+                const { data: membersData } = await supabase
+                    .from('members')
+                    .select('id, full_name, belt, photo_url')
+                    .in('id', memberIds);
+
+                const rankedMembers = membersData?.map(m => ({
+                    ...m,
+                    xp: attendanceByMember[m.id] || 0 // Using xp field for display purposes
+                })).sort((a, b) => b.xp - a.xp).slice(0, 50) || [];
+
+                setMembers(rankedMembers);
+            }
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
         } finally {
@@ -76,6 +151,69 @@ export function Leaderboard() {
                     <p className="text-muted mt-1">Os guerreiros mais dedicados do Dojo.</p>
                 </div>
             </header>
+
+            {/* Ranking Type Filters */}
+            <div className="flex flex-wrap gap-2">
+                <button
+                    onClick={() => setRankingType('xp_all_time')}
+                    className={cn(
+                        "px-4 py-2 rounded-xl text-sm font-bold transition-all border flex items-center gap-2",
+                        rankingType === 'xp_all_time'
+                            ? "bg-primary text-white border-primary shadow-lg shadow-primary/20"
+                            : "bg-card text-muted border-border-slate hover:border-primary/50 hover:text-white"
+                    )}
+                >
+                    <span>👑</span>
+                    <span>Top XP Geral</span>
+                </button>
+                <button
+                    onClick={() => setRankingType('xp_month')}
+                    className={cn(
+                        "px-4 py-2 rounded-xl text-sm font-bold transition-all border flex items-center gap-2",
+                        rankingType === 'xp_month'
+                            ? "bg-primary text-white border-primary shadow-lg shadow-primary/20"
+                            : "bg-card text-muted border-border-slate hover:border-primary/50 hover:text-white"
+                    )}
+                >
+                    <span>🏆</span>
+                    <span>XP do Mês</span>
+                </button>
+                <button
+                    onClick={() => setRankingType('frequency')}
+                    className={cn(
+                        "px-4 py-2 rounded-xl text-sm font-bold transition-all border flex items-center gap-2",
+                        rankingType === 'frequency'
+                            ? "bg-primary text-white border-primary shadow-lg shadow-primary/20"
+                            : "bg-card text-muted border-border-slate hover:border-primary/50 hover:text-white"
+                    )}
+                >
+                    <span>🔥</span>
+                    <span>Mais Frequentes</span>
+                </button>
+            </div>
+
+            {/* Ranking Info */}
+            <div className="bg-card rounded-2xl border border-border-slate p-4">
+                <div className="flex items-center gap-3">
+                    <span className="text-3xl">
+                        {rankingType === 'xp_all_time' && '👑'}
+                        {rankingType === 'xp_month' && '🏆'}
+                        {rankingType === 'frequency' && '🔥'}
+                    </span>
+                    <div>
+                        <h2 className="text-white text-xl font-bold">
+                            {rankingType === 'xp_all_time' && 'Campeões Gerais'}
+                            {rankingType === 'xp_month' && 'Top XP do Mês'}
+                            {rankingType === 'frequency' && 'Mais Frequentes'}
+                        </h2>
+                        <p className="text-sm text-muted">
+                            {rankingType === 'xp_all_time' && 'Top XP de todos os tempos'}
+                            {rankingType === 'xp_month' && 'Maior XP ganho nos últimos 30 dias'}
+                            {rankingType === 'frequency' && 'Maior número de presenças no mês'}
+                        </p>
+                    </div>
+                </div>
+            </div>
 
             {/* Top 3 Podium Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 items-end">
@@ -170,7 +308,9 @@ export function Leaderboard() {
                                 <th className="px-6 py-4 text-left text-[10px] font-bold text-muted uppercase tracking-widest w-20">#</th>
                                 <th className="px-6 py-4 text-left text-[10px] font-bold text-muted uppercase tracking-widest">Aluno</th>
                                 <th className="px-6 py-4 text-left text-[10px] font-bold text-muted uppercase tracking-widest">Faixa</th>
-                                <th className="px-6 py-4 text-right text-[10px] font-bold text-muted uppercase tracking-widest">XP Total</th>
+                                <th className="px-6 py-4 text-right text-[10px] font-bold text-muted uppercase tracking-widest">
+                                    {rankingType === 'frequency' ? 'Presenças' : 'XP'}
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border-slate/50">
