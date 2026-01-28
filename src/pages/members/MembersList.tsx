@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { XPModal } from '../../components/XPModal';
 
 interface Member {
     id: string;
@@ -17,6 +18,8 @@ interface Member {
 export function MembersList() {
     const [members, setMembers] = useState<Member[]>([]);
     const [loading, setLoading] = useState(true);
+    const [xpModalOpen, setXpModalOpen] = useState(false);
+    const [selectedMember, setSelectedMember] = useState<Member | null>(null);
 
     useEffect(() => {
         fetchMembers();
@@ -175,6 +178,16 @@ export function MembersList() {
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-right">
                                             <div className="flex justify-end gap-1 md:gap-2 text-slate-400">
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedMember(member);
+                                                        setXpModalOpen(true);
+                                                    }}
+                                                    className="p-1 hover:text-primary transition-colors group"
+                                                    title="Gerenciar XP"
+                                                >
+                                                    <span className="material-symbols-outlined text-[18px] md:text-[20px] group-hover:animate-pulse">bolt</span>
+                                                </button>
                                                 <Link to={`/members/${member.id}`} className="p-1 hover:text-primary transition-colors" title="Editar">
                                                     <span className="material-symbols-outlined text-[18px] md:text-[20px]">edit</span>
                                                 </Link>
@@ -190,6 +203,21 @@ export function MembersList() {
                     </table>
                 </div>
             </div>
+
+            {/* XP Modal */}
+            {selectedMember && (
+                <XPModal
+                    isOpen={xpModalOpen}
+                    onClose={() => {
+                        setXpModalOpen(false);
+                        setSelectedMember(null);
+                    }}
+                    memberId={selectedMember.id}
+                    memberName={selectedMember.full_name}
+                    currentXP={selectedMember.xp || 0}
+                    onSuccess={fetchMembers}
+                />
+            )}
         </div>
     );
 }
