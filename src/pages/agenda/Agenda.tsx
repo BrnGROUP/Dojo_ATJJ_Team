@@ -123,8 +123,8 @@ export function Agenda() {
                                                     </div>
                                                     <div className="w-full bg-main h-1.5 rounded-full overflow-hidden">
                                                         <div
-                                                            className={`h-full rounded-full ${occupancy > 90 ? 'bg-red-500' : 'bg-primary'}`}
-                                                            style={{ width: `${occupancy}%` }}
+                                                            className={`h-full rounded-full progress-fill ${occupancy > 90 ? 'bg-red-500' : 'bg-primary'}`}
+                                                            style={{ '--w': `${occupancy}%` } as React.CSSProperties}
                                                         ></div>
                                                     </div>
                                                 </div>
