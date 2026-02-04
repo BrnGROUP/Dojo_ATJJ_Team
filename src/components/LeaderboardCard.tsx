@@ -10,12 +10,6 @@ interface LeaderboardCardProps {
 }
 
 export function LeaderboardCard({ position, memberName, value, valueLabel, belt, isPodium = false }: LeaderboardCardProps) {
-    const getMedalColor = (pos: number) => {
-        if (pos === 1) return 'text-yellow-400';
-        if (pos === 2) return 'text-slate-300';
-        if (pos === 3) return 'text-amber-600';
-        return 'text-muted';
-    };
 
     const getMedalIcon = (pos: number) => {
         if (pos === 1) return '🥇';
