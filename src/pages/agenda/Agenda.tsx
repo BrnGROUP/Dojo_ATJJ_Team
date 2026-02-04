@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Link } from 'react-router-dom';
+import { DynamicDiv } from '../../components/DynamicDiv';
 
 interface ClassSession {
     id: string;
@@ -122,10 +123,10 @@ export function Agenda() {
                                                         <span>{occupancy}%</span>
                                                     </div>
                                                     <div className="w-full bg-main h-1.5 rounded-full overflow-hidden">
-                                                        <div
+                                                        <DynamicDiv
                                                             className={`h-full rounded-full progress-fill ${occupancy > 90 ? 'bg-red-500' : 'bg-primary'}`}
-                                                            style={{ '--w': `${occupancy}%` } as React.CSSProperties}
-                                                        ></div>
+                                                            dynamicStyle={{ '--w': `${occupancy}%` }}
+                                                        ></DynamicDiv>
                                                     </div>
                                                 </div>
                                             </td>

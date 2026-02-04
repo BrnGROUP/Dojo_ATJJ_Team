@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { DynamicDiv } from '../components/DynamicDiv';
 
 interface DashboardStats {
     totalStudents: number;
@@ -296,7 +297,7 @@ export function Dashboard() {
                                                 <td className="px-8 py-5 hidden lg:table-cell">
                                                     <div className="flex items-center gap-3">
                                                         <div className="w-20 bg-main h-1.5 rounded-full overflow-hidden">
-                                                            <div className="bg-primary h-full shadow-[0_0_8px_#d72638] progress-fill" style={{ '--w': `${occupancy}%` } as React.CSSProperties}></div>
+                                                            <DynamicDiv className="bg-primary h-full shadow-[0_0_8px_#d72638] progress-fill" dynamicStyle={{ '--w': `${occupancy}%` }}></DynamicDiv>
                                                         </div>
                                                         <span className="text-[10px] font-bold text-white">{occupancy}%</span>
                                                     </div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { cn } from '../../lib/utils';
 import { toast } from 'react-hot-toast';
+import { DynamicDiv } from '../../components/DynamicDiv';
 
 interface Member {
     id: string;
@@ -34,6 +35,8 @@ export function GraduationPanel() {
         }
     }>({});
 
+    const [masteryMap, setMasteryMap] = useState<Record<string, number>>({});
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -49,8 +52,14 @@ export function GraduationPanel() {
             if (membersRes.error) throw membersRes.error;
             if (beltsRes.error) throw beltsRes.error;
 
-            calculateEligibility(membersRes.data || [], beltsRes.data || []);
+            const eligible = calculateEligibility(membersRes.data || [], beltsRes.data || []);
+            setEligibleMembers(eligible);
             setSelectedMembers([]);
+
+            // Fetch Mastery Data for Eligible Members
+            if (eligible.length > 0) {
+                await fetchMasteryData(eligible);
+            }
 
         } catch (error) {
             console.error('Error fetching graduation data:', error);
@@ -58,6 +67,44 @@ export function GraduationPanel() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const fetchMasteryData = async (eligible: { member: Member, currentBelt: Belt }[]) => {
+        const mastery: Record<string, number> = {};
+
+        // Optimisation: Fetch all techniques once (lightweight: id, belt_id)
+        const { data: allTechniques } = await supabase.from('techniques').select('id, belt_id');
+        if (!allTechniques) return;
+
+        // Fetch all mastered techniques for eligible members
+        const memberIds = eligible.map(e => e.member.id);
+        const { data: allMemberTechniques } = await supabase
+            .from('member_techniques')
+            .select('member_id, technique_id, status')
+            .in('member_id', memberIds)
+            .in('status', ['mastered', 'alone']);
+
+        eligible.forEach(({ member, currentBelt }) => {
+            // Filter techniques for this belt
+            const beltTechniqueIds = allTechniques
+                .filter(t => t.belt_id === currentBelt.id)
+                .map(t => t.id);
+
+            if (beltTechniqueIds.length === 0) {
+                mastery[member.id] = 100; // No techniques to master? Assume 100%
+                return;
+            }
+
+            // Count mastered
+            const masteredCount = allMemberTechniques?.filter(mt =>
+                mt.member_id === member.id &&
+                beltTechniqueIds.includes(mt.technique_id)
+            ).length || 0;
+
+            mastery[member.id] = Math.round((masteredCount / beltTechniqueIds.length) * 100);
+        });
+
+        setMasteryMap(mastery);
     };
 
     const calculateEligibility = (membersList: Member[], beltsList: Belt[]) => {
@@ -83,7 +130,7 @@ export function GraduationPanel() {
             }
         });
 
-        setEligibleMembers(eligible);
+        return eligible;
     };
 
     const handleSelectMember = (memberId: string) => {
@@ -266,6 +313,18 @@ export function GraduationPanel() {
                                                 <span className="material-symbols-outlined text-base">bolt</span>
                                                 {member.xp.toLocaleString()} XP Total
                                             </div>
+                                            {typeof masteryMap[member.id] === 'number' && (
+                                                <div className="flex items-center gap-2 text-[10px] uppercase font-bold mt-1 tracking-wide">
+                                                    <div className={cn("w-2 h-2 rounded-full",
+                                                        masteryMap[member.id] >= 70 ? "bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)]" : "bg-orange-500 animate-pulse"
+                                                    )} />
+                                                    <span className={cn(
+                                                        masteryMap[member.id] >= 70 ? "text-green-500" : "text-orange-500"
+                                                    )}>
+                                                        {masteryMap[member.id]}% Domínio Técnico
+                                                    </span>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
@@ -274,9 +333,9 @@ export function GraduationPanel() {
 
                                         <div className="flex flex-col items-center gap-2 z-10">
                                             <span className="text-[10px] font-bold uppercase text-muted tracking-widest">Atual</span>
-                                            <div
+                                            <DynamicDiv
                                                 className="w-8 h-8 rounded-full shadow-lg border border-white/10 bg-dynamic-color"
-                                                style={{ '--dynamic-color': currentBelt.color } as React.CSSProperties}
+                                                dynamicStyle={{ '--dynamic-color': currentBelt.color }}
                                                 title={currentBelt.name}
                                             />
                                             <span className="text-xs font-bold text-slate-300 max-w-[80px] text-center truncate">{currentBelt.name}</span>
@@ -288,9 +347,9 @@ export function GraduationPanel() {
 
                                         <div className="flex flex-col items-center gap-2 z-10">
                                             <span className="text-[10px] font-bold uppercase text-primary tracking-widest">Próxima</span>
-                                            <div
+                                            <DynamicDiv
                                                 className="w-10 h-10 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)] border-2 border-primary bg-dynamic-color"
-                                                style={{ '--dynamic-color': nextBelt.color } as React.CSSProperties}
+                                                dynamicStyle={{ '--dynamic-color': nextBelt.color }}
                                                 title={nextBelt.name}
                                             />
                                             <span className="text-xs font-bold text-white max-w-[80px] text-center truncate">{nextBelt.name}</span>

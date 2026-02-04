@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { cn } from '../../lib/utils';
+import { DynamicDiv } from '../../components/DynamicDiv';
 
 interface Belt {
     id: string;
@@ -159,9 +160,9 @@ export function BeltManagement() {
                                 <div className="flex flex-col gap-2">
                                     <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Cor Principal</span>
                                     <div className="flex items-center gap-4 h-12">
-                                        <div
+                                        <DynamicDiv
                                             className="w-12 h-12 rounded-xl border border-border-slate shadow-inner bg-dynamic-color"
-                                            style={{ '--dynamic-color': formData.color } as React.CSSProperties}
+                                            dynamicStyle={{ '--dynamic-color': formData.color }}
                                         />
                                         <input
                                             type="color"
@@ -178,16 +179,16 @@ export function BeltManagement() {
                                 <div className="flex flex-col gap-2">
                                     <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Cor Secundária (Opcional)</span>
                                     <div className="flex items-center gap-4 h-12">
-                                        <div
+                                        <DynamicDiv
                                             className="w-12 h-12 rounded-xl border border-border-slate shadow-inner relative overflow-hidden bg-dynamic-color"
-                                            style={{ '--dynamic-color': formData.color_secondary || 'transparent' } as React.CSSProperties}
+                                            dynamicStyle={{ '--dynamic-color': formData.color_secondary || 'transparent' }}
                                         >
                                             {!formData.color_secondary && (
                                                 <div className="absolute inset-0 flex items-center justify-center">
                                                     <span className="text-[10px] text-muted opacity-50">N/A</span>
                                                 </div>
                                             )}
-                                        </div>
+                                        </DynamicDiv>
                                         <div className="flex-1 flex items-center gap-2">
                                             <input
                                                 type="color"
@@ -271,8 +272,9 @@ export function BeltManagement() {
                             </div>
                         </form>
                     </div>
-                </div>
-            )}
+                </div >
+            )
+            }
 
             <div className="bg-card rounded-3xl border border-border-slate overflow-hidden shadow-sm">
                 <div className="overflow-x-auto">
@@ -311,14 +313,14 @@ export function BeltManagement() {
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-4">
                                                 <div className="relative w-12 h-5 rounded-full border border-white/20 shadow-sm overflow-hidden flex">
-                                                    <div
+                                                    <DynamicDiv
                                                         className="h-full flex-1"
-                                                        style={{ backgroundColor: belt.color } as React.CSSProperties}
+                                                        dynamicStyle={{ backgroundColor: belt.color }}
                                                     />
                                                     {belt.color_secondary && (
-                                                        <div
+                                                        <DynamicDiv
                                                             className="h-full flex-1"
-                                                            style={{ backgroundColor: belt.color_secondary } as React.CSSProperties}
+                                                            dynamicStyle={{ backgroundColor: belt.color_secondary }}
                                                         />
                                                     )}
                                                 </div>
@@ -351,6 +353,6 @@ export function BeltManagement() {
                     </table>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

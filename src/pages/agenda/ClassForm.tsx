@@ -18,6 +18,7 @@ export function ClassForm() {
         max_students: 20,
         type: 'Gi',
         lesson_plan: '',
+        allowed_groups: [] as string[],
     });
     const [groups, setGroups] = useState<{ id: string, name: string }[]>([]);
     const [activeTab, setActiveTab] = useState<'details' | 'plan' | 'attendance'>('details');
@@ -45,7 +46,8 @@ export function ClassForm() {
             const endDate = new Date(data.end_time);
 
             setFormData({
-                group_id: '', // Group ID isn't stored in classes table directly based on insert
+                group_id: '',
+                allowed_groups: data.allowed_groups || [],
                 title: data.title,
                 instructor: data.instructor,
                 date: startDate.toISOString().split('T')[0],
@@ -67,18 +69,17 @@ export function ClassForm() {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
-        // Auto-fill title if group is selected
-        if (name === 'group_id') {
-            const group = groups.find(g => g.id === value);
-            if (group) {
-                setFormData(prev => ({
-                    ...prev,
-                    group_id: value,
-                    title: group.name
-                }));
+    const handleGroupToggle = (groupName: string) => {
+        setFormData(prev => {
+            const current = prev.allowed_groups || [];
+            if (current.includes(groupName)) {
+                return { ...prev, allowed_groups: current.filter(g => g !== groupName) };
+            } else {
+                return { ...prev, allowed_groups: [...current, groupName] };
             }
-        }
+        });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -98,6 +99,7 @@ export function ClassForm() {
             type: formData.type,
             status: 'Scheduled',
             lesson_plan: formData.lesson_plan,
+            allowed_groups: formData.allowed_groups,
         };
 
         const { error } = id
@@ -162,18 +164,25 @@ export function ClassForm() {
                     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <label className="flex flex-col w-full md:col-span-2">
-                                <p className="text-white text-sm font-semibold leading-normal pb-2">Turma / Modalidade</p>
-                                <select
-                                    name="group_id"
-                                    value={formData.group_id}
-                                    onChange={handleChange}
-                                    className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-base font-normal transition-all outline-none mb-2 hover:border-white/20"
-                                >
-                                    <option value="">Selecione uma turma (Opcional)...</option>
-                                    {groups.map(g => (
-                                        <option key={g.id} value={g.id}>{g.name}</option>
+                                <p className="text-white text-sm font-semibold leading-normal pb-2">Turmas Participantes</p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1 bg-main p-3 rounded-lg border border-border-slate">
+                                    {groups.map(grp => (
+                                        <label key={grp.id} className={`flex items-center gap-3 p-2 rounded-lg border cursor-pointer transition-all ${formData.allowed_groups.includes(grp.name) ? 'bg-primary/20 border-primary' : 'bg-card border-border-slate hover:border-gray-500'}`}>
+                                            <div className={`w-5 h-5 rounded flex items-center justify-center border shrink-0 ${formData.allowed_groups.includes(grp.name) ? 'bg-primary border-primary' : 'border-gray-500'}`}>
+                                                {formData.allowed_groups.includes(grp.name) && <span className="material-symbols-outlined text-white text-[16px]">check</span>}
+                                            </div>
+                                            <input
+                                                type="checkbox"
+                                                className="hidden"
+                                                checked={formData.allowed_groups.includes(grp.name)}
+                                                onChange={() => handleGroupToggle(grp.name)}
+                                            />
+                                            <span className="text-white text-sm font-medium leading-tight">{grp.name}</span>
+                                        </label>
                                     ))}
-                                </select>
+                                    {groups.length === 0 && <p className="text-muted text-xs">Nenhuma turma cadastrada.</p>}
+                                </div>
+                                <p className="text-muted text-[10px] mt-1 italic">* Selecione quais turmas podem participar desta aula.</p>
                             </label>
 
                             <label className="flex flex-col w-full md:col-span-2">

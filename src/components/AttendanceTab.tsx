@@ -44,6 +44,25 @@ export function AttendanceTab({ classId, date, classTitle }: AttendanceTabProps)
             if (membersError) throw membersError;
             setMembers(membersData || []);
 
+            // 2. Fetch Class Settings (Allowed Groups)
+            const { data: classData } = await supabase
+                .from('classes')
+                .select('allowed_groups')
+                .eq('id', classId)
+                .single();
+
+            const allowedGroups: string[] = classData?.allowed_groups || [];
+
+            // Filter members locally if allowedGroups has values
+            if (allowedGroups.length > 0) {
+                const filtered = (membersData || []).filter((m: Member) =>
+                    m.enrolled_classes && m.enrolled_classes.some((g: string) => allowedGroups.includes(g))
+                );
+                setMembers(filtered);
+            }
+            // If no allowed groups defined, show all (or keep previous behavior)
+
+
             // Fetch existing attendance
             const { data: attendanceData, error: attendanceError } = await supabase
                 .from('attendance')

@@ -16,6 +16,8 @@ import { BadgeManagement } from './pages/gamification/BadgeManagement';
 import { BeltManagement } from './pages/gamification/BeltManagement';
 import { Leaderboard } from './pages/gamification/Leaderboard';
 import { GraduationPanel } from './pages/gamification/GraduationPanel';
+import { StudentEvolution } from './pages/gamification/StudentEvolution';
+import { CurriculumManagement } from './pages/gamification/CurriculumManagement';
 import { Settings } from './pages/Settings';
 
 function App() {
@@ -40,6 +42,8 @@ function App() {
           <Route path="badges" element={<BadgeManagement />} />
           <Route path="gamification/leaderboard" element={<Leaderboard />} />
           <Route path="gamification/graduation" element={<GraduationPanel />} />
+          <Route path="gamification/evolution" element={<StudentEvolution />} />
+          <Route path="gamification/curriculum" element={<CurriculumManagement />} />
           <Route path="competitions" element={<PlaceholderPage title="Competições" />} />
           <Route path="finance" element={<Finance />} />
           <Route path="finance/new" element={<PaymentForm />} />

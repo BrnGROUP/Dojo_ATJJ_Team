@@ -29,6 +29,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         { label: 'Faixas & Graduação', icon: 'military_tech', path: '/belts' },
         { label: 'Insígnias (Badges)', icon: 'workspace_premium', path: '/badges' },
         { label: 'Ranking', icon: 'trophy', path: '/gamification/leaderboard' },
+        { label: 'Evolução', icon: 'monitoring', path: '/gamification/evolution' },
+        { label: 'Currículo', icon: 'menu_book', path: '/gamification/curriculum' },
         { label: 'Graduação', icon: 'upgrade', path: '/gamification/graduation' },
     ];
 
