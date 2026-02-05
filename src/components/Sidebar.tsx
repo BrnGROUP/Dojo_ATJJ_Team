@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../lib/utils';
+import { useAuth } from '../lib/auth';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -8,9 +9,9 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
     const location = useLocation();
+    const { profile, isAdmin, isManager } = useAuth();
 
     // Close sidebar when route changes on mobile
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     const handleLinkClick = () => {
         if (window.innerWidth < 768) {
             onClose();
@@ -35,10 +36,15 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     ];
 
     const adminItems = [
-        { label: 'Financeiro', icon: 'payments', path: '/finance' },
-        { label: 'Relatórios', icon: 'analytics', path: '/reports' },
-        { label: 'Configurações', icon: 'settings', path: '/settings' },
+        { label: 'Financeiro', icon: 'payments', path: '/finance', roles: ['admin', 'manager', 'coordinator'] },
+        { label: 'Usuários', icon: 'manage_accounts', path: '/users', roles: ['admin', 'manager'] },
+        { label: 'Relatórios', icon: 'analytics', path: '/reports', roles: ['admin', 'manager', 'coordinator'] },
+        { label: 'Configurações', icon: 'settings', path: '/settings', roles: ['admin'] },
     ];
+
+    const filteredAdminItems = adminItems.filter(item =>
+        !item.roles || (profile && item.roles.includes(profile.role))
+    );
 
     return (
         <>
@@ -109,33 +115,40 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         </Link>
                     ))}
 
-                    <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 mt-8 opacity-50">Administrativo</p>
-                    {adminItems.map((item) => (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            onClick={handleLinkClick}
-                            className={cn(
-                                "sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200",
-                                location.pathname === item.path
-                                    ? "bg-primary/10 text-primary hover:bg-primary/20"
-                                    : "text-muted hover:bg-white/5 hover:text-white"
-                            )}
-                        >
-                            <span className={cn("material-symbols-outlined", location.pathname === item.path && "fill-current")}>{item.icon}</span>
-                            {item.label}
-                        </Link>
-                    ))}
+                    {filteredAdminItems.length > 0 && (
+                        <>
+                            <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 mt-8 opacity-50">Administrativo</p>
+                            {filteredAdminItems.map((item) => (
+                                <Link
+                                    key={item.path}
+                                    to={item.path}
+                                    onClick={handleLinkClick}
+                                    className={cn(
+                                        "sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200",
+                                        location.pathname === item.path
+                                            ? "bg-primary/10 text-primary hover:bg-primary/20"
+                                            : "text-muted hover:bg-white/5 hover:text-white"
+                                    )}
+                                >
+                                    <span className={cn("material-symbols-outlined", location.pathname === item.path && "fill-current")}>{item.icon}</span>
+                                    {item.label}
+                                </Link>
+                            ))}
+                        </>
+                    )}
                 </nav>
-                <div className="p-6 border-t border-border-slate">
-                    <div className="bg-card rounded-2xl p-4 border border-border-slate">
-                        <p className="text-[11px] font-medium text-muted mb-2">Plano Premium</p>
-                        <div className="h-1.5 w-full bg-main rounded-full mb-3">
-                            <div className="h-full bg-primary w-2/3 rounded-full shadow-[0_0_10px_rgba(215,38,56,0.5)]"></div>
+
+                {(isAdmin || isManager) && (
+                    <div className="p-6 border-t border-border-slate">
+                        <div className="bg-card rounded-2xl p-4 border border-border-slate">
+                            <p className="text-[11px] font-medium text-muted mb-2">Plano Premium</p>
+                            <div className="h-1.5 w-full bg-main rounded-full mb-3">
+                                <div className="h-full bg-primary w-2/3 rounded-full shadow-[0_0_10px_rgba(215,38,56,0.5)]"></div>
+                            </div>
+                            <button className="text-[10px] font-bold text-primary hover:text-white uppercase tracking-wider transition-colors">Ver detalhes</button>
                         </div>
-                        <button className="text-[10px] font-bold text-primary hover:text-white uppercase tracking-wider transition-colors">Ver detalhes</button>
                     </div>
-                </div>
+                )}
             </aside>
         </>
     );

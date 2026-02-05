@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../lib/auth';
 import { XPModal } from '../../components/XPModal';
 
 interface Member {
@@ -20,6 +21,8 @@ export function MembersList() {
     const [loading, setLoading] = useState(true);
     const [xpModalOpen, setXpModalOpen] = useState(false);
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+    const { isAdmin, isManager, isCoordinator } = useAuth();
+    const canManageMembers = isAdmin || isManager || isCoordinator;
 
     useEffect(() => {
         fetchMembers();
@@ -79,11 +82,16 @@ export function MembersList() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Lista de Alunos</h1>
-                <Link to="/members/new" className="flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all">
-                    <span className="material-symbols-outlined mr-2 text-[20px]">person_add</span>
-                    <span className="truncate">+ Novo Aluno</span>
-                </Link>
+                <div className="flex flex-col gap-1">
+                    <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Alunos</h1>
+                    <p className="text-muted text-sm font-medium leading-normal">Gerencie os alunos do Dojo, suas graduações e planos.</p>
+                </div>
+                {canManageMembers && (
+                    <Link to="/members/new" className="flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all">
+                        <span className="material-symbols-outlined mr-2 text-[20px]">person_add</span>
+                        <span className="truncate">+ Novo Aluno</span>
+                    </Link>
+                )}
             </div>
 
             <div className="bg-card rounded-xl border border-border-slate p-4 shadow-sm">
@@ -156,8 +164,8 @@ export function MembersList() {
                                         </td>
                                         <td className="px-4 md:px-6 py-4 hidden sm:table-cell">
                                             <div className="flex items-center gap-2">
-                                                <span className={`size-3 rounded-full shadow-sm border border-zinc-700 ${getBeltBg(member.belt)}`}></span>
-                                                <span className={`${getBeltColor(member.belt)} text-xs font-bold`}>
+                                                <span className={`size - 3 rounded - full shadow - sm border border - zinc - 700 ${getBeltBg(member.belt)} `}></span>
+                                                <span className={`${getBeltColor(member.belt)} text - xs font - bold`}>
                                                     {member.belt}
                                                 </span>
                                             </div>
@@ -169,31 +177,41 @@ export function MembersList() {
                                             </div>
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-center">
-                                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${member.status === 'Active' ? 'bg-emerald-900/30 text-emerald-400' :
+                                            <span className={`inline - flex items - center rounded - full px - 2 py - 0.5 text - [10px] font - bold uppercase ${member.status === 'Active' ? 'bg-emerald-900/30 text-emerald-400' :
                                                 member.status === 'Paused' ? 'bg-yellow-900/30 text-yellow-400' :
                                                     'bg-red-900/30 text-red-400'
-                                                }`}>
+                                                } `}>
                                                 {member.status === 'Active' ? 'Ativo' : member.status === 'Paused' ? 'Pausado' : 'Inativo'}
                                             </span>
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-right">
                                             <div className="flex justify-end gap-1 md:gap-2 text-slate-400">
-                                                <button
-                                                    onClick={() => {
-                                                        setSelectedMember(member);
-                                                        setXpModalOpen(true);
-                                                    }}
-                                                    className="p-1 hover:text-primary transition-colors group"
-                                                    title="Gerenciar XP"
+                                                {canManageMembers && (
+                                                    <button
+                                                        onClick={() => {
+                                                            setSelectedMember(member);
+                                                            setXpModalOpen(true);
+                                                        }}
+                                                        className="p-1 hover:text-primary transition-colors group"
+                                                        title="Gerenciar XP"
+                                                    >
+                                                        <span className="material-symbols-outlined text-[18px] md:text-[20px] group-hover:animate-pulse">bolt</span>
+                                                    </button>
+                                                )}
+                                                <Link
+                                                    to={`/ members / ${canManageMembers ? '' : 'view/'}${member.id} `}
+                                                    className="p-1 hover:text-primary transition-colors"
+                                                    title={canManageMembers ? "Editar" : "Ver Detalhes"}
                                                 >
-                                                    <span className="material-symbols-outlined text-[18px] md:text-[20px] group-hover:animate-pulse">bolt</span>
-                                                </button>
-                                                <Link to={`/members/${member.id}`} className="p-1 hover:text-primary transition-colors" title="Editar">
-                                                    <span className="material-symbols-outlined text-[18px] md:text-[20px]">edit</span>
+                                                    <span className="material-symbols-outlined text-[18px] md:text-[20px]">
+                                                        {canManageMembers ? 'edit' : 'visibility'}
+                                                    </span>
                                                 </Link>
-                                                <button className="p-1 hover:text-red-500 transition-colors" title="Desativar">
-                                                    <span className="material-symbols-outlined text-[18px] md:text-[20px]">do_not_disturb_on</span>
-                                                </button>
+                                                {canManageMembers && (
+                                                    <button className="p-1 hover:text-red-500 transition-colors" title="Desativar">
+                                                        <span className="material-symbols-outlined text-[18px] md:text-[20px]">do_not_disturb_on</span>
+                                                    </button>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>

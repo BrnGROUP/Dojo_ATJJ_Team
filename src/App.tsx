@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './lib/auth';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './layouts/Layout';
 import { Dashboard } from './pages/Dashboard';
 import { Login } from './pages/Login';
@@ -19,39 +21,62 @@ import { GraduationPanel } from './pages/gamification/GraduationPanel';
 import { StudentEvolution } from './pages/gamification/StudentEvolution';
 import { CurriculumManagement } from './pages/gamification/CurriculumManagement';
 import { Settings } from './pages/Settings';
+import { UsersList } from './pages/users/UsersList';
+import { UserForm } from './pages/users/UserForm';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="members" element={<MembersList />} />
-          <Route path="members/new" element={<MemberForm />} />
-          <Route path="members/:id" element={<MemberForm />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
 
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Dashboard />} />
 
-          <Route path="agenda" element={<Agenda />} />
-          <Route path="agenda/new" element={<ClassForm />} />
-          <Route path="agenda/edit/:id" element={<ClassForm />} />
-          <Route path="groups" element={<GroupList />} />
-          <Route path="groups/new" element={<GroupForm />} />
-          <Route path="groups/:id" element={<GroupForm />} />
-          <Route path="belts" element={<BeltManagement />} />
-          <Route path="badges" element={<BadgeManagement />} />
-          <Route path="gamification/leaderboard" element={<Leaderboard />} />
-          <Route path="gamification/graduation" element={<GraduationPanel />} />
-          <Route path="gamification/evolution" element={<StudentEvolution />} />
-          <Route path="gamification/curriculum" element={<CurriculumManagement />} />
-          <Route path="competitions" element={<PlaceholderPage title="Competições" />} />
-          <Route path="finance" element={<Finance />} />
-          <Route path="finance/new" element={<PaymentForm />} />
-          <Route path="reports" element={<PlaceholderPage title="Relatórios" />} />
-          <Route path="settings" element={<Settings />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+              {/* Rotas acessíveis por todos os autenticados */}
+              <Route path="agenda" element={<Agenda />} />
+              <Route path="members" element={<MembersList />} />
+              <Route path="gamification/leaderboard" element={<Leaderboard />} />
+              <Route path="gamification/evolution" element={<StudentEvolution />} />
+
+              {/* Staff (Admin, Manager, Coordinator) */}
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'manager', 'coordinator']} />}>
+                <Route path="members/new" element={<MemberForm />} />
+                <Route path="members/:id" element={<MemberForm />} />
+                <Route path="agenda/new" element={<ClassForm />} />
+                <Route path="agenda/edit/:id" element={<ClassForm />} />
+                <Route path="groups" element={<GroupList />} />
+                <Route path="groups/new" element={<GroupForm />} />
+                <Route path="groups/:id" element={<GroupForm />} />
+                <Route path="belts" element={<BeltManagement />} />
+                <Route path="badges" element={<BadgeManagement />} />
+                <Route path="gamification/graduation" element={<GraduationPanel />} />
+                <Route path="gamification/curriculum" element={<CurriculumManagement />} />
+                <Route path="finance" element={<Finance />} />
+                <Route path="finance/new" element={<PaymentForm />} />
+                <Route path="reports" element={<PlaceholderPage title="Relatórios" />} />
+                <Route path="competitions" element={<PlaceholderPage title="Competições" />} />
+              </Route>
+
+              {/* Admin & Manager Only Routes */}
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'manager']} />}>
+                <Route path="users" element={<UsersList />} />
+                <Route path="users/:id" element={<UserForm />} />
+              </Route>
+
+              {/* Admin Only Routes */}
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="settings" element={<Settings />} />
+              </Route>
+            </Route>
+          </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

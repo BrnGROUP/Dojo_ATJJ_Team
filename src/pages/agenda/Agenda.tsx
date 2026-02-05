@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Link } from 'react-router-dom';
 import { DynamicDiv } from '../../components/DynamicDiv';
+import { useAuth } from '../../lib/auth';
 
 interface ClassSession {
     id: string;
@@ -19,6 +20,8 @@ export function Agenda() {
     const [classes, setClasses] = useState<ClassSession[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('all'); // all, today, week
+    const { isAdmin, isManager, isCoordinator } = useAuth();
+    const canManageClasses = isAdmin || isManager || isCoordinator;
 
     useEffect(() => {
         async function fetchClasses() {
@@ -73,10 +76,12 @@ export function Agenda() {
                             Hoje
                         </button>
                     </div>
-                    <Link to="/agenda/new" className="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all">
-                        <span className="material-symbols-outlined mr-2 text-[20px]">add_circle</span>
-                        <span className="truncate">Nova Aula</span>
-                    </Link>
+                    {canManageClasses && (
+                        <Link to="/agenda/new" className="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all">
+                            <span className="material-symbols-outlined mr-2 text-[20px]">add_circle</span>
+                            <span className="truncate">Nova Aula</span>
+                        </Link>
+                    )}
                 </div>
             </div>
 
@@ -141,25 +146,29 @@ export function Agenda() {
                                             <td className="px-4 md:px-6 py-4 text-right">
                                                 <div className="flex justify-end gap-1 md:gap-2 text-slate-400">
                                                     <Link
-                                                        to={`/agenda/edit/${cls.id}`}
+                                                        to={`/agenda/${canManageClasses ? 'edit/' : ''}${cls.id}`}
                                                         className="p-1 hover:text-primary transition-colors"
-                                                        title="Editar"
+                                                        title={canManageClasses ? "Editar" : "Ver Detalhes"}
                                                     >
-                                                        <span className="material-symbols-outlined text-[18px] md:text-[20px]">edit</span>
+                                                        <span className="material-symbols-outlined text-[18px] md:text-[20px]">
+                                                            {canManageClasses ? 'edit' : 'visibility'}
+                                                        </span>
                                                     </Link>
-                                                    <button
-                                                        onClick={async () => {
-                                                            if (confirm('Tem certeza que deseja cancelar esta aula?')) {
-                                                                const { error } = await supabase.from('classes').delete().eq('id', cls.id);
-                                                                if (error) alert('Erro ao excluir aula.');
-                                                                else window.location.reload();
-                                                            }
-                                                        }}
-                                                        className="p-1 hover:text-red-500 transition-colors"
-                                                        title="Cancelar Aula"
-                                                    >
-                                                        <span className="material-symbols-outlined text-[18px] md:text-[20px]">delete</span>
-                                                    </button>
+                                                    {canManageClasses && (
+                                                        <button
+                                                            onClick={async () => {
+                                                                if (confirm('Tem certeza que deseja cancelar esta aula?')) {
+                                                                    const { error } = await supabase.from('classes').delete().eq('id', cls.id);
+                                                                    if (error) alert('Erro ao excluir aula.');
+                                                                    else window.location.reload();
+                                                                }
+                                                            }}
+                                                            className="p-1 hover:text-red-500 transition-colors"
+                                                            title="Cancelar Aula"
+                                                        >
+                                                            <span className="material-symbols-outlined text-[18px] md:text-[20px]">delete</span>
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </td>
                                         </tr>
