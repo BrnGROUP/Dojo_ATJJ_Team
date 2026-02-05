@@ -1,83 +1,25 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../lib/auth';
-import { XPModal } from '../../components/XPModal';
 
-interface Member {
-    id: string;
-    full_name: string;
-    email: string;
-    belt: string;
-    stripes: number;
-    plan: string;
-    enrolled_classes: string[];
-    status: string;
-    xp: number;
-}
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../lib/auth';
+import { useMembers } from '../../hooks/useMembers';
+import type { Member } from '../../hooks/useMembers';
+import { XPModal } from '../../components/XPModal';
+import { BeltAvatar } from '../../components/shared/BeltAvatar';
+import { getBeltColor, getBeltBg } from '../../lib/ui-utils';
 
 export function MembersList() {
-    const [members, setMembers] = useState<Member[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { members, loading, refresh } = useMembers();
     const [xpModalOpen, setXpModalOpen] = useState(false);
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const { isAdmin, isManager, isCoordinator } = useAuth();
     const canManageMembers = isAdmin || isManager || isCoordinator;
+    const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        fetchMembers();
-    }, []);
-
-    async function fetchMembers() {
-        setLoading(true);
-        const { data, error } = await supabase
-            .from('members')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-        if (error) {
-            console.error('Error fetching members:', error);
-        } else {
-            setMembers(data || []);
-        }
-        setLoading(false);
-    }
-
-    const getBeltColor = (belt: string) => {
-        const b = belt?.toLowerCase() || '';
-        if (b.includes('azul')) return 'text-blue-500';
-        if (b.includes('roxa')) return 'text-purple-500';
-        if (b.includes('marrom')) return 'text-amber-700';
-        if (b.includes('preta')) return 'text-white drop-shadow-[0_0_2px_rgba(255,255,255,0.5)]';
-        if (b.includes('cinza')) return 'text-slate-400';
-        if (b.includes('amarela')) return 'text-yellow-400';
-        if (b.includes('laranja')) return 'text-orange-500';
-        if (b.includes('verde')) return 'text-green-500';
-        return 'text-slate-200';
-    };
-
-    const getBeltBg = (belt: string) => {
-        const b = belt?.toLowerCase() || '';
-        if (b.includes('branca')) return 'bg-white';
-        if (b.includes('azul')) return 'bg-blue-600';
-        if (b.includes('roxa')) return 'bg-purple-600';
-        if (b.includes('marrom')) return 'bg-[#422e25]';
-        if (b.includes('preta')) return 'bg-black border-red-600 border-r-4';
-        if (b.includes('cinza')) return 'bg-slate-500';
-        if (b.includes('amarela')) return 'bg-yellow-400';
-        if (b.includes('laranja')) return 'bg-orange-500';
-        if (b.includes('verde')) return 'bg-green-600';
-        return 'bg-slate-200';
-    };
-
-    const getInitials = (name: string) => {
-        return name
-            .split(' ')
-            .map((n) => n[0])
-            .join('')
-            .substring(0, 2)
-            .toUpperCase();
-    };
+    const filteredMembers = members.filter(m =>
+        m.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        m.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div className="space-y-6">
@@ -102,7 +44,12 @@ export function MembersList() {
                                 <div className="text-muted flex items-center justify-center pl-4 bg-main">
                                     <span className="material-symbols-outlined">search</span>
                                 </div>
-                                <input className="flex w-full min-w-0 flex-1 resize-none overflow-hidden text-white focus:outline-0 focus:ring-0 border-none bg-main focus:border-none h-full placeholder:text-muted px-4 pl-2 text-sm font-normal leading-normal" placeholder="Pesquisar por nome ou e-mail..." />
+                                <input
+                                    className="flex w-full min-w-0 flex-1 resize-none overflow-hidden text-white focus:outline-0 focus:ring-0 border-none bg-main focus:border-none h-full placeholder:text-muted px-4 pl-2 text-sm font-normal leading-normal"
+                                    placeholder="Pesquisar por nome ou e-mail..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
                             </div>
                         </label>
                     </div>
@@ -126,20 +73,18 @@ export function MembersList() {
                         <tbody className="divide-y divide-border-slate/50">
                             {loading ? (
                                 <tr>
-                                    <td colSpan={6} className="px-6 py-8 text-center text-muted">Carregando alunos...</td>
+                                    <td colSpan={7} className="px-6 py-8 text-center text-muted">Carregando alunos...</td>
                                 </tr>
-                            ) : members.length === 0 ? (
+                            ) : filteredMembers.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="px-6 py-8 text-center text-muted">Nenhum aluno encontrado.</td>
+                                    <td colSpan={7} className="px-6 py-8 text-center text-muted">Nenhum aluno encontrado.</td>
                                 </tr>
                             ) : (
-                                members.map((member) => (
+                                filteredMembers.map((member) => (
                                     <tr key={member.id} className="hover:bg-main/30 transition-colors group">
                                         <td className="px-4 md:px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs shrink-0">
-                                                    {getInitials(member.full_name)}
-                                                </div>
+                                                <BeltAvatar name={member.full_name} belt={member.belt} size="md" showGlow={false} />
                                                 <div className="flex flex-col">
                                                     <span className="text-white text-sm font-semibold truncate max-w-[120px] sm:max-w-none">{member.full_name}</span>
                                                     <span className="text-[10px] text-muted sm:hidden">Faixa {member.belt}</span>
@@ -164,8 +109,8 @@ export function MembersList() {
                                         </td>
                                         <td className="px-4 md:px-6 py-4 hidden sm:table-cell">
                                             <div className="flex items-center gap-2">
-                                                <span className={`size - 3 rounded - full shadow - sm border border - zinc - 700 ${getBeltBg(member.belt)} `}></span>
-                                                <span className={`${getBeltColor(member.belt)} text - xs font - bold`}>
+                                                <span className={`w-3 h-3 rounded-full shadow-sm border border-zinc-700 ${getBeltBg(member.belt)}`}></span>
+                                                <span className={`${getBeltColor(member.belt)} text-xs font-bold`}>
                                                     {member.belt}
                                                 </span>
                                             </div>
@@ -177,10 +122,10 @@ export function MembersList() {
                                             </div>
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-center">
-                                            <span className={`inline - flex items - center rounded - full px - 2 py - 0.5 text - [10px] font - bold uppercase ${member.status === 'Active' ? 'bg-emerald-900/30 text-emerald-400' :
+                                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${member.status === 'Active' ? 'bg-emerald-900/30 text-emerald-400' :
                                                 member.status === 'Paused' ? 'bg-yellow-900/30 text-yellow-400' :
                                                     'bg-red-900/30 text-red-400'
-                                                } `}>
+                                                }`}>
                                                 {member.status === 'Active' ? 'Ativo' : member.status === 'Paused' ? 'Pausado' : 'Inativo'}
                                             </span>
                                         </td>
@@ -199,7 +144,7 @@ export function MembersList() {
                                                     </button>
                                                 )}
                                                 <Link
-                                                    to={`/ members / ${canManageMembers ? '' : 'view/'}${member.id} `}
+                                                    to={`/members/${canManageMembers ? '' : 'view/'}${member.id}`}
                                                     className="p-1 hover:text-primary transition-colors"
                                                     title={canManageMembers ? "Editar" : "Ver Detalhes"}
                                                 >
@@ -233,7 +178,7 @@ export function MembersList() {
                     memberId={selectedMember.id}
                     memberName={selectedMember.full_name}
                     currentXP={selectedMember.xp || 0}
-                    onSuccess={fetchMembers}
+                    onSuccess={refresh}
                 />
             )}
         </div>

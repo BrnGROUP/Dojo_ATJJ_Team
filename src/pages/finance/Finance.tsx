@@ -1,53 +1,12 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabase';
-import { Link } from 'react-router-dom';
 
-interface Payment {
-    id: string;
-    description: string;
-    amount: number;
-    due_date: string;
-    paid_date: string | null;
-    status: string;
-    type: string;
-    members: {
-        full_name: string;
-    };
-}
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useFinance } from '../../hooks/useFinance';
+import { StatCard } from '../../components/shared/StatCard';
 
 export function Finance() {
-    const [payments, setPayments] = useState<Payment[]>([]);
-    const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('all'); // all, pending, paid, overdue
-
-    useEffect(() => {
-        fetchPayments();
-    }, [filter]);
-
-    async function fetchPayments() {
-        setLoading(true);
-        let query = supabase
-            .from('payments')
-            .select('*, members(full_name)')
-            .order('due_date', { ascending: false });
-
-        if (filter === 'pending') {
-            query = query.eq('status', 'Pending');
-        } else if (filter === 'paid') {
-            query = query.eq('status', 'Paid');
-        } else if (filter === 'overdue') {
-            query = query.eq('status', 'Overdue');
-        }
-
-        const { data, error } = await query;
-
-        if (error) {
-            console.error('Error fetching payments:', error);
-        } else {
-            setPayments(data || []);
-        }
-        setLoading(false);
-    }
+    const { payments, stats, loading } = useFinance(filter);
 
     const formatDate = (dateStr: string) => {
         if (!dateStr) return '-';
@@ -79,7 +38,10 @@ export function Finance() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Financeiro</h1>
+                <div className="flex flex-col gap-1">
+                    <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Financeiro</h1>
+                    <p className="text-muted text-sm font-medium">Controle de mensalidades e lançamentos do Dojo.</p>
+                </div>
                 <div className="flex gap-3">
                     <div className="flex bg-main rounded-lg p-1 border border-border-slate">
                         <button onClick={() => setFilter('all')} className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${filter === 'all' ? 'bg-primary text-white shadow-sm' : 'text-muted hover:text-white'}`}>Todos</button>
@@ -93,41 +55,24 @@ export function Finance() {
                 </div>
             </div>
 
-            {/* KPI Summary (Simulated) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-card p-6 rounded-xl border border-border-slate">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                            <span className="material-symbols-outlined">payments</span>
-                        </div>
-                        <div>
-                            <p className="text-muted text-xs font-bold uppercase">Recebido (Mês)</p>
-                            <h3 className="text-2xl font-black text-white">R$ 12.450,00</h3>
-                        </div>
-                    </div>
-                </div>
-                <div className="bg-card p-6 rounded-xl border border-border-slate">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-500">
-                            <span className="material-symbols-outlined">pending_actions</span>
-                        </div>
-                        <div>
-                            <p className="text-muted text-xs font-bold uppercase">A Receber</p>
-                            <h3 className="text-2xl font-black text-white">R$ 3.800,00</h3>
-                        </div>
-                    </div>
-                </div>
-                <div className="bg-card p-6 rounded-xl border border-border-slate">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center text-red-500">
-                            <span className="material-symbols-outlined">warning</span>
-                        </div>
-                        <div>
-                            <p className="text-muted text-xs font-bold uppercase">Em Atraso</p>
-                            <h3 className="text-2xl font-black text-white">R$ 850,00</h3>
-                        </div>
-                    </div>
-                </div>
+                <StatCard
+                    label="Recebido (Total)"
+                    value={formatCurrency(stats.totalPaid)}
+                    className="border-emerald-500/20"
+                />
+                <StatCard
+                    label="Pendente"
+                    value={formatCurrency(stats.totalPending)}
+                    className="border-amber-500/20"
+                    trendType="neutral"
+                />
+                <StatCard
+                    label="Em Atraso"
+                    value={formatCurrency(stats.totalOverdue)}
+                    className="border-red-500/20"
+                    trendType="negative"
+                />
             </div>
 
             <div className="bg-card rounded-xl border border-border-slate shadow-sm overflow-hidden">
@@ -178,7 +123,7 @@ export function Finance() {
                                             </span>
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-right">
-                                            <button className="text-slate-400 hover:text-white transition-colors text-[18px] md:text-[20px] font-bold material-symbols-outlined">edit</button>
+                                            <Link to={`/finance/edit/${pay.id}`} className="text-slate-400 hover:text-white transition-colors text-[18px] md:text-[20px] font-bold material-symbols-outlined">edit</Link>
                                         </td>
                                     </tr>
                                 ))

@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +25,7 @@ export function Login() {
                     password,
                 });
                 if (error) throw error;
-                toast.success('Login realizado com sucesso!');
+                toast.success('Bem-vindo de volta!');
             } else {
                 const { error } = await supabase.auth.signUp({
                     email,
@@ -32,25 +33,23 @@ export function Login() {
                     options: {
                         data: {
                             full_name: fullName,
-                            role: 'admin' // First user typically wants to be admin
+                            role: 'admin'
                         }
                     }
                 });
                 if (error) throw error;
-                toast.success('Conta criada! Você já pode entrar.');
+                toast.success('Conta criada com sucesso!');
                 setMode('login');
             }
             navigate('/');
         } catch (err: any) {
             console.error('Auth error:', err);
             setError(err.message || 'Erro ao processar solicitação.');
-            toast.error(mode === 'login' ? 'Credenciais inválidas.' : 'Erro ao criar conta.');
+            toast.error(mode === 'login' ? 'E-mail ou senha incorretos.' : 'Erro ao criar conta.');
         } finally {
             setLoading(false);
         }
     };
-
-
 
     return (
         <div className="bg-main min-h-screen flex flex-col font-display text-white">
@@ -71,16 +70,11 @@ export function Login() {
                         </h1>
 
                         {error && (
-                            <div className="mb-6 animate-fade-in">
-                                <div className="flex flex-col items-start justify-between gap-3 rounded-lg border border-red-900/50 bg-red-950/20 p-4">
-                                    <div className="flex items-start gap-3">
-                                        <span className="material-symbols-outlined text-red-500">error</span>
-                                        <div className="flex flex-col gap-1">
-                                            <p className="text-red-400 text-sm font-bold leading-tight">Falha na Autenticação</p>
-                                            <p className="text-red-300 text-xs font-normal leading-normal">{error}</p>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="mb-6 animate-fade-in border border-red-500/20 bg-red-500/10 p-4 rounded-xl text-red-500 text-sm font-medium">
+                                <p className="flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-base">error</span>
+                                    {error}
+                                </p>
                             </div>
                         )}
 
@@ -88,11 +82,11 @@ export function Login() {
                             {mode === 'signup' && (
                                 <div className="flex flex-col gap-1">
                                     <label className="flex flex-col w-full">
-                                        <p className="text-muted text-sm font-medium leading-normal pb-1.5">Nome Completo</p>
+                                        <p className="text-muted text-sm font-medium pb-1.5">Nome Completo</p>
                                         <div className="relative">
                                             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted text-xl">person</span>
                                             <input
-                                                className="form-input flex w-full rounded-lg text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-slate bg-main h-12 placeholder:text-muted/50 pl-10 pr-4 text-sm font-normal"
+                                                className="flex w-full rounded-lg text-white border border-border-slate bg-main h-12 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50 outline-none transition-all"
                                                 placeholder="Seu nome"
                                                 type="text"
                                                 value={fullName}
@@ -105,11 +99,11 @@ export function Login() {
                             )}
                             <div className="flex flex-col gap-1">
                                 <label className="flex flex-col w-full">
-                                    <p className="text-muted text-sm font-medium leading-normal pb-1.5">E-mail</p>
+                                    <p className="text-muted text-sm font-medium pb-1.5">E-mail</p>
                                     <div className="relative">
                                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted text-xl">mail</span>
                                         <input
-                                            className="form-input flex w-full rounded-lg text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-slate bg-main h-12 placeholder:text-muted/50 pl-10 pr-4 text-sm font-normal"
+                                            className="flex w-full rounded-lg text-white border border-border-slate bg-main h-12 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50 outline-none transition-all"
                                             placeholder="ex: sensei@atjjdojo.com"
                                             type="email"
                                             value={email}
@@ -121,11 +115,11 @@ export function Login() {
                             </div>
                             <div className="flex flex-col gap-1">
                                 <label className="flex flex-col w-full">
-                                    <p className="text-muted text-sm font-medium leading-normal pb-1.5">Senha</p>
+                                    <p className="text-muted text-sm font-medium pb-1.5">Senha</p>
                                     <div className="relative">
                                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted text-xl">lock</span>
                                         <input
-                                            className="form-input flex w-full rounded-lg text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-slate bg-main h-12 placeholder:text-muted/50 pl-10 pr-4 text-sm font-normal"
+                                            className="flex w-full rounded-lg text-white border border-border-slate bg-main h-12 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50 outline-none transition-all"
                                             placeholder="••••••••"
                                             type="password"
                                             value={password}
@@ -159,13 +153,11 @@ export function Login() {
                                 {mode === 'login' ? 'Não tem conta? Cadastre-se' : 'Já tem conta? Clique para entrar'}
                             </button>
                         </div>
-
-
                     </div>
                 </div>
             </main>
             <footer className="py-6 text-center text-muted text-xs">
-                © 2024 ATJJ Dojo v4 Sistema de Gestão. Todos os direitos reservados.
+                © 2024 Aranha Team Jiu-Jitsu. Todos os direitos reservados.
             </footer>
         </div>
     );

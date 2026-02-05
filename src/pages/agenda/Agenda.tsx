@@ -1,53 +1,16 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabase';
+
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DynamicDiv } from '../../components/DynamicDiv';
 import { useAuth } from '../../lib/auth';
-
-interface ClassSession {
-    id: string;
-    title: string;
-    instructor: string;
-    start_time: string;
-    end_time: string;
-    max_students: number;
-    enrolled_count: number;
-    status: string;
-    type: string;
-}
+import { useAgenda } from '../../hooks/useAgenda';
+import { toast } from 'react-hot-toast';
 
 export function Agenda() {
-    const [classes, setClasses] = useState<ClassSession[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [filter, setFilter] = useState('all'); // all, today, week
+    const [filter, setFilter] = useState('all'); // all, today
+    const { classes, loading, deleteClass } = useAgenda(filter);
     const { isAdmin, isManager, isCoordinator } = useAuth();
     const canManageClasses = isAdmin || isManager || isCoordinator;
-
-    useEffect(() => {
-        async function fetchClasses() {
-            setLoading(true);
-            let query = supabase
-                .from('classes')
-                .select('*')
-                .order('start_time', { ascending: true });
-
-            if (filter === 'today') {
-                const today = new Date().toISOString().split('T')[0];
-                query = query.gte('start_time', `${today}T00:00:00`).lte('start_time', `${today}T23:59:59`);
-            }
-
-            const { data, error } = await query;
-
-            if (error) {
-                console.error('Error fetching classes:', error);
-            } else {
-                setClasses(data || []);
-            }
-            setLoading(false);
-        }
-
-        fetchClasses();
-    }, [filter]);
 
     const formatTime = (dateStr: string) => {
         return new Date(dateStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -57,10 +20,24 @@ export function Agenda() {
         return new Date(dateStr).toLocaleDateString();
     };
 
+    const handleDelete = async (id: string) => {
+        if (window.confirm('Tem certeza que deseja cancelar esta aula?')) {
+            const success = await deleteClass(id);
+            if (success) {
+                toast.success('Aula cancelada com sucesso!');
+            } else {
+                toast.error('Erro ao excluir aula.');
+            }
+        }
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Agenda de Aulas</h1>
+                <div className="flex flex-col gap-1">
+                    <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Agenda</h1>
+                    <p className="text-muted text-sm font-medium leading-normal">Horários das aulas e presença dos alunos.</p>
+                </div>
                 <div className="flex gap-3">
                     <div className="flex bg-main rounded-lg p-1 border border-border-slate">
                         <button
@@ -140,7 +117,7 @@ export function Agenda() {
                                                     cls.type === 'No-Gi' ? 'bg-primary/10 border-primary/20 text-primary' :
                                                         'bg-green-500/10 border-green-500/20 text-green-500'
                                                     }`}>
-                                                    {cls.type}
+                                                    {cls.type || 'Básico'}
                                                 </span>
                                             </td>
                                             <td className="px-4 md:px-6 py-4 text-right">
@@ -156,13 +133,7 @@ export function Agenda() {
                                                     </Link>
                                                     {canManageClasses && (
                                                         <button
-                                                            onClick={async () => {
-                                                                if (confirm('Tem certeza que deseja cancelar esta aula?')) {
-                                                                    const { error } = await supabase.from('classes').delete().eq('id', cls.id);
-                                                                    if (error) alert('Erro ao excluir aula.');
-                                                                    else window.location.reload();
-                                                                }
-                                                            }}
+                                                            onClick={() => handleDelete(cls.id)}
                                                             className="p-1 hover:text-red-500 transition-colors"
                                                             title="Cancelar Aula"
                                                         >

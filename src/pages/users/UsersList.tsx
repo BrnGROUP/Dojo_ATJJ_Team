@@ -1,72 +1,45 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
-import { toast } from 'react-hot-toast';
 
-interface UserProfile {
-    id: string;
-    full_name: string;
-    email: string;
-    role: 'admin' | 'manager' | 'coordinator' | 'instructor' | 'student';
-    created_at: string;
-}
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { useUsers } from '../../hooks/useUsers';
+import { BeltAvatar } from '../../components/shared/BeltAvatar';
 
 export function UsersList() {
-    const [users, setUsers] = useState<UserProfile[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { users, loading } = useUsers();
+    const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        fetchUsers();
-    }, []);
-
-    async function fetchUsers() {
-        setLoading(true);
-        const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-        if (error) {
-            console.error('Error fetching users:', error);
-            toast.error('Erro ao carregar usuários. Verifique se a tabela "profiles" existe.');
-        } else {
-            setUsers(data || []);
-        }
-        setLoading(false);
-    }
+    const filteredUsers = users.filter(u =>
+        u.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        u.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     const getRoleLabel = (role: string) => {
-        switch (role) {
-            case 'admin': return 'Administrador';
-            case 'manager': return 'Gerente';
-            case 'coordinator': return 'Coordenador';
-            case 'instructor': return 'Instrutor';
-            case 'student': return 'Aluno';
-            default: return role;
-        }
+        const labels: Record<string, string> = {
+            admin: 'Administrador',
+            manager: 'Gerente',
+            coordinator: 'Coordenador',
+            instructor: 'Instrutor',
+            student: 'Aluno'
+        };
+        return labels[role] || role;
     };
 
     const getRoleColor = (role: string) => {
-        switch (role) {
-            case 'admin': return 'bg-red-900/30 text-red-400 border-red-500/30';
-            case 'manager': return 'bg-purple-900/30 text-purple-400 border-purple-500/30';
-            case 'coordinator': return 'bg-blue-900/30 text-blue-400 border-blue-500/30';
-            case 'instructor': return 'bg-emerald-900/30 text-emerald-400 border-emerald-500/30';
-            default: return 'bg-slate-900/30 text-slate-400 border-slate-500/30';
-        }
-    };
-
-    const getInitials = (name: string) => {
-        return name
-            ? name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-            : 'U';
+        const colors: Record<string, string> = {
+            admin: 'bg-red-900/30 text-red-400 border-red-500/30',
+            manager: 'bg-purple-900/30 text-purple-400 border-purple-500/30',
+            coordinator: 'bg-blue-900/30 text-blue-400 border-blue-500/30',
+            instructor: 'bg-emerald-900/30 text-emerald-400 border-emerald-500/30'
+        };
+        return colors[role] || 'bg-slate-900/30 text-slate-400 border-slate-500/30';
     };
 
     return (
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex flex-col gap-1">
-                    <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Gestão de Usuários</h1>
+                    <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Gestão de Equipe</h1>
                     <p className="text-muted text-sm font-medium">Controle de acessos e níveis de permissão do sistema.</p>
                 </div>
                 <button
@@ -86,7 +59,12 @@ export function UsersList() {
                                 <div className="text-muted flex items-center justify-center pl-4 bg-main">
                                     <span className="material-symbols-outlined">search</span>
                                 </div>
-                                <input className="flex w-full min-w-0 flex-1 resize-none overflow-hidden text-white focus:outline-0 focus:ring-0 border-none bg-main focus:border-none h-full placeholder:text-muted px-4 pl-2 text-sm font-normal leading-normal" placeholder="Pesquisar por nome ou e-mail..." />
+                                <input
+                                    className="flex w-full min-w-0 flex-1 resize-none overflow-hidden text-white focus:outline-0 focus:ring-0 border-none bg-main focus:border-none h-full placeholder:text-muted px-4 pl-2 text-sm font-normal leading-normal"
+                                    placeholder="Pesquisar por nome ou e-mail..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
                             </div>
                         </label>
                     </div>
@@ -110,22 +88,18 @@ export function UsersList() {
                                 <tr>
                                     <td colSpan={5} className="px-6 py-8 text-center text-muted">Carregando usuários...</td>
                                 </tr>
-                            ) : users.length === 0 ? (
+                            ) : filteredUsers.length === 0 ? (
                                 <tr>
                                     <td colSpan={5} className="px-6 py-8 text-center text-muted">
                                         Nenhum usuário encontrado.
-                                        <br />
-                                        <span className="text-[11px] text-primary mt-2 block">Dica: Rode o script SQL criado para criar a tabela "profiles".</span>
                                     </td>
                                 </tr>
                             ) : (
-                                users.map((user) => (
+                                filteredUsers.map((user) => (
                                     <tr key={user.id} className="hover:bg-main/30 transition-colors group">
                                         <td className="px-4 md:px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs shrink-0">
-                                                    {getInitials(user.full_name)}
-                                                </div>
+                                                <BeltAvatar name={user.full_name} belt="white" size="sm" showGlow={false} />
                                                 <div className="flex flex-col">
                                                     <span className="text-white text-sm font-semibold truncate max-w-[120px] sm:max-w-none">{user.full_name || 'Sem nome'}</span>
                                                 </div>
