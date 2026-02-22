@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { cn } from '../../lib/utils';
+import { toast } from 'react-hot-toast';
 import { DynamicDiv } from '../../components/DynamicDiv';
 import { EvaluationsList } from '../members/EvaluationsList';
 import { TechniqueChecklist } from './TechniqueChecklist';
@@ -28,6 +29,12 @@ interface MemberEvolution {
     xp_progress: number;
     stripes_earned: number; // 0-4
     next_stripe_progress: number; // 0-100% to next individual stripe
+    xp_logs: {
+        id: string;
+        amount: number;
+        reason: string;
+        created_at: string;
+    }[];
 }
 
 
@@ -162,6 +169,14 @@ export function StudentEvolution() {
                     nextStripeProgress = 100;
                 }
 
+                // 6. Fetch XP Logs
+                const { data: xpLogs } = await supabase
+                    .from('xp_logs')
+                    .select('*')
+                    .eq('member_id', m.id)
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+
                 return {
                     ...m,
                     belt: currentBeltObj ? currentBeltObj.name : m.belt,
@@ -171,7 +186,8 @@ export function StudentEvolution() {
                     current_belt_obj: currentBeltObj,
                     xp_progress: Math.round(progress),
                     stripes_earned: stripesEarned,
-                    next_stripe_progress: Math.round(nextStripeProgress)
+                    next_stripe_progress: Math.round(nextStripeProgress),
+                    xp_logs: xpLogs || []
                 };
             });
 
@@ -181,6 +197,53 @@ export function StudentEvolution() {
             console.error(error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleAwardStripe = async (member: MemberEvolution) => {
+        if (member.stripes >= 4) {
+            toast.error('Aluno já possui o limite máximo de graus nesta faixa.');
+            return;
+        }
+
+        const confirmed = window.confirm(`Deseja conceder oficialmente o ${member.stripes + 1}º Grau para ${member.full_name}?`);
+        if (!confirmed) return;
+
+        try {
+            // 1. Update Member
+            const { error: membError } = await supabase
+                .from('members')
+                .update({ stripes: member.stripes + 1 })
+                .eq('id', member.id);
+
+            if (membError) throw membError;
+
+            // 2. Log Evaluation
+            const { error: evalError } = await supabase
+                .from('evaluations')
+                .insert({
+                    member_id: member.id,
+                    type: 'Outorga de Grau',
+                    status: 'Aprovado',
+                    score: 100,
+                    notes: `Outorgado o ${member.stripes + 1}º Grau por mérito técnico e de presença.`,
+                    belt_snapshot: member.belt
+                });
+
+            if (evalError) throw evalError;
+
+            // 3. Log XP (optional bonus XP for degree)
+            await supabase.from('xp_logs').insert({
+                member_id: member.id,
+                amount: 50,
+                reason: `Bônus: Recebeu o ${member.stripes + 1}º Grau`
+            });
+
+            toast.success('Grau outorgado com sucesso!');
+            fetchEvolutionData();
+        } catch (error) {
+            console.error('Error awarding stripe:', error);
+            toast.error('Erro ao outorgar grau.');
         }
     };
 
@@ -296,6 +359,17 @@ export function StudentEvolution() {
                                             <span className="text-[10px] bg-primary/20 text-primary px-1.5 rounded font-bold">
                                                 {selectedMember.xp_progress}%
                                             </span>
+                                            {selectedMember.stripes_earned > selectedMember.stripes && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleAwardStripe(selectedMember);
+                                                    }}
+                                                    className="ml-2 text-[8px] bg-green-500 text-white px-2 py-0.5 rounded-full font-black animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.4)]"
+                                                >
+                                                    OUTORGAR {selectedMember.stripes + 1}º GRAU
+                                                </button>
+                                            )}
                                         </div>
 
                                         {/* Stripes Visual */}
@@ -388,17 +462,34 @@ export function StudentEvolution() {
                             {/* Technical Evolution (Evaluations) */}
                             <EvaluationsList memberId={selectedMember.id} currentBelt={selectedMember.belt} />
 
-                            {/* Additional Gamification / Notes could go here */}
-                            <div className="bg-card rounded-3xl border border-border-slate p-6">
-                                <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
-                                    <span className="material-symbols-outlined text-primary">history</span>
-                                    Última Atividade
+                            {/* Evolution Timeline (XP Logs) */}
+                            <div className="bg-card rounded-3xl border border-border-slate p-6 md:p-8">
+                                <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-6">
+                                    <span className="material-symbols-outlined text-primary">timeline</span>
+                                    Linha do Tempo de XP
                                 </h3>
-                                <p className="text-muted text-sm">
-                                    {selectedMember.last_presence
-                                        ? `Última presença registrada em ${new Date(selectedMember.last_presence).toLocaleDateString()} às ${new Date(selectedMember.last_presence).toLocaleTimeString()}.`
-                                        : "Nhuma presença registrada nos últimos 90 dias."}
-                                </p>
+                                {selectedMember.xp_logs.length > 0 ? (
+                                    <div className="space-y-4 relative before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-white/5">
+                                        {selectedMember.xp_logs.map(log => (
+                                            <div key={log.id} className="relative pl-8 group">
+                                                <div className="absolute left-0 top-1.5 w-5 h-5 rounded-full bg-zinc-900 border-2 border-primary group-hover:scale-110 transition-transform flex items-center justify-center">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                                </div>
+                                                <div className="flex justify-between items-start">
+                                                    <div>
+                                                        <p className="text-sm font-bold text-slate-200">{log.reason}</p>
+                                                        <p className="text-[10px] text-muted uppercase font-bold tracking-widest">{new Date(log.created_at).toLocaleString('pt-BR')}</p>
+                                                    </div>
+                                                    <span className="bg-primary/10 text-primary text-[10px] font-black px-2 py-0.5 rounded-full border border-primary/20">
+                                                        +{log.amount} XP
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-muted text-sm italic">Nenhuma atividade de gamificação registrada recentemente.</p>
+                                )}
                             </div>
 
                         </div>

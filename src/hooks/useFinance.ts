@@ -19,6 +19,7 @@ export interface FinanceStats {
     totalPaid: number;
     totalPending: number;
     totalOverdue: number;
+    projectedRevenue: number;
 }
 
 export function useFinance(filter: string = 'all') {
@@ -28,6 +29,7 @@ export function useFinance(filter: string = 'all') {
         totalPaid: 0,
         totalPending: 0,
         totalOverdue: 0,
+        projectedRevenue: 0,
     });
     const [error, setError] = useState<any>(null);
 
@@ -65,7 +67,18 @@ export function useFinance(filter: string = 'all') {
                     if (curr.status === 'Pending') acc.totalPending += curr.amount;
                     if (curr.status === 'Overdue') acc.totalOverdue += curr.amount;
                     return acc;
-                }, { totalPaid: 0, totalPending: 0, totalOverdue: 0 });
+                }, { totalPaid: 0, totalPending: 0, totalOverdue: 0, projectedRevenue: 0 });
+
+                // Calculate Projected Revenue (Monthly Fees of Active Members)
+                const { data: activeMembers } = await supabase
+                    .from('members')
+                    .select('monthly_fee')
+                    .eq('status', 'active');
+
+                if (activeMembers) {
+                    newStats.projectedRevenue = activeMembers.reduce((sum, m) => sum + (m.monthly_fee || 0), 0);
+                }
+
                 setStats(newStats);
             }
 

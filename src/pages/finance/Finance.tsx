@@ -1,8 +1,8 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useFinance } from '../../hooks/useFinance';
 import { StatCard } from '../../components/shared/StatCard';
+import { DynamicDiv } from '../../components/DynamicDiv';
 
 export function Finance() {
     const [filter, setFilter] = useState('all'); // all, pending, paid, overdue
@@ -55,24 +55,47 @@ export function Finance() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatCard
-                    label="Recebido (Total)"
+                    label="Recebido (Mês)"
                     value={formatCurrency(stats.totalPaid)}
                     className="border-emerald-500/20"
+                    trendType="positive"
+                    trend="Confirmado"
                 />
                 <StatCard
-                    label="Pendente"
-                    value={formatCurrency(stats.totalPending)}
-                    className="border-amber-500/20"
+                    label="Previsão Próx. Mês"
+                    value={formatCurrency(stats.projectedRevenue)}
+                    className="border-blue-500/20"
                     trendType="neutral"
+                    trend="Meta"
                 />
                 <StatCard
                     label="Em Atraso"
                     value={formatCurrency(stats.totalOverdue)}
                     className="border-red-500/20"
                     trendType="negative"
+                    trend="Atrasado"
                 />
+                <div className="bg-card rounded-3xl border border-border-slate p-6 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <span className="material-symbols-outlined text-4xl">monitoring</span>
+                    </div>
+                    <div className="relative z-10">
+                        <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">Taxa de Conversão</p>
+                        <h4 className="text-2xl font-black text-white italic">
+                            {stats.projectedRevenue > 0
+                                ? Math.round((stats.totalPaid / stats.projectedRevenue) * 100)
+                                : 0}%
+                        </h4>
+                        <div className="w-full h-1 bg-main rounded-full mt-2 overflow-hidden">
+                            <DynamicDiv
+                                className="h-full bg-primary"
+                                dynamicStyle={{ width: `${stats.projectedRevenue > 0 ? (stats.totalPaid / stats.projectedRevenue) * 100 : 0}%` }}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className="bg-card rounded-xl border border-border-slate shadow-sm overflow-hidden">
@@ -103,19 +126,37 @@ export function Finance() {
                                         <td className="px-4 md:px-6 py-4">
                                             <div className="flex flex-col">
                                                 <span className="text-white text-sm font-bold truncate max-w-[120px] sm:max-w-none">{pay.members?.full_name || 'Aluno Removido'}</span>
-                                                <span className="text-[10px] text-muted sm:hidden uppercase font-bold tracking-wider">{pay.description}</span>
+                                                <div className="flex items-center gap-1">
+                                                    <span className="text-[10px] text-muted sm:hidden uppercase font-bold tracking-wider">{pay.description}</span>
+                                                    <span className="text-[9px] bg-white/5 text-slate-500 px-1 rounded sm:hidden">{pay.type}</span>
+                                                </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 hidden sm:table-cell">
-                                            <span className="text-slate-300 text-sm">{pay.description}</span>
-                                            <span className="block text-[10px] text-muted uppercase tracking-wider">{pay.type}</span>
+                                            <div className="flex items-start gap-2">
+                                                <span className="material-symbols-outlined text-muted text-sm mt-0.5">
+                                                    {pay.type === 'Mensalidade' ? 'payments' : 'reorder'}
+                                                </span>
+                                                <div>
+                                                    <span className="text-slate-300 text-sm font-medium">{pay.description}</span>
+                                                    <span className="block text-[10px] text-muted uppercase tracking-wider font-bold">{pay.type}</span>
+                                                </div>
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4 hidden lg:table-cell">
-                                            <span className="text-slate-300 text-sm font-medium">{formatDate(pay.due_date)}</span>
+                                            <div className="flex items-center gap-2 text-slate-300">
+                                                <span className="material-symbols-outlined text-sm opacity-50">calendar_month</span>
+                                                <span className="text-sm font-medium">{formatDate(pay.due_date)}</span>
+                                            </div>
                                         </td>
                                         <td className="px-4 md:px-6 py-4">
-                                            <span className="text-white text-sm font-bold">{formatCurrency(pay.amount)}</span>
-                                            <span className="block text-[9px] text-muted lg:hidden font-bold">{formatDate(pay.due_date)}</span>
+                                            <div className="flex flex-col">
+                                                <span className="text-white text-sm font-black italic">{formatCurrency(pay.amount)}</span>
+                                                <span className="text-[9px] text-muted lg:hidden font-bold flex items-center gap-1">
+                                                    <span className="material-symbols-outlined text-[10px]">event</span>
+                                                    {formatDate(pay.due_date)}
+                                                </span>
+                                            </div>
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-center">
                                             <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase border ${getStatusColor(pay.status)}`}>
