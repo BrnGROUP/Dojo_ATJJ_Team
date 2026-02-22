@@ -33,6 +33,7 @@ export function MemberForm() {
         cep: '',
         city: '',
         state: 'SP',
+        type: 'student',
     });
 
     const { cities, loadingCities } = useCities(formData.state);
@@ -90,6 +91,7 @@ export function MemberForm() {
                     cep: data.cep || '',
                     city: data.city || '',
                     state: data.state || 'SP',
+                    type: data.type || 'student',
                 });
             }
         } catch (err) {
@@ -143,6 +145,7 @@ export function MemberForm() {
             cep: formData.cep,
             city: formData.city,
             state: formData.state,
+            type: formData.type,
         };
 
         try {
@@ -218,7 +221,29 @@ export function MemberForm() {
                                     placeholder="Ex: Hélio Gracie"
                                     required
                                 />
-
+                                <div className="w-full space-y-2">
+                                    <label className="text-slate-400 text-xs font-bold uppercase tracking-wider ml-1">Categoria / Vínculo</label>
+                                    <div className="relative group">
+                                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">
+                                            groups_3
+                                        </span>
+                                        <select
+                                            name="type"
+                                            title="Selecione a Categoria"
+                                            value={formData.type}
+                                            onChange={handleChange}
+                                            className="w-full bg-main border border-border-slate rounded-xl py-3 px-12 text-white text-sm outline-none transition-all duration-300 focus:border-primary focus:ring-1 focus:ring-primary/30 appearance-none cursor-pointer"
+                                        >
+                                            <option value="student" className="bg-zinc-900">Aluno(a)</option>
+                                            <option value="instructor" className="bg-zinc-900">Instrutor(a)</option>
+                                            <option value="teacher" className="bg-zinc-900">Professor(a)</option>
+                                            <option value="staff" className="bg-zinc-900">Colaborador / Staff</option>
+                                        </select>
+                                        <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
+                                            expand_more
+                                        </span>
+                                    </div>
+                                </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     <Input
                                         label="E-mail"

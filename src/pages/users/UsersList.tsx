@@ -5,13 +5,13 @@ import { toast } from 'react-hot-toast';
 import { useUsers } from '../../hooks/useUsers';
 import { useAuth } from '../../lib/auth';
 import { BeltAvatar } from '../../components/shared/BeltAvatar';
-import { InviteUserModal } from '../../components/InviteUserModal';
+import { CreateUserModal } from '../../components/CreateUserModal';
 
 export function UsersList() {
     const { users, loading, refresh } = useUsers();
     const { user: currentAuthUser } = useAuth();
     const [searchTerm, setSearchTerm] = useState('');
-    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     const filteredUsers = users.filter(u =>
         u.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -47,11 +47,11 @@ export function UsersList() {
                     <p className="text-muted text-sm font-medium">Controle de acessos e níveis de permissão do sistema.</p>
                 </div>
                 <button
-                    onClick={() => setIsInviteModalOpen(true)}
+                    onClick={() => setIsCreateModalOpen(true)}
                     className="flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all shadow-lg shadow-primary/20"
                 >
                     <span className="material-symbols-outlined mr-2 text-[20px]">person_add</span>
-                    <span className="truncate">Convidar Usuário</span>
+                    <span className="truncate">Novo Usuário</span>
                 </button>
             </div>
 
@@ -172,10 +172,10 @@ export function UsersList() {
                 </div>
             </div>
 
-            {/* Invite Modal */}
-            <InviteUserModal
-                isOpen={isInviteModalOpen}
-                onClose={() => setIsInviteModalOpen(false)}
+            {/* Create Modal */}
+            <CreateUserModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
                 onSuccess={() => {
                     refresh();
                     toast.success('Lista de usuários atualizada.');

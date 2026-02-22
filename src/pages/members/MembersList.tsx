@@ -16,23 +16,36 @@ export function MembersList() {
     const { isAdmin, isManager, isCoordinator } = useAuth();
     const canManageMembers = isAdmin || isManager || isCoordinator;
     const [searchTerm, setSearchTerm] = useState('');
+    const [typeFilter, setTypeFilter] = useState('all'); // all, student, instructor, teacher, staff
 
-    const filteredMembers = members.filter(m =>
-        m.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        m.email?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredMembers = members.filter(m => {
+        const matchesSearch = m.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            m.email?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesType = typeFilter === 'all' || m.type === typeFilter;
+        return matchesSearch && matchesType;
+    });
+
+    const getTypeLabel = (type: string) => {
+        const labels: Record<string, string> = {
+            student: 'Aluno',
+            instructor: 'Instrutor',
+            teacher: 'Professor',
+            staff: 'Equipe'
+        };
+        return labels[type] || 'Aluno';
+    };
 
     return (
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex flex-col gap-1">
-                    <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Alunos</h1>
-                    <p className="text-muted text-sm font-medium leading-normal">Gerencie os alunos do Dojo, suas graduações e planos.</p>
+                    <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Equipe & Alunos</h1>
+                    <p className="text-muted text-sm font-medium leading-normal">Gerencie todos os membros do Dojo, desde alunos até professores.</p>
                 </div>
                 {canManageMembers && (
-                    <Link to="/members/new" className="flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all">
+                    <Link to="/members/new" className="flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all shadow-lg shadow-primary/20">
                         <span className="material-symbols-outlined mr-2 text-[20px]">person_add</span>
-                        <span className="truncate">+ Novo Aluno</span>
+                        <span className="truncate">+ Novo Membro</span>
                     </Link>
                 )}
             </div>
@@ -53,6 +66,12 @@ export function MembersList() {
                                 />
                             </div>
                         </label>
+                    </div>
+                    <div className="flex bg-main rounded-lg p-1 border border-border-slate">
+                        <button onClick={() => setTypeFilter('all')} className={`px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all ${typeFilter === 'all' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Todos</button>
+                        <button onClick={() => setTypeFilter('student')} className={`px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all ${typeFilter === 'student' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Alunos</button>
+                        <button onClick={() => setTypeFilter('instructor')} className={`px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all ${typeFilter === 'instructor' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Instrutores</button>
+                        <button onClick={() => setTypeFilter('teacher')} className={`px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all ${typeFilter === 'teacher' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Professores</button>
                     </div>
                 </div>
             </div>
@@ -88,7 +107,16 @@ export function MembersList() {
                                                 <BeltAvatar name={member.full_name} belt={member.belt} size="md" showGlow={false} />
                                                 <div className="flex flex-col">
                                                     <span className="text-white text-sm font-semibold truncate max-w-[120px] sm:max-w-none">{member.full_name}</span>
-                                                    <span className="text-[10px] text-muted sm:hidden">Faixa {member.belt}</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className={`text-[9px] px-1.5 py-0.5 rounded border ${member.type === 'teacher' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
+                                                                member.type === 'instructor' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
+                                                                    member.type === 'staff' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
+                                                                        'bg-slate-500/10 text-slate-400 border-slate-500/20'
+                                                            } font-bold uppercase tracking-wider`}>
+                                                            {getTypeLabel(member.type || 'student')}
+                                                        </span>
+                                                        <span className="text-[10px] text-muted sm:hidden font-medium">Faixa {member.belt}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>

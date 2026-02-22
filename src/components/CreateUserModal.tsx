@@ -2,17 +2,19 @@ import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { toast } from 'react-hot-toast';
 
-interface InviteUserModalProps {
+interface CreateUserModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSuccess: () => void;
 }
 
-export function InviteUserModal({ isOpen, onClose, onSuccess }: InviteUserModalProps) {
+export function CreateUserModal({ isOpen, onClose, onSuccess }: CreateUserModalProps) {
     const [email, setEmail] = useState('');
     const [fullName, setFullName] = useState('');
+    const [password, setPassword] = useState('');
     const [role, setRole] = useState('student');
     const [loading, setLoading] = useState(false);
+    const [creationMethod, setCreationMethod] = useState<'invite' | 'manual'>('invite');
 
     const roles = [
         { id: 'admin', label: 'Administrador' },
@@ -29,39 +31,50 @@ export function InviteUserModal({ isOpen, onClose, onSuccess }: InviteUserModalP
         setLoading(true);
 
         try {
-            // No Supabase, sem Service Role no frontend, a melhor forma de "convidar"
-            // é enviar um link de login (Magic Link). Isso criará o registro em auth.users.
-            // O trigger no banco então criará o perfil.
+            if (creationMethod === 'invite') {
+                const { error: inviteError } = await supabase.auth.signInWithOtp({
+                    email,
+                    options: {
+                        data: {
+                            full_name: fullName,
+                            role: role
+                        },
+                        emailRedirectTo: `${window.location.origin}/auth/callback`
+                    }
+                });
+                if (inviteError) throw inviteError;
+                toast.success(`Convite enviado para ${email}!`);
+            } else {
+                // Cadastro Manual com Senha
+                // Nota: No Supabase Client padrão, signUp cria e LOGA o novo usuário.
+                // Para cadastrar OUTROS sem deslogar, o ideal é uma Edge Function.
+                // Aqui faremos o flow de signUp e avisaremos sobre o login ou usaremos o profile.
 
-            const { error: inviteError } = await supabase.auth.signInWithOtp({
-                email,
-                options: {
-                    data: {
-                        full_name: fullName,
-                        role: role
-                    },
-                    // Redirecionar para trocar a senha ou completar o perfil
-                    emailRedirectTo: `${window.location.origin}/auth/callback`
-                }
-            });
+                const { error: signUpError } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            full_name: fullName,
+                            role: role
+                        }
+                    }
+                });
 
-            if (inviteError) throw inviteError;
+                if (signUpError) throw signUpError;
+                toast.success(`Usuário ${fullName} cadastrado com sucesso!`);
+            }
 
-            // Se o usuário já existir ou o convite for enviado, garantimos que o perfil tenha os dados certos
-            // (Isso é redundante se o trigger handle_new_user estiver funcionando, mas é seguro)
-
-            toast.success(`Convite enviado para ${email}!`);
             onSuccess();
             onClose();
-
-            // Limpar campos
             setEmail('');
             setFullName('');
+            setPassword('');
             setRole('student');
 
         } catch (error: any) {
-            console.error('Erro ao convidar:', error);
-            toast.error(error.message || 'Erro ao enviar convite');
+            console.error('Erro ao cadastrar:', error);
+            toast.error(error.message || 'Erro ao processar cadastro');
         } finally {
             setLoading(false);
         }
@@ -73,10 +86,25 @@ export function InviteUserModal({ isOpen, onClose, onSuccess }: InviteUserModalP
                 <div className="p-6 border-b border-border-slate flex justify-between items-center bg-main/50">
                     <h2 className="text-white text-xl font-bold flex items-center gap-2">
                         <span className="material-symbols-outlined text-primary">person_add</span>
-                        Convidar Novo Usuário
+                        Novo Usuário
                     </h2>
                     <button onClick={onClose} className="text-muted hover:text-white transition-colors">
                         <span className="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <div className="flex p-1 bg-main mx-6 mt-6 rounded-lg border border-border-slate">
+                    <button
+                        onClick={() => setCreationMethod('invite')}
+                        className={`flex-1 py-2 text-xs font-bold rounded-md transition-all ${creationMethod === 'invite' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}
+                    >
+                        Convidar por E-mail
+                    </button>
+                    <button
+                        onClick={() => setCreationMethod('manual')}
+                        className={`flex-1 py-2 text-xs font-bold rounded-md transition-all ${creationMethod === 'manual' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}
+                    >
+                        Cadastro Direto
                     </button>
                 </div>
 
@@ -105,6 +133,21 @@ export function InviteUserModal({ isOpen, onClose, onSuccess }: InviteUserModalP
                         />
                     </div>
 
+                    {creationMethod === 'manual' && (
+                        <div className="space-y-2 animate-in slide-in-from-top-2 duration-300">
+                            <label className="text-slate-400 text-xs font-bold uppercase tracking-wider ml-1">Senha Inicial</label>
+                            <input
+                                required
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full bg-main border border-border-slate rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-muted/30 text-sm"
+                                placeholder="Mínimo 6 caracteres"
+                                minLength={6}
+                            />
+                        </div>
+                    )}
+
                     <div className="space-y-2">
                         <label htmlFor="role-select" className="text-slate-400 text-xs font-bold uppercase tracking-wider ml-1">Nível de Acesso</label>
                         <select
@@ -122,7 +165,9 @@ export function InviteUserModal({ isOpen, onClose, onSuccess }: InviteUserModalP
 
                     <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 mt-4">
                         <p className="text-primary/80 text-[11px] leading-relaxed">
-                            <span className="font-bold uppercase">Nota:</span> O usuário receberá um e-mail com um link de acesso. Ao clicar, a conta será criada automaticamente com as permissões selecionadas.
+                            <span className="font-bold uppercase italic">Dica:</span> {creationMethod === 'invite' ?
+                                "O usuário receberá um link mágico para acessar sem senha." :
+                                "O usuário poderá logar imediatamente com o e-mail e a senha definida acima."}
                         </p>
                     </div>
 
@@ -142,7 +187,7 @@ export function InviteUserModal({ isOpen, onClose, onSuccess }: InviteUserModalP
                             {loading ? (
                                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                             ) : (
-                                "Enviar Convite"
+                                creationMethod === 'invite' ? "Enviar Convite" : "Cadastrar Agora"
                             )}
                         </button>
                     </div>

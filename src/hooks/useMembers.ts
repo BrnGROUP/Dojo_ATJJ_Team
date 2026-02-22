@@ -12,6 +12,7 @@ export interface Member {
     enrolled_classes: string[];
     status: string;
     xp: number;
+    type?: string;
 }
 
 export function useMembers() {
