@@ -85,7 +85,7 @@ export function StudentEvolution() {
                 .gte('created_at', ninetyDaysAgo.toISOString());
 
             // Process Data
-            const evolutionList = membersData?.map(m => {
+            const membersWithEvolution = await Promise.all(membersData?.map(async (m) => {
                 // Attendance
                 const memberAttendance = attendanceData?.filter(a => a.member_id === m.id) || [];
                 const lastPres = memberAttendance.length > 0
@@ -189,9 +189,9 @@ export function StudentEvolution() {
                     next_stripe_progress: Math.round(nextStripeProgress),
                     xp_logs: xpLogs || []
                 };
-            });
+            }));
 
-            setMembers(evolutionList || []);
+            setMembers(membersWithEvolution || []);
 
         } catch (error) {
             console.error(error);

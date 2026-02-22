@@ -205,10 +205,10 @@ export function Dashboard() {
                                         <span className="text-[9px] font-bold text-muted px-2 py-0.5 bg-card rounded-lg">{Math.floor(progress)}%</span>
                                     </div>
                                     <div className="h-2 w-full bg-card rounded-full overflow-hidden border border-border-slate">
-                                        <div
+                                        <DynamicDiv
                                             className="h-full bg-gradient-to-r from-primary to-primary/40 rounded-full shadow-[0_0_10px_rgba(215,38,54,0.3)] transition-all duration-1000"
-                                            style={{ width: `${progress}%` }}
-                                        ></div>
+                                            dynamicStyle={{ width: `${progress}%` }}
+                                        />
                                     </div>
                                 </div>
                             );
