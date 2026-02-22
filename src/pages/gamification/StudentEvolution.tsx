@@ -18,9 +18,12 @@ interface MemberEvolution {
         name: string;
         min_xp: number;
         color: string;
+        requirements: string;
     };
     current_belt_obj?: {
         color: string;
+        requirements: string;
+        min_xp: number;
     };
     xp_progress: number;
     stripes_earned: number; // 0-4
@@ -161,7 +164,7 @@ export function StudentEvolution() {
 
                 return {
                     ...m,
-                    belt: currentBeltObj ? currentBeltObj.name : m.belt, // Use the official name from belts table if found
+                    belt: currentBeltObj ? currentBeltObj.name : m.belt,
                     attendance_count: memberAttendance.length,
                     last_presence: lastPres,
                     next_belt: nextBelt,
@@ -288,10 +291,10 @@ export function StudentEvolution() {
                                     <div className="flex flex-col items-center gap-1 z-10 w-full px-4">
                                         <div className="flex justify-between w-full items-center">
                                             <span className="text-[10px] uppercase font-bold text-muted tracking-widest">
-                                                {selectedMember.stripes_earned}º Grau
+                                                {selectedMember.stripes_earned === 4 ? 'Pronto para Faixa' : `${selectedMember.stripes_earned}º Grau`}
                                             </span>
                                             <span className="text-[10px] bg-primary/20 text-primary px-1.5 rounded font-bold">
-                                                {selectedMember.next_stripe_progress}% do próx.
+                                                {selectedMember.xp_progress}%
                                             </span>
                                         </div>
 
@@ -299,14 +302,12 @@ export function StudentEvolution() {
                                         <div className="flex gap-1 w-full h-2 mt-1">
                                             {[0, 1, 2, 3].map(idx => (
                                                 <div key={idx} className="flex-1 bg-black/40 rounded-sm overflow-hidden relative border border-white/5">
-                                                    {/* Filled Stripes */}
                                                     {idx < selectedMember.stripes_earned && (
-                                                        <div className="absolute inset-0 bg-white" />
+                                                        <div className="absolute inset-0 bg-white shadow-[0_0_5px_rgba(255,255,255,0.5)]" />
                                                     )}
-                                                    {/* Progressing Stripe */}
                                                     {idx === selectedMember.stripes_earned && (
                                                         <DynamicDiv
-                                                            className="absolute inset-y-0 left-0 bg-primary opacity-50"
+                                                            className="absolute inset-y-0 left-0 bg-primary/60"
                                                             dynamicStyle={{ width: `${selectedMember.next_stripe_progress}%` }}
                                                         />
                                                     )}
@@ -315,13 +316,69 @@ export function StudentEvolution() {
                                         </div>
 
                                         <div className="flex justify-between w-full text-[9px] text-muted font-bold mt-1 uppercase tracking-widest opacity-50">
-                                            <span>Faixa Atual ({selectedMember.belt})</span>
+                                            <span>{selectedMember.belt}</span>
                                             <span className="text-primary">{selectedMember.next_belt?.name || 'Graduação Máxima'}</span>
                                         </div>
                                     </div>
 
-                                    {/* Overall Progress Bar Background (Subtle) */}
-                                    <DynamicDiv className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-transparent via-primary/50 to-transparent transition-all duration-1000 opacity-30" dynamicStyle={{ width: `${selectedMember.xp_progress}%` }} />
+                                    <DynamicDiv className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent transition-all duration-1000" dynamicStyle={{ width: `${selectedMember.xp_progress}%` }} />
+                                </div>
+                            </div>
+
+                            {/* Requisitos de Graduação Card */}
+                            <div className="bg-card rounded-3xl border border-border-slate p-6 md:p-8 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                    <span className="material-symbols-outlined text-8xl">military_tech</span>
+                                </div>
+                                <div className="relative z-10">
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <span className="material-symbols-outlined text-primary text-3xl">target</span>
+                                        <div>
+                                            <h3 className="text-xl font-bold text-white uppercase tracking-tight italic">Missão: {selectedMember.next_belt?.name || 'Lenda do Dojo'}</h3>
+                                            <p className="text-xs text-muted">Requisitos para alcançar o próximo nível da jornada.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-4">
+                                            <div className="flex flex-col gap-1">
+                                                <span className="text-[10px] font-black text-muted uppercase tracking-widest">Critérios Técnicos</span>
+                                                <p className="text-sm text-slate-200 leading-relaxed italic border-l-2 border-primary/30 pl-3">
+                                                    {selectedMember.next_belt?.requirements || 'Continue treinando duro para alcançar o nível máximo!'}
+                                                </p>
+                                            </div>
+
+                                            <div className="flex flex-col gap-1">
+                                                <span className="text-[10px] font-black text-muted uppercase tracking-widest">Status da Jornada</span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="material-symbols-outlined text-green-500 text-sm">check_circle</span>
+                                                    <span className="text-xs text-slate-300">Frequência consistente (90 dias): <strong>{selectedMember.attendance_count} treinos</strong></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-main/50 rounded-2xl border border-border-slate p-5 space-y-4">
+                                            <div className="flex justify-between items-end">
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-muted uppercase">Progresso de XP</p>
+                                                    <h4 className="text-2xl font-black text-white">{selectedMember.xp.toLocaleString()} <span className="text-xs text-muted font-normal">/ {selectedMember.next_belt?.min_xp.toLocaleString() || 'MAX'} XP</span></h4>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-[10px] font-bold text-primary uppercase">Restam</p>
+                                                    <p className="text-lg font-black text-primary">
+                                                        {selectedMember.next_belt ? (selectedMember.next_belt.min_xp - selectedMember.xp).toLocaleString() : 0} XP
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="h-2 w-full bg-card rounded-full overflow-hidden border border-border-slate">
+                                                <DynamicDiv
+                                                    className="h-full bg-gradient-to-r from-primary to-primary/40 rounded-full shadow-[0_0_10px_rgba(215,38,54,0.3)] transition-all duration-1000"
+                                                    dynamicStyle={{ width: `${selectedMember.xp_progress}%` }}
+                                                />
+                                            </div>
+                                            <p className="text-[9px] text-muted italic text-center uppercase tracking-widest">Foco total nas técnicas do currículo abaixo para agilizar sua promoção.</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
