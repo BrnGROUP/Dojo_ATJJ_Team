@@ -4,10 +4,11 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../lib/auth';
 import { toast } from 'react-hot-toast';
 import { cn } from '../../lib/utils';
-import { maskPhone, maskCPF } from '../../lib/masks';
+import { maskPhone, maskCPF, maskCEP } from '../../lib/masks';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Card, CardContent } from '../../components/ui/Card';
+import { useCities } from '../../hooks/useCities';
 
 export function UserForm() {
     const { id } = useParams();
@@ -20,10 +21,15 @@ export function UserForm() {
         email: '',
         role: 'student',
         phone: '',
+        cep: '',
         address: '',
+        city: '',
+        state: 'SP',
         cpf: '',
         password: '' // Apenas para alteração
     });
+
+    const { cities, loadingCities } = useCities(formData.state);
 
     const isOwnProfile = currentUser?.id === id;
 
@@ -61,7 +67,10 @@ export function UserForm() {
                     email: data.email || '',
                     role: data.role || 'student',
                     phone: data.phone || '',
+                    cep: data.cep || '',
                     address: data.address || '',
+                    city: data.city || '',
+                    state: data.state || 'SP',
                     cpf: data.cpf || '',
                     password: ''
                 });
@@ -87,7 +96,10 @@ export function UserForm() {
                     email: formData.email,
                     role: formData.role,
                     phone: formData.phone,
+                    cep: formData.cep,
                     address: formData.address,
+                    city: formData.city,
+                    state: formData.state,
                     cpf: formData.cpf,
                     updated_at: new Date().toISOString()
                 });
@@ -224,14 +236,68 @@ export function UserForm() {
                                     placeholder="000.000.000-00"
                                     maxLength={14}
                                 />
+                                <Input
+                                    label="CEP"
+                                    icon="location_on"
+                                    value={formData.cep}
+                                    onChange={(e) => setFormData({ ...formData, cep: maskCEP(e.target.value) })}
+                                    placeholder="00000-000"
+                                    maxLength={9}
+                                />
                                 <div className="md:col-span-2">
                                     <Input
                                         label="Endereço"
-                                        icon="location_on"
+                                        icon="home"
                                         value={formData.address}
                                         onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                                        placeholder="Rua, Número, Bairro, Cidade"
+                                        placeholder="Rua, Número, Bairro"
                                     />
+                                </div>
+                                <div className="w-full space-y-2">
+                                    <label className="text-slate-400 text-xs font-bold uppercase tracking-wider ml-1">Cidade</label>
+                                    <div className="relative group">
+                                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">
+                                            location_city
+                                        </span>
+                                        <select
+                                            name="city"
+                                            title="Selecione a Cidade"
+                                            value={formData.city}
+                                            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                                            disabled={loadingCities}
+                                            className="w-full bg-main border border-border-slate rounded-xl py-3 px-12 text-white text-sm outline-none transition-all duration-300 focus:border-primary focus:ring-1 focus:ring-primary/30 appearance-none cursor-pointer disabled:opacity-50"
+                                        >
+                                            <option value="" className="bg-zinc-900">{loadingCities ? 'Carregando cidades...' : 'Selecione a cidade...'}</option>
+                                            {cities.map(city => (
+                                                <option key={city} value={city} className="bg-zinc-900">{city}</option>
+                                            ))}
+                                        </select>
+                                        <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
+                                            expand_more
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="w-full space-y-2">
+                                    <label className="text-slate-400 text-xs font-bold uppercase tracking-wider ml-1">Estado (UF)</label>
+                                    <div className="relative group">
+                                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">
+                                            public
+                                        </span>
+                                        <select
+                                            name="state"
+                                            title="Estado (UF)"
+                                            value={formData.state}
+                                            onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                                            className="w-full bg-main border border-border-slate rounded-xl py-3 px-12 text-white text-sm outline-none transition-all duration-300 focus:border-primary focus:ring-1 focus:ring-primary/30 appearance-none cursor-pointer"
+                                        >
+                                            {['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'].map(uf => (
+                                                <option key={uf} value={uf} className="bg-zinc-900">{uf}</option>
+                                            ))}
+                                        </select>
+                                        <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
+                                            expand_more
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

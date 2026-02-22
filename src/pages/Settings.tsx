@@ -5,12 +5,11 @@ import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Card, CardContent } from '../components/ui/Card';
 import { toast } from 'react-hot-toast';
+import { useCities } from '../hooks/useCities';
 
 export function Settings() {
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
-    const [cities, setCities] = useState<string[]>([]);
-    const [loadingCities, setLoadingCities] = useState(false);
     const [formData, setFormData] = useState({
         id: '',
         dojoName: '',
@@ -23,30 +22,11 @@ export function Settings() {
         state: 'SP',
     });
 
+    const { cities, loadingCities } = useCities(formData.state);
+
     useEffect(() => {
         fetchSettings();
     }, []);
-
-    useEffect(() => {
-        if (formData.state) {
-            fetchCities(formData.state);
-        }
-    }, [formData.state]);
-
-    async function fetchCities(uf: string) {
-        setLoadingCities(true);
-        try {
-            const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
-            const data = await response.json();
-            const cityNames = data.map((c: any) => c.nome).sort();
-            setCities(cityNames);
-        } catch (err) {
-            console.error('Erro ao buscar cidades:', err);
-            toast.error('Erro ao carregar lista de cidades.');
-        } finally {
-            setLoadingCities(false);
-        }
-    }
 
     async function fetchSettings() {
         setLoading(true);
