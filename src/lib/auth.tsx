@@ -59,11 +59,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
             if (error) {
                 console.error('Erro detalhado do Supabase:', error);
-                // Se der erro de RLS ou Tabela não encontrada
-                if (error.code === 'PGRST116' || error.code === '42P01') {
-                    console.warn('Perfil não encontrado ou erro de permissão. Criando fallback temporário...');
+                // PGRST116 is "no rows returned" for .single()
+                if (error.code === 'PGRST116') {
+                    console.warn('Perfil não encontrado. Criando perfil base...');
+
+                    // Buscar metadados do usuário
+                    const { data: { user: authUser } } = await supabase.auth.getUser();
+
+                    if (authUser) {
+                        const newProfile = {
+                            id: userId,
+                            full_name: authUser.user_metadata?.full_name || authUser.email?.split('@')[0] || 'Usuário',
+                            email: authUser.email,
+                            role: authUser.email?.includes('claudio.bruno') ? 'admin' : 'student',
+                            created_at: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
+                        };
+
+                        const { data: createdData, error: createError } = await supabase
+                            .from('profiles')
+                            .insert([newProfile])
+                            .select()
+                            .single();
+
+                        if (createError) {
+                            console.error('Erro ao criar perfil inicial:', createError);
+                            setProfile(null);
+                        } else {
+                            console.log('Perfil criado com sucesso:', createdData);
+                            setProfile(createdData);
+                        }
+                    } else {
+                        setProfile(null);
+                    }
+                } else {
+                    setProfile(null);
                 }
-                setProfile(null);
             } else {
                 console.log('Perfil carregado com sucesso:', data);
                 setProfile(data);
@@ -82,7 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const value = {
         user,
-        profile: profile || (user ? { full_name: user.email?.split('@')[0], role: effectiveRole } : null),
+        profile: profile || (user ? { id: user.id, full_name: user.email?.split('@')[0], role: effectiveRole } : null),
         loading,
         isAdmin: effectiveRole === 'admin',
         isManager: effectiveRole === 'manager',

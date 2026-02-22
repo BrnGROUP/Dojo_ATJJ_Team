@@ -3,11 +3,16 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { cn } from '../../lib/utils';
 import { AttendanceTab } from '../../components/AttendanceTab';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
+import { Card, CardContent } from '../../components/ui/Card';
+import { toast } from 'react-hot-toast';
 
 export function ClassForm() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [saving, setSaving] = useState(false);
     const [formData, setFormData] = useState({
         group_id: '',
         title: '',
@@ -24,46 +29,55 @@ export function ClassForm() {
     const [activeTab, setActiveTab] = useState<'details' | 'plan' | 'attendance'>('details');
 
     useEffect(() => {
-        fetchGroups();
+        fetchInitialData();
         if (id) {
             fetchClass();
         }
     }, [id]);
 
-    async function fetchClass() {
-        setLoading(true);
-        const { data, error } = await supabase
-            .from('classes')
-            .select('*')
-            .eq('id', id)
-            .single();
-
-        if (error) {
-            console.error('Error fetching class:', error);
-            navigate('/agenda');
-        } else if (data) {
-            const startDate = new Date(data.start_time);
-            const endDate = new Date(data.end_time);
-
-            setFormData({
-                group_id: '',
-                allowed_groups: data.allowed_groups || [],
-                title: data.title,
-                instructor: data.instructor,
-                date: startDate.toISOString().split('T')[0],
-                start_time: startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-                end_time: endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-                max_students: data.max_students,
-                type: data.type,
-                lesson_plan: data.lesson_plan || '',
-            });
+    async function fetchInitialData() {
+        try {
+            const { data } = await supabase.from('groups').select('id, name');
+            if (data) setGroups(data);
+        } catch (err) {
+            console.error('Error fetching groups:', err);
         }
-        setLoading(false);
     }
 
-    async function fetchGroups() {
-        const { data } = await supabase.from('groups').select('id, name');
-        if (data) setGroups(data);
+    async function fetchClass() {
+        setLoading(true);
+        try {
+            const { data, error } = await supabase
+                .from('classes')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error) {
+                toast.error('Aula não encontrada');
+                navigate('/agenda');
+            } else if (data) {
+                const startDate = new Date(data.start_time);
+                const endDate = new Date(data.end_time);
+
+                setFormData({
+                    group_id: '',
+                    allowed_groups: data.allowed_groups || [],
+                    title: data.title,
+                    instructor: data.instructor,
+                    date: startDate.toISOString().split('T')[0],
+                    start_time: startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+                    end_time: endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+                    max_students: data.max_students,
+                    type: data.type,
+                    lesson_plan: data.lesson_plan || '',
+                });
+            }
+        } catch (err) {
+            toast.error('Erro ao buscar dados da aula');
+        } finally {
+            setLoading(false);
+        }
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -83,59 +97,78 @@ export function ClassForm() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
+        if (e) e.preventDefault();
+        setSaving(true);
 
-        // Combine date and time
-        const startDateTime = new Date(`${formData.date}T${formData.start_time}:00`);
-        const endDateTime = new Date(`${formData.date}T${formData.end_time}:00`);
+        try {
+            // Combine date and time
+            const startDateTime = new Date(`${formData.date}T${formData.start_time}:00`);
+            const endDateTime = new Date(`${formData.date}T${formData.end_time}:00`);
 
-        const classData = {
-            title: formData.title,
-            instructor: formData.instructor,
-            start_time: startDateTime.toISOString(),
-            end_time: endDateTime.toISOString(),
-            max_students: Number(formData.max_students),
-            type: formData.type,
-            status: 'Scheduled',
-            lesson_plan: formData.lesson_plan,
-            allowed_groups: formData.allowed_groups,
-        };
+            const classData = {
+                title: formData.title,
+                instructor: formData.instructor,
+                start_time: startDateTime.toISOString(),
+                end_time: endDateTime.toISOString(),
+                max_students: Number(formData.max_students),
+                type: formData.type,
+                status: 'Scheduled',
+                lesson_plan: formData.lesson_plan,
+                allowed_groups: formData.allowed_groups,
+            };
 
-        const { error } = id
-            ? await supabase.from('classes').update(classData).eq('id', id)
-            : await supabase.from('classes').insert([classData]);
+            const { error } = id
+                ? await supabase.from('classes').update(classData).eq('id', id)
+                : await supabase.from('classes').insert([classData]);
 
-        setLoading(false);
+            if (error) throw error;
 
-        if (error) {
-            console.error('Error saving class:', error);
-            alert('Erro ao agendar aula. Verifique os dados.');
-        } else {
+            toast.success(id ? 'Aula atualizada!' : 'Aula criada!');
             navigate('/agenda');
+        } catch (err: any) {
+            toast.error(`Erro: ${err.message}`);
+        } finally {
+            setSaving(false);
         }
     };
 
+    if (loading) {
+        return (
+            <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
+                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-muted font-black uppercase tracking-widest text-xs animate-pulse">Sincronizando Agenda...</p>
+            </div>
+        );
+    }
+
     return (
-        <div className="max-w-[768px] w-full mx-auto space-y-6">
-            <div className="flex flex-wrap gap-2 mb-2">
-                <Link to="/agenda" className="text-muted hover:text-primary text-sm font-medium leading-normal">Agenda</Link>
-                <span className="text-muted text-sm font-medium leading-normal">/</span>
-                <span className="text-white text-sm font-medium leading-normal">{id ? 'Editar Aula' : 'Nova Aula'}</span>
+        <div className="max-w-[900px] w-full mx-auto space-y-6 pb-20 px-4 sm:px-0">
+            {/* Breadcrumb */}
+            <div className="hidden sm:flex items-center gap-2 mb-2">
+                <Link to="/agenda" className="text-muted hover:text-primary text-sm font-bold transition-colors">Agenda</Link>
+                <span className="material-symbols-outlined text-muted text-sm">chevron_right</span>
+                <span className="text-white text-sm font-bold">{id ? 'Editar Aula' : 'Nova Aula'}</span>
             </div>
 
-            <div className="flex flex-wrap justify-between items-end gap-3 mb-8">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6 mb-10">
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-white text-3xl font-black leading-tight tracking-tight">{id ? 'Editar Aula' : 'Agendar Aula'}</h1>
-                    <p className="text-muted text-base font-normal leading-normal">{id ? 'Modifique os detalhes da sessão de treinamento.' : 'Configure os detalhes da nova sessão de treinamento.'}</p>
+                    <h1 className="text-white text-3xl sm:text-5xl font-black leading-none tracking-tighter uppercase italic">
+                        {id ? 'Editar Aula' : 'Agendar Aula'}
+                    </h1>
+                    <p className="text-muted text-sm sm:text-base font-medium max-w-xl">
+                        {id ? 'Modifique os detalhes da sessão de treinamento.' : 'Configure os detalhes da nova sessão de treinamento.'}
+                    </p>
                 </div>
-                <Link to="/agenda" className="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary/10 text-primary hover:bg-primary/20 text-sm font-bold leading-normal transition-all">
-                    <span className="material-symbols-outlined mr-2 text-lg">arrow_back</span>
-                    <span>Voltar</span>
+                <Link to="/agenda">
+                    <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                        <span className="material-symbols-outlined mr-2 text-lg">arrow_back</span>
+                        Voltar
+                    </Button>
                 </Link>
             </div>
 
-            <div className="flex bg-card border-b border-border-slate px-6 pt-4 gap-6 sticky top-0 z-20 rounded-t-xl mb-0">
+            {/* Responsive Tabs Container */}
+            <div className="flex bg-card border border-border-slate p-1 gap-1 sticky top-0 z-20 rounded-2xl mb-6 overflow-x-auto scrollbar-hide no-scrollbar shadow-xl backdrop-blur-md bg-card/90">
                 {[
                     { id: 'details', label: 'Detalhes', icon: 'edit' },
                     { id: 'plan', label: 'Plano de Aula', icon: 'menu_book' },
@@ -147,179 +180,203 @@ export function ClassForm() {
                         onClick={() => !tab.disabled && setActiveTab(tab.id as any)}
                         disabled={tab.disabled}
                         className={cn(
-                            "pb-4 px-2 text-sm font-bold flex items-center gap-2 border-b-2 transition-all",
+                            "flex items-center justify-center gap-2 px-4 sm:px-6 h-12 rounded-xl transition-all font-bold text-sm whitespace-nowrap flex-1",
                             activeTab === tab.id
-                                ? "border-primary text-white"
-                                : "border-transparent text-muted hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
+                                ? "bg-primary text-white shadow-lg shadow-primary/20"
+                                : "text-muted hover:text-white hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed"
                         )}
                     >
                         <span className="material-symbols-outlined text-lg">{tab.icon}</span>
-                        {tab.label}
+                        <span className={cn(
+                            "transition-all",
+                            activeTab === tab.id ? "opacity-100 translate-x-0" : "opacity-80 transition-all duration-300"
+                        )}>
+                            {tab.label}
+                        </span>
                     </button>
                 ))}
             </div>
 
-            <div className="bg-card p-6 rounded-b-xl shadow-sm border border-border-slate border-t-0 mt-0">
+            <div className="space-y-6">
                 {activeTab === 'details' && (
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <label className="flex flex-col w-full md:col-span-2">
-                                <p className="text-white text-sm font-semibold leading-normal pb-2">Turmas Participantes</p>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1 bg-main p-3 rounded-lg border border-border-slate">
-                                    {groups.map(grp => (
-                                        <label key={grp.id} className={`flex items-center gap-3 p-2 rounded-lg border cursor-pointer transition-all ${formData.allowed_groups.includes(grp.name) ? 'bg-primary/20 border-primary' : 'bg-card border-border-slate hover:border-gray-500'}`}>
-                                            <div className={`w-5 h-5 rounded flex items-center justify-center border shrink-0 ${formData.allowed_groups.includes(grp.name) ? 'bg-primary border-primary' : 'border-gray-500'}`}>
-                                                {formData.allowed_groups.includes(grp.name) && <span className="material-symbols-outlined text-white text-[16px]">check</span>}
+                    <Card>
+                        <CardContent className="p-6 sm:p-8 space-y-8">
+                            <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="md:col-span-2 space-y-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                                                <span className="material-symbols-outlined text-primary">groups</span>
                                             </div>
-                                            <input
-                                                type="checkbox"
-                                                className="hidden"
-                                                checked={formData.allowed_groups.includes(grp.name)}
-                                                onChange={() => handleGroupToggle(grp.name)}
-                                            />
-                                            <span className="text-white text-sm font-medium leading-tight">{grp.name}</span>
-                                        </label>
-                                    ))}
-                                    {groups.length === 0 && <p className="text-muted text-xs">Nenhuma turma cadastrada.</p>}
+                                            <h2 className="text-white text-xl font-black uppercase tracking-tight italic">Turmas Participantes</h2>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-main rounded-2xl border border-border-slate">
+                                            {groups.map(grp => (
+                                                <button
+                                                    key={grp.id}
+                                                    type="button"
+                                                    onClick={() => handleGroupToggle(grp.name)}
+                                                    className={cn(
+                                                        "flex items-center gap-3 p-3 rounded-xl border transition-all text-left",
+                                                        formData.allowed_groups.includes(grp.name)
+                                                            ? 'bg-primary/10 border-primary text-white'
+                                                            : 'bg-card border-border-slate text-muted hover:border-slate-500'
+                                                    )}
+                                                >
+                                                    <div className={cn(
+                                                        "w-5 h-5 rounded flex items-center justify-center border transition-all",
+                                                        formData.allowed_groups.includes(grp.name) ? 'bg-primary border-primary' : 'border-slate-700'
+                                                    )}>
+                                                        {formData.allowed_groups.includes(grp.name) && <span className="material-symbols-outlined text-white text-[14px]">check</span>}
+                                                    </div>
+                                                    <span className="text-sm font-bold">{grp.name}</span>
+                                                </button>
+                                            ))}
+                                            {groups.length === 0 && <p className="text-muted text-xs p-2">Nenhuma turma cadastrada.</p>}
+                                        </div>
+                                        <p className="text-muted text-[10px] mt-2 italic flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-[14px]">info</span>
+                                            Selecione quais turmas podem participar desta aula para controle de acesso automático.
+                                        </p>
+                                    </div>
+
+                                    <div className="md:col-span-2">
+                                        <Input
+                                            label="Título da Aula"
+                                            name="title"
+                                            icon="title"
+                                            value={formData.title}
+                                            onChange={handleChange}
+                                            required
+                                            placeholder="Ex: Treino de Competição ou Nome da Turma"
+                                        />
+                                    </div>
+
+                                    <Input
+                                        label="Instrutor Responsável"
+                                        name="instructor"
+                                        icon="person"
+                                        value={formData.instructor}
+                                        onChange={handleChange}
+                                        required
+                                        placeholder="Nome do Professor"
+                                    />
+
+                                    <Input
+                                        label="Data"
+                                        name="date"
+                                        type="date"
+                                        icon="calendar_month"
+                                        value={formData.date}
+                                        onChange={handleChange}
+                                        required
+                                    />
+
+                                    <Input
+                                        label="Início"
+                                        name="start_time"
+                                        type="time"
+                                        icon="schedule"
+                                        value={formData.start_time}
+                                        onChange={handleChange}
+                                        required
+                                    />
+
+                                    <Input
+                                        label="Término"
+                                        name="end_time"
+                                        type="time"
+                                        icon="history"
+                                        value={formData.end_time}
+                                        onChange={handleChange}
+                                        required
+                                    />
+
+                                    <div className="space-y-2">
+                                        <p className="text-white text-sm font-semibold leading-normal pb-2 ml-1">Modalidade / Tipo</p>
+                                        <div className="relative group">
+                                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted text-xl group-focus-within:text-primary transition-colors">category</span>
+                                            <select
+                                                name="type"
+                                                title="Selecione o tipo de aula"
+                                                value={formData.type}
+                                                onChange={handleChange}
+                                                className="w-full rounded-xl text-white bg-main border border-border-slate focus:border-primary focus:ring-1 focus:ring-primary h-14 pl-12 pr-4 text-base font-bold transition-all outline-none appearance-none cursor-pointer"
+                                            >
+                                                <option value="Gi">Gi (Com Kimono)</option>
+                                                <option value="No-Gi">No-Gi (Sem Kimono)</option>
+                                                <option value="Kids">Infantil</option>
+                                                <option value="Private">Particular</option>
+                                            </select>
+                                            <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-muted pointer-events-none">expand_more</span>
+                                        </div>
+                                    </div>
+
+                                    <Input
+                                        label="Capacidade Máxima"
+                                        name="max_students"
+                                        type="number"
+                                        icon="group"
+                                        value={formData.max_students}
+                                        onChange={handleChange}
+                                        required
+                                        min="1"
+                                    />
                                 </div>
-                                <p className="text-muted text-[10px] mt-1 italic">* Selecione quais turmas podem participar desta aula.</p>
-                            </label>
 
-                            <label className="flex flex-col w-full md:col-span-2">
-                                <p className="text-white text-sm font-semibold leading-normal pb-2">Título da Aula</p>
-                                <input
-                                    name="title"
-                                    value={formData.title}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-base font-normal transition-all outline-none hover:border-white/20"
-                                    placeholder="Ex: Treino de Competição (ou preenchido pela turma)"
-                                    type="text"
-                                />
-                            </label>
-
-                            <label className="flex flex-col w-full">
-                                <p className="text-white text-sm font-semibold leading-normal pb-2">Instrutor</p>
-                                <input
-                                    name="instructor"
-                                    value={formData.instructor}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-base font-normal transition-all outline-none hover:border-white/20"
-                                    placeholder="Nome do Professor"
-                                    type="text"
-                                />
-                            </label>
-
-                            <label className="flex flex-col w-full">
-                                <p className="text-white text-sm font-semibold leading-normal pb-2">Data</p>
-                                <input
-                                    name="date"
-                                    value={formData.date}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-base font-normal transition-all outline-none hover:border-white/20"
-                                    type="date"
-                                />
-                            </label>
-
-                            <label className="flex flex-col w-full">
-                                <p className="text-white text-sm font-semibold leading-normal pb-2">Horário Início</p>
-                                <input
-                                    name="start_time"
-                                    value={formData.start_time}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-base font-normal transition-all outline-none hover:border-white/20"
-                                    type="time"
-                                />
-                            </label>
-
-                            <label className="flex flex-col w-full">
-                                <p className="text-white text-sm font-semibold leading-normal pb-2">Horário Fim</p>
-                                <input
-                                    name="end_time"
-                                    value={formData.end_time}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-base font-normal transition-all outline-none hover:border-white/20"
-                                    type="time"
-                                />
-                            </label>
-
-                            <label className="flex flex-col w-full">
-                                <p className="text-white text-sm font-semibold leading-normal pb-2">Tipo</p>
-                                <select
-                                    name="type"
-                                    value={formData.type}
-                                    onChange={handleChange}
-                                    className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-base font-normal transition-all outline-none hover:border-white/20"
-                                >
-                                    <option value="Gi">Gi (Com Kimono)</option>
-                                    <option value="No-Gi">No-Gi (Sem Kimono)</option>
-                                    <option value="Kids">Infantil</option>
-                                    <option value="Private">Particular</option>
-                                </select>
-                            </label>
-
-                            <label className="flex flex-col w-full">
-                                <p className="text-white text-sm font-semibold leading-normal pb-2">Capacidade Máxima</p>
-                                <input
-                                    name="max_students"
-                                    value={formData.max_students}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-base font-normal transition-all outline-none hover:border-white/20"
-                                    type="number"
-                                    min="1"
-                                />
-                            </label>
-                        </div>
-
-                        <div className="flex justify-end gap-4 mt-4 pt-6 border-t border-border-slate">
-                            <Link to="/agenda" className="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-12 px-6 bg-card text-white text-sm font-bold leading-normal hover:bg-card/80 transition-all border border-border-slate">
-                                Cancelar
-                            </Link>
-                            <button
-                                disabled={loading}
-                                className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-sm font-bold leading-normal shadow-lg shadow-primary/20 hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                type="submit"
-                            >
-                                <span className="material-symbols-outlined mr-2">save</span>
-                                {loading ? 'Salvando...' : (id ? 'Salvar Alterações' : 'Criar Aula')}
-                            </button>
-                        </div>
-                    </form>
+                                <div className="flex flex-col sm:flex-row justify-end gap-3 pt-8 border-t border-border-slate mt-4">
+                                    <Link to="/agenda" className="w-full sm:w-auto">
+                                        <Button variant="outline" className="w-full px-8">Cancelar</Button>
+                                    </Link>
+                                    <Button
+                                        type="submit"
+                                        loading={saving}
+                                        className="w-full sm:min-w-[200px]"
+                                        icon={<span className="material-symbols-outlined">save</span>}
+                                    >
+                                        {id ? 'Salvar Alterações' : 'Criar Aula'}
+                                    </Button>
+                                </div>
+                            </form>
+                        </CardContent>
+                    </Card>
                 )}
 
                 {activeTab === 'plan' && (
-                    <div className="space-y-4 animate-in fade-in">
-                        <div className="flex justify-between items-center">
-                            <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                <span className="material-symbols-outlined text-primary">menu_book</span>
-                                Plano de Aula
-                            </h3>
-                            <button
-                                onClick={handleSubmit}
-                                disabled={loading}
-                                className="text-sm font-bold text-primary hover:text-white transition-colors"
-                            >
-                                {loading ? 'Salvando...' : 'Salvar Conteúdo'}
-                            </button>
-                        </div>
-                        <p className="text-muted text-sm">Descreva o conteúdo técnico, aquecimento e objetivos desta aula.</p>
-                        <textarea
-                            name="lesson_plan"
-                            value={formData.lesson_plan}
-                            onChange={(e) => setFormData(prev => ({ ...prev, lesson_plan: e.target.value }))}
-                            className="w-full h-[400px] bg-main border border-border-slate rounded-xl p-6 text-white text-base leading-relaxed outline-none resize-none focus:border-primary"
-                            placeholder="# Aquecimento&#10;- Corrida leve&#10;- Mobilidade de quadril&#10;&#10;# Técnica do Dia&#10;- Passagem de guarda emborcando&#10;- Variação para as costas&#10;&#10;# Rola (Sparring)&#10;- 5 rolas de 5 minutos"
-                        />
-                    </div>
+                    <Card>
+                        <CardContent className="p-6 sm:p-8 space-y-6">
+                            <div className="flex justify-between items-center sm:items-end gap-4">
+                                <div className="flex flex-col gap-1">
+                                    <h3 className="text-xl font-black text-white flex items-center gap-3 uppercase italic">
+                                        <span className="material-symbols-outlined text-primary text-2xl">menu_book</span>
+                                        Plano de Aula
+                                    </h3>
+                                    <p className="text-muted text-sm font-medium">Descreva o conteúdo técnico, aquecimento e objetivos.</p>
+                                </div>
+                                <Button
+                                    onClick={handleSubmit}
+                                    loading={saving}
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-primary hover:bg-primary/10"
+                                >
+                                    Salvar Plano
+                                </Button>
+                            </div>
+
+                            <textarea
+                                name="lesson_plan"
+                                value={formData.lesson_plan}
+                                onChange={(e) => setFormData(prev => ({ ...prev, lesson_plan: e.target.value }))}
+                                className="w-full h-[450px] bg-main border border-border-slate rounded-2xl p-6 text-white text-base leading-relaxed outline-none resize-none focus:border-primary font-medium shadow-inner transition-all sm:text-lg"
+                                placeholder="# Aquecimento\n- Corrida leve\n- Mobilidade de quadril\n\n# Técnica do Dia\n- Passagem de guarda emborcando\n- Variação para as costas\n\n# Rola (Sparring)\n- 5 rolas de 5 minutos"
+                            />
+                        </CardContent>
+                    </Card>
                 )}
 
                 {activeTab === 'attendance' && id && (
-                    <div className="animate-in fade-in">
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <AttendanceTab classId={id} date={formData.date} classTitle={formData.title} />
                     </div>
                 )}

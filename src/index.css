@@ -146,12 +146,25 @@ button:active {
     backdrop-filter: blur(5px);
 }
 
+/* Belt Backgrounds */
+.belt-bg-branca { background-color: #ffffff; }
+.belt-bg-azul { background-color: #0000ff; }
+.belt-bg-roxa { background-color: #800080; }
+.belt-bg-marrom { background-color: #8b4513; }
+.belt-bg-preta { background-color: #000000; }
+.belt-bg-cinza { background-color: #808080; }
+.belt-bg-amarela { background-color: #ffff00; }
+.belt-bg-laranja { background-color: #ffa500; }
+.belt-bg-verde { background-color: #008000; }
+.belt-bg-coral { background-color: #ff7f50; }
+.belt-bg-vermelha { background-color: #ff0000; }
+
 /* Utility for dynamic progress bars to avoid inline style width */
 .progress-fill {
     width: var(--w, 0%);
 }
 
-/* Utility for dynamic background colors */
+/* Utility for dynamic background colors (use with caution to avoid inline style lint) */
 .bg-dynamic-color {
     background-color: var(--dynamic-color, transparent);
 }

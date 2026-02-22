@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useAuth } from '../lib/auth';
 import { toast } from 'react-hot-toast';
 
@@ -52,26 +53,31 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <div className="h-8 w-px bg-border-slate hidden sm:block"></div>
 
                 <div className="flex items-center gap-2 md:gap-3 pl-2 group relative">
-                    <div className="text-right hidden sm:block">
-                        <p className="text-sm font-bold text-white group-hover:text-primary transition-colors">
-                            {profile?.full_name || 'Usuário'}
-                        </p>
-                        <p className="text-[10px] text-primary font-bold uppercase tracking-wider">
-                            {getRoleLabel(profile?.role)}
-                        </p>
-                    </div>
+                    <Link
+                        to={profile?.id ? `/users/${profile.id}` : '#'}
+                        className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-all cursor-pointer"
+                    >
+                        <div className="text-right hidden sm:block">
+                            <p className="text-sm font-bold text-white group-hover:text-primary transition-colors">
+                                {profile?.full_name || 'Usuário'}
+                            </p>
+                            <p className="text-[10px] text-primary font-bold uppercase tracking-wider">
+                                {getRoleLabel(profile?.role)}
+                            </p>
+                        </div>
 
-                    <div className="relative">
-                        <img
-                            alt="User"
-                            className="w-8 h-8 md:w-10 md:h-10 rounded-xl object-cover shadow-sm border border-border-slate cursor-pointer"
-                            src={profile?.avatar_url || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"}
-                        />
-                    </div>
+                        <div className="relative">
+                            <img
+                                alt="User"
+                                className="w-8 h-8 md:w-10 md:h-10 rounded-xl object-cover shadow-sm border border-border-slate"
+                                src={profile?.avatar_url || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"}
+                            />
+                        </div>
+                    </Link>
 
                     <button
                         onClick={handleSignOut}
-                        className="p-2 text-muted hover:text-red-500 hover:bg-red-500/5 rounded-xl transition-all"
+                        className="p-2 text-muted hover:text-red-500 hover:bg-red-500/5 rounded-xl transition-all ml-2"
                         title="Sair do Sistema"
                     >
                         <span className="material-symbols-outlined text-[20px] md:text-[24px]">logout</span>
@@ -81,3 +87,4 @@ export function Header({ onMenuClick }: HeaderProps) {
         </header>
     );
 }
+

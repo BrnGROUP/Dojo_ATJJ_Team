@@ -3,11 +3,15 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useUsers } from '../../hooks/useUsers';
+import { useAuth } from '../../lib/auth';
 import { BeltAvatar } from '../../components/shared/BeltAvatar';
+import { InviteUserModal } from '../../components/InviteUserModal';
 
 export function UsersList() {
-    const { users, loading } = useUsers();
+    const { users, loading, refresh } = useUsers();
+    const { user: currentAuthUser } = useAuth();
     const [searchTerm, setSearchTerm] = useState('');
+    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
     const filteredUsers = users.filter(u =>
         u.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -43,8 +47,8 @@ export function UsersList() {
                     <p className="text-muted text-sm font-medium">Controle de acessos e níveis de permissão do sistema.</p>
                 </div>
                 <button
-                    onClick={() => toast.success('Funcionalidade de convite será implementada em breve!')}
-                    className="flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all"
+                    onClick={() => setIsInviteModalOpen(true)}
+                    className="flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all shadow-lg shadow-primary/20"
                 >
                     <span className="material-symbols-outlined mr-2 text-[20px]">person_add</span>
                     <span className="truncate">Convidar Usuário</span>
@@ -120,12 +124,14 @@ export function UsersList() {
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-right">
                                             <div className="flex justify-end gap-1 md:gap-2 text-slate-400">
-                                                <Link to={`/users/${user.id}`} className="p-1 hover:text-primary transition-colors" title="Editar Permissões">
+                                                <Link to={`/users/${user.id}`} className="p-1 hover:text-primary transition-colors" title="Editar Perfil">
                                                     <span className="material-symbols-outlined text-[18px] md:text-[20px]">manage_accounts</span>
                                                 </Link>
-                                                <button className="p-1 hover:text-red-500 transition-colors" title="Bloquear Acesso">
-                                                    <span className="material-symbols-outlined text-[18px] md:text-[20px]">block</span>
-                                                </button>
+                                                {user.id !== currentAuthUser?.id && (
+                                                    <button className="p-1 hover:text-red-500 transition-colors" title="Bloquear Acesso">
+                                                        <span className="material-symbols-outlined text-[18px] md:text-[20px]">block</span>
+                                                    </button>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>
@@ -165,6 +171,16 @@ export function UsersList() {
                     </p>
                 </div>
             </div>
+
+            {/* Invite Modal */}
+            <InviteUserModal
+                isOpen={isInviteModalOpen}
+                onClose={() => setIsInviteModalOpen(false)}
+                onSuccess={() => {
+                    refresh();
+                    toast.success('Lista de usuários atualizada.');
+                }}
+            />
         </div>
     );
 }
