@@ -2,13 +2,21 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import { supabase } from '../lib/supabase';
 import type { User } from '@supabase/supabase-js';
 
+interface MemberSnapshot {
+    id?: string;
+    belt?: string;
+    stripes?: number;
+    xp?: number;
+    [key: string]: unknown;
+}
+
 interface UserProfile {
     id: string;
     full_name: string;
     email: string;
     role: string;
     avatar_url?: string;
-    member?: Record<string, unknown>; // Temporário para não quebrar outros componentes
+    member?: MemberSnapshot;
 }
 
 interface AuthContextType {

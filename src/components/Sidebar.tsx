@@ -85,7 +85,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 </div>
                 <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
                     <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 opacity-50">Geral</p>
-                    {menuItems.filter(item => !item.roles || item.roles.includes(profile?.role)).map((item) => (
+                    {menuItems.filter(item => !item.roles || item.roles.includes(profile?.role ?? '')).map((item) => (
                         <Link
                             key={item.path}
                             to={item.path}
@@ -103,7 +103,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     ))}
 
                     <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 mt-8 opacity-50">Gamificação</p>
-                    {gamificationItems.filter(item => !item.roles || item.roles.includes(profile?.role)).map((item) => (
+                    {gamificationItems.filter(item => !item.roles || item.roles.includes(profile?.role ?? '')).map((item) => (
                         <Link
                             key={item.path}
                             to={item.path}

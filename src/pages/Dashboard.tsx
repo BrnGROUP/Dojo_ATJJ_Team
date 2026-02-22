@@ -31,7 +31,7 @@ export function Dashboard() {
                 {/* Cabeçalho de Boas Vindas Personalizado */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-r from-primary/20 to-transparent p-8 rounded-3xl border border-primary/20">
                     <div className="flex items-center gap-6">
-                        <BeltAvatar name={profile?.full_name || 'Aluno'} belt={profile?.member?.belt || 'Branca'} size="xl" />
+                        <BeltAvatar name={profile?.full_name || 'Aluno'} belt={String(profile?.member?.belt || 'Branca')} size="xl" />
                         <div>
                             <h1 className="text-3xl font-black text-white italic tracking-tighter">OSS, {profile?.full_name?.split(' ')[0]}!</h1>
                             <p className="text-primary text-sm font-bold uppercase tracking-widest mt-1">Sua jornada no tatame continua.</p>
@@ -40,11 +40,11 @@ export function Dashboard() {
                     <div className="flex gap-4">
                         <div className="bg-main border border-border-slate p-4 rounded-2xl text-center min-w-[100px]">
                             <p className="text-[10px] text-muted font-bold uppercase mb-1">Seu XP</p>
-                            <p className="text-xl font-black text-white tabular-nums">{profile?.member?.xp || 0}</p>
+                            <p className="text-xl font-black text-white tabular-nums">{Number(profile?.member?.xp) || 0}</p>
                         </div>
                         <div className="bg-main border border-border-slate p-4 rounded-2xl text-center min-w-[100px]">
                             <p className="text-[10px] text-muted font-bold uppercase mb-1">Nível</p>
-                            <p className="text-xl font-black text-white tabular-nums">{calculateLevel(profile?.member?.xp || 0).level}</p>
+                            <p className="text-xl font-black text-white tabular-nums">{calculateLevel(Number(profile?.member?.xp) || 0).level}</p>
                         </div>
                     </div>
                 </div>
@@ -91,7 +91,7 @@ export function Dashboard() {
 
                             <div className="flex justify-center">
                                 <div className="relative">
-                                    <BeltAvatar name={profile?.full_name} belt={profile?.member?.belt || 'Branca'} size="xl" />
+                                    <BeltAvatar name={profile?.full_name || 'Aluno'} belt={String(profile?.member?.belt || 'Branca')} size="xl" />
                                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white text-main text-[8px] font-black px-3 py-0.5 rounded-full border-2 border-card uppercase whitespace-nowrap">
                                         Faixa {profile?.member?.belt || 'Branca'}
                                     </div>
@@ -101,12 +101,12 @@ export function Dashboard() {
                             <div className="space-y-2">
                                 <div className="flex justify-between text-[10px] font-bold text-muted uppercase tracking-widest">
                                     <span>Progresso atual</span>
-                                    <span>{Math.floor(calculateLevel(profile?.member?.xp || 0).progress)}%</span>
+                                    <span>{Math.floor(calculateLevel(Number(profile?.member?.xp) || 0).progress)}%</span>
                                 </div>
                                 <div className="h-2 w-full bg-main rounded-full overflow-hidden p-[1px]">
                                     <DynamicDiv
                                         className="h-full bg-primary rounded-full shadow-[0_0_8px_rgba(215,38,54,0.3)]"
-                                        dynamicStyle={{ width: `${calculateLevel(profile?.member?.xp || 0).progress}%` }}
+                                        dynamicStyle={{ width: `${calculateLevel(Number(profile?.member?.xp) || 0).progress}%` }}
                                     />
                                 </div>
                             </div>
