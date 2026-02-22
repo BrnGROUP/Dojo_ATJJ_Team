@@ -9,6 +9,8 @@ import { toast } from 'react-hot-toast';
 export function Settings() {
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [cities, setCities] = useState<string[]>([]);
+    const [loadingCities, setLoadingCities] = useState(false);
     const [formData, setFormData] = useState({
         id: '',
         dojoName: '',
@@ -24,6 +26,27 @@ export function Settings() {
     useEffect(() => {
         fetchSettings();
     }, []);
+
+    useEffect(() => {
+        if (formData.state) {
+            fetchCities(formData.state);
+        }
+    }, [formData.state]);
+
+    async function fetchCities(uf: string) {
+        setLoadingCities(true);
+        try {
+            const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
+            const data = await response.json();
+            const cityNames = data.map((c: any) => c.nome).sort();
+            setCities(cityNames);
+        } catch (err) {
+            console.error('Erro ao buscar cidades:', err);
+            toast.error('Erro ao carregar lista de cidades.');
+        } finally {
+            setLoadingCities(false);
+        }
+    }
 
     async function fetchSettings() {
         setLoading(true);
@@ -45,7 +68,7 @@ export function Settings() {
                     cep: maskCEP(data.cep || ''),
                     address: data.address || '',
                     city: data.city || '',
-                    state: data.state || '',
+                    state: data.state || 'SP',
                 });
             }
         } catch (err: any) {
@@ -191,14 +214,30 @@ export function Settings() {
                                 />
                             </div>
 
-                            <Input
-                                label="Cidade"
-                                name="city"
-                                icon="location_city"
-                                value={formData.city}
-                                onChange={handleChange}
-                                placeholder="Sua Cidade"
-                            />
+                            <div className="w-full space-y-2">
+                                <label className="text-slate-400 text-xs font-bold uppercase tracking-wider ml-1">Cidade</label>
+                                <div className="relative group">
+                                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">
+                                        location_city
+                                    </span>
+                                    <select
+                                        name="city"
+                                        title="Selecione a Cidade"
+                                        value={formData.city}
+                                        onChange={handleChange}
+                                        disabled={loadingCities}
+                                        className="w-full bg-main border border-border-slate rounded-xl py-3 px-12 text-white text-sm outline-none transition-all duration-300 focus:border-primary focus:ring-1 focus:ring-primary/30 appearance-none cursor-pointer disabled:opacity-50"
+                                    >
+                                        <option value="" className="bg-zinc-900">{loadingCities ? 'Carregando cidades...' : 'Selecione a cidade...'}</option>
+                                        {cities.map(city => (
+                                            <option key={city} value={city} className="bg-zinc-900">{city}</option>
+                                        ))}
+                                    </select>
+                                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
+                                        {loadingCities ? 'sync' : 'expand_more'}
+                                    </span>
+                                </div>
+                            </div>
 
                             <div className="w-full space-y-2">
                                 <label className="text-slate-400 text-xs font-bold uppercase tracking-wider ml-1">Estado (UF)</label>
