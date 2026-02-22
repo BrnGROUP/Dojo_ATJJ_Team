@@ -1,5 +1,5 @@
-
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../lib/auth';
 import { useDashboard } from '../hooks/useDashboard';
 import { useFinanceAlerts } from '../hooks/useFinanceAlerts';
 import { DynamicDiv } from '../components/DynamicDiv';
@@ -11,6 +11,8 @@ export function Dashboard() {
     const navigate = useNavigate();
     const { stats, recentMembers, topStudents, birthdays, classes, highlightStudent, loading } = useDashboard();
     const { overdueMembers } = useFinanceAlerts();
+    const { profile } = useAuth();
+    const isStudent = profile?.role === 'student';
 
     if (loading) {
         return (
@@ -18,6 +20,125 @@ export function Dashboard() {
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                     <p className="text-muted text-sm font-medium animate-pulse">Carregando métricas reais...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (isStudent) {
+        return (
+            <div className="max-w-7xl mx-auto space-y-10 animate-fade-in">
+                {/* Cabeçalho de Boas Vindas Personalizado */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-r from-primary/20 to-transparent p-8 rounded-3xl border border-primary/20">
+                    <div className="flex items-center gap-6">
+                        <BeltAvatar name={profile?.full_name || 'Aluno'} belt={profile?.member?.belt || 'Branca'} size="xl" />
+                        <div>
+                            <h1 className="text-3xl font-black text-white italic tracking-tighter">OSS, {profile?.full_name?.split(' ')[0]}!</h1>
+                            <p className="text-primary text-sm font-bold uppercase tracking-widest mt-1">Sua jornada no tatame continua.</p>
+                        </div>
+                    </div>
+                    <div className="flex gap-4">
+                        <div className="bg-main border border-border-slate p-4 rounded-2xl text-center min-w-[100px]">
+                            <p className="text-[10px] text-muted font-bold uppercase mb-1">Seu XP</p>
+                            <p className="text-xl font-black text-white tabular-nums">{profile?.member?.xp || 0}</p>
+                        </div>
+                        <div className="bg-main border border-border-slate p-4 rounded-2xl text-center min-w-[100px]">
+                            <p className="text-[10px] text-muted font-bold uppercase mb-1">Nível</p>
+                            <p className="text-xl font-black text-white tabular-nums">{calculateLevel(profile?.member?.xp || 0).level}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    {/* Próximas Aulas */}
+                    <div className="lg:col-span-8 flex flex-col space-y-6">
+                        <h3 className="text-xs font-bold text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+                            <span className="material-symbols-outlined text-primary text-sm">calendar_month</span>
+                            Minha Agenda de Hoje
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {classes.length > 0 ? classes.map(c => (
+                                <div key={c.id} className="bg-card border border-border-slate p-6 rounded-3xl hover:border-primary/50 transition-all group">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="w-12 h-12 rounded-2xl bg-main flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                            <span className="material-symbols-outlined text-3xl">exercise</span>
+                                        </div>
+                                        <span className="text-[10px] font-black text-white bg-primary px-3 py-1 rounded-lg">
+                                            {new Date(c.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    </div>
+                                    <h4 className="text-lg font-bold text-white mb-1">{c.title}</h4>
+                                    <p className="text-xs text-muted font-medium mb-4">{c.instructor}</p>
+                                    <button className="w-full py-2 bg-main border border-border-slate rounded-xl text-[10px] font-bold text-white uppercase tracking-widest hover:bg-primary transition-colors">Marcar Presença</button>
+                                </div>
+                            )) : (
+                                <div className="col-span-full p-12 text-center bg-white/5 rounded-3xl border border-dashed border-border-slate">
+                                    <p className="text-muted text-sm italic">Nenhuma aula programada para hoje.</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Situação Financeira / Planos */}
+                    <div className="lg:col-span-4 space-y-6">
+                        <h3 className="text-xs font-bold text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+                            <span className="material-symbols-outlined text-emerald-500 text-sm">shield_person</span>
+                            Minha Graduação
+                        </h3>
+                        <div className="bg-card border border-border-slate p-8 rounded-3xl text-center space-y-6 relative overflow-hidden">
+                            {/* Background Glow */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-primary/10 blur-3xl -z-10 rounded-full"></div>
+
+                            <div className="flex justify-center">
+                                <div className="relative">
+                                    <BeltAvatar name={profile?.full_name} belt={profile?.member?.belt || 'Branca'} size="xl" />
+                                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white text-main text-[8px] font-black px-3 py-0.5 rounded-full border-2 border-card uppercase whitespace-nowrap">
+                                        Faixa {profile?.member?.belt || 'Branca'}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <div className="flex justify-between text-[10px] font-bold text-muted uppercase tracking-widest">
+                                    <span>Progresso atual</span>
+                                    <span>{Math.floor(calculateLevel(profile?.member?.xp || 0).progress)}%</span>
+                                </div>
+                                <div className="h-2 w-full bg-main rounded-full overflow-hidden p-[1px]">
+                                    <DynamicDiv
+                                        className="h-full bg-primary rounded-full shadow-[0_0_8px_rgba(215,38,54,0.3)]"
+                                        dynamicStyle={{ width: `${calculateLevel(profile?.member?.xp || 0).progress}%` }}
+                                    />
+                                </div>
+                            </div>
+
+                            <button className="w-full py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:brightness-110 transition-all">
+                                Ver Requisitos de Troca
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Ranking Contextual */}
+                <div className="bg-card border border-border-slate rounded-3xl p-8">
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 className="text-xl font-black text-white italic tracking-tighter uppercase">Ranking de Elite</h3>
+                            <p className="text-muted text-xs font-medium">Veja quem está dominando o tatame este mês</p>
+                        </div>
+                        <Link to="/gamification/leaderboard" className="text-primary text-[10px] font-black uppercase tracking-widest hover:underline">Ver Tabela Completa</Link>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {topStudents.slice(0, 3).map((student, idx) => (
+                            <div key={student.id} className={`p-6 rounded-2xl border ${idx === 0 ? 'bg-primary/5 border-primary/20' : 'bg-main border-border-slate'} flex items-center gap-4`}>
+                                <span className={`text-xl font-black italic ${idx === 0 ? 'text-primary' : 'text-muted'}`}>#{idx + 1}</span>
+                                <BeltAvatar name={student.full_name} belt={student.belt} size="md" showGlow={idx === 0} />
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-bold text-white truncate">{student.full_name}</p>
+                                    <p className="text-[10px] text-muted font-bold uppercase">{student.xp} XP</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         );

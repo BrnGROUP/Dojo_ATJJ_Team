@@ -79,7 +79,7 @@ export function TechniqueChecklist({ memberId, beltName }: TechniqueChecklistPro
 
             const progressMap: Record<string, string> = {};
             if (progressData) {
-                progressData.forEach((p: any) => {
+                progressData.forEach((p) => {
                     progressMap[p.technique_id] = p.status || 'not_seen';
                 });
             }

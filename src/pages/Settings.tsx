@@ -51,7 +51,7 @@ export function Settings() {
                     state: data.state || 'SP',
                 });
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Erro ao buscar configurações:', err);
             toast.error('Não foi possível carregar as configurações.');
         } finally {
@@ -95,8 +95,9 @@ export function Settings() {
 
             toast.success('Configurações salvas com sucesso!');
             fetchSettings();
-        } catch (err: any) {
-            console.error('Erro ao salvar configurações:', err);
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error('Erro ao salvar configurações:', error);
             toast.error('Erro ao salvar configurações.');
         } finally {
             setSaving(false);

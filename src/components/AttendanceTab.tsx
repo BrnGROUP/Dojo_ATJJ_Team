@@ -72,7 +72,7 @@ export function AttendanceTab({ classId, date, classTitle }: AttendanceTabProps)
             if (attendanceError) throw attendanceError;
 
             const initialAttendance: Record<string, { present: boolean, onTime: boolean, goodBehavior: boolean }> = {};
-            attendanceData?.forEach((rec: any) => {
+            attendanceData?.forEach((rec) => {
                 initialAttendance[rec.member_id] = {
                     present: rec.status === 'Present',
                     onTime: rec.on_time,
@@ -92,7 +92,7 @@ export function AttendanceTab({ classId, date, classTitle }: AttendanceTabProps)
     const toggleStatus = (memberId: string, field: 'present' | 'onTime' | 'goodBehavior') => {
         setAttendance(prev => {
             const current = prev[memberId] || { present: false, onTime: false, goodBehavior: false };
-            let updated = { ...current };
+            const updated = { ...current };
 
             if (field === 'present') {
                 updated.present = !current.present;
@@ -114,7 +114,7 @@ export function AttendanceTab({ classId, date, classTitle }: AttendanceTabProps)
     const handleSave = async () => {
         setSaving(true);
         const attendanceToSave = Object.entries(attendance)
-            .filter(([_, data]) => data.present)
+            .filter(([, data]) => data.present)
             .map(([memberId, data]) => ({
                 class_id: classId,
                 member_id: memberId,

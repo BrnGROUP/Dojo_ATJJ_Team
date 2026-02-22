@@ -13,7 +13,7 @@ export interface UserProfile {
 export function useUsers() {
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<any>(null);
+    const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
         fetchUsers();
@@ -31,7 +31,7 @@ export function useUsers() {
             setUsers(data || []);
         } catch (err) {
             console.error('Error fetching users:', err);
-            setError(err);
+            setError(err as Error);
         } finally {
             setLoading(false);
         }

@@ -33,10 +33,11 @@ export function Login() {
                 setMode('login');
             }
             navigate('/');
-        } catch (err: any) {
-            console.error('Auth error:', err);
-            setError(err.message || 'Erro na autenticação');
-            toast.error(err.message || 'Erro na autenticação');
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error('Auth error:', error);
+            setError(error.message || 'Erro na autenticação');
+            toast.error(error.message || 'Erro na autenticação');
         } finally {
             setLoading(false);
         }

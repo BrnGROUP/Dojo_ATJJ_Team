@@ -291,10 +291,10 @@ export function EvaluationsList({ memberId, currentBelt }: EvaluationsListProps)
                                             </div>
                                             <div className="w-full h-2 bg-black/50 rounded-full overflow-hidden">
                                                 <div
-                                                    className={cn("h-full transition-all duration-1000",
+                                                    className={cn("h-full transition-all duration-1000 [width:var(--bar-width)]",
                                                         techniqueStats.percent >= 70 ? "bg-green-500" : "bg-orange-500"
                                                     )}
-                                                    style={{ width: `${techniqueStats.percent}%` }}
+                                                    style={{ '--bar-width': `${techniqueStats.percent}%` } as React.CSSProperties}
                                                 />
                                             </div>
                                             {techniqueStats.percent < 70 && (
@@ -339,7 +339,7 @@ export function EvaluationsList({ memberId, currentBelt }: EvaluationsListProps)
                                         <label className="block text-sm font-bold text-muted mb-2">Status</label>
                                         <select
                                             value={newEval.status}
-                                            onChange={(e) => setNewEval({ ...newEval, status: e.target.value as any })}
+                                            onChange={(e) => setNewEval({ ...newEval, status: e.target.value as 'Aprovado' | 'Reprovado' | 'Pendente' })}
                                             title="Status da Avaliação"
                                             className="w-full bg-main border border-border-slate rounded-xl p-3 text-white outline-none focus:border-primary"
                                         >

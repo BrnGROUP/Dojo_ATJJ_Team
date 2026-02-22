@@ -17,7 +17,7 @@ export interface ClassSession {
 export function useAgenda(filter: string = 'all') {
     const [classes, setClasses] = useState<ClassSession[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<any>(null);
+    const [error, setError] = useState<unknown>(null);
 
     useEffect(() => {
         fetchClasses();

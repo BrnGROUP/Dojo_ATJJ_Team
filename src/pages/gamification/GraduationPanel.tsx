@@ -150,7 +150,7 @@ export function GraduationPanel() {
     };
 
     const handleOpenExamModal = () => {
-        const initialExamData: any = {};
+        const initialExamData: Record<string, { status: 'Aprovado' | 'Reprovado', score: number, notes: string }> = {};
         selectedMembers.forEach(id => {
             initialExamData[id] = { status: 'Aprovado', score: 100, notes: '' };
         });
@@ -158,7 +158,7 @@ export function GraduationPanel() {
         setIsExamModalOpen(true);
     };
 
-    const handleExamChange = (memberId: string, field: string, value: any) => {
+    const handleExamChange = (memberId: string, field: string, value: string | number) => {
         setExamData(prev => ({
             ...prev,
             [memberId]: { ...prev[memberId], [field]: value }

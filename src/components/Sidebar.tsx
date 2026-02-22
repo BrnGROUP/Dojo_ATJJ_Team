@@ -21,20 +21,21 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     };
 
     const menuItems = [
-        { label: 'Painel Geral', icon: 'dashboard', path: '/' },
-        { label: 'Membros', icon: 'group', path: '/members' },
+        { label: 'Painel Geral', icon: 'dashboard', path: '/', roles: ['admin', 'manager', 'coordinator', 'instructor'] },
+        { label: 'Meu Perfil', icon: 'person', path: `/users/${profile?.id}`, roles: ['student'] },
+        { label: 'Membros', icon: 'group', path: '/members', roles: ['admin', 'manager', 'coordinator', 'instructor'] },
         { label: 'Agenda de Aulas', icon: 'calendar_today', path: '/agenda' },
-        { label: 'Turmas', icon: 'groups', path: '/groups' },
+        { label: 'Turmas', icon: 'groups', path: '/groups', roles: ['admin', 'manager', 'coordinator', 'instructor'] },
         { label: 'Competições', icon: 'trophy', path: '/competitions' },
     ];
 
     const gamificationItems = [
-        { label: 'Faixas & Graduação', icon: 'military_tech', path: '/belts' },
-        { label: 'Insígnias (Badges)', icon: 'workspace_premium', path: '/badges' },
-        { label: 'Ranking', icon: 'trophy', path: '/gamification/leaderboard' },
-        { label: 'Evolução', icon: 'monitoring', path: '/gamification/evolution' },
+        { label: 'Faixas & Graduação', icon: 'military_tech', path: '/belts', roles: ['admin', 'manager', 'coordinator', 'instructor'] },
+        { label: 'Insígnias (Badges)', icon: 'workspace_premium', path: '/badges', roles: ['admin', 'manager', 'coordinator', 'instructor'] },
+        { label: 'Ranking', icon: 'leaderboard', path: '/gamification/leaderboard' },
+        { label: 'Minha Evolução', icon: 'monitoring', path: '/gamification/evolution' },
         { label: 'Currículo', icon: 'menu_book', path: '/gamification/curriculum' },
-        { label: 'Graduação', icon: 'upgrade', path: '/gamification/graduation' },
+        { label: 'Graduação', icon: 'upgrade', path: '/gamification/graduation', roles: ['admin', 'manager', 'coordinator', 'instructor'] },
     ];
 
     const adminItems = [
@@ -84,7 +85,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 </div>
                 <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
                     <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 opacity-50">Geral</p>
-                    {menuItems.map((item) => (
+                    {menuItems.filter(item => !item.roles || item.roles.includes(profile?.role)).map((item) => (
                         <Link
                             key={item.path}
                             to={item.path}
@@ -102,7 +103,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     ))}
 
                     <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 mt-8 opacity-50">Gamificação</p>
-                    {gamificationItems.map((item) => (
+                    {gamificationItems.filter(item => !item.roles || item.roles.includes(profile?.role)).map((item) => (
                         <Link
                             key={item.path}
                             to={item.path}

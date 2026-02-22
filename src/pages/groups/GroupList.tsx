@@ -14,24 +14,22 @@ export function GroupList() {
     const [groups, setGroups] = useState<Group[]>([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchGroups();
-    }, []);
+    const [refreshKey, setRefreshKey] = useState(0);
+    const refresh = () => setRefreshKey(k => k + 1);
 
-    async function fetchGroups() {
-        setLoading(true);
-        const { data, error } = await supabase
+    useEffect(() => {
+        let cancelled = false;
+        supabase
             .from('groups')
             .select('*')
-            .order('name', { ascending: true });
-
-        if (error) {
-            console.error('Error fetching groups:', error);
-        } else {
-            setGroups(data || []);
-        }
-        setLoading(false);
-    }
+            .order('name', { ascending: true })
+            .then(({ data, error }) => {
+                if (cancelled) return;
+                if (!error) setGroups(data || []);
+                setLoading(false);
+            });
+        return () => { cancelled = true; };
+    }, [refreshKey]);
 
     const handleDelete = async (id: string) => {
         if (!confirm('Tem certeza que deseja excluir esta turma?')) return;
@@ -41,7 +39,7 @@ export function GroupList() {
         if (error) {
             alert('Erro ao excluir turma.');
         } else {
-            fetchGroups();
+            refresh();
         }
     };
 

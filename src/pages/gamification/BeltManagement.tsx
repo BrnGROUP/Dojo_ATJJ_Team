@@ -29,24 +29,22 @@ export function BeltManagement() {
         order_index: 0
     });
 
-    useEffect(() => {
-        fetchBelts();
-    }, []);
+    const [refreshKey, setRefreshKey] = useState(0);
+    const refresh = () => setRefreshKey(k => k + 1);
 
-    async function fetchBelts() {
-        setLoading(true);
-        const { data, error } = await supabase
+    useEffect(() => {
+        let cancelled = false;
+        supabase
             .from('belts')
             .select('*')
-            .order('order_index', { ascending: true });
-
-        if (error) {
-            console.error('Error fetching belts:', error);
-        } else {
-            setBelts(data || []);
-        }
-        setLoading(false);
-    }
+            .order('order_index', { ascending: true })
+            .then(({ data, error }) => {
+                if (cancelled) return;
+                if (!error) setBelts(data || []);
+                setLoading(false);
+            });
+        return () => { cancelled = true; };
+    }, [refreshKey]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -75,7 +73,7 @@ export function BeltManagement() {
                 requirements: '',
                 order_index: (belts.length > 0 ? belts[belts.length - 1].order_index + 1 : 1)
             });
-            fetchBelts();
+            refresh();
         }
         setSaving(false);
     };
@@ -101,7 +99,7 @@ export function BeltManagement() {
             console.error('Error deleting belt:', error);
             alert('Erro ao excluir faixa.');
         } else {
-            fetchBelts();
+            refresh();
         }
     };
 

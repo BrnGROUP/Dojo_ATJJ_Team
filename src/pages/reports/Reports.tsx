@@ -7,7 +7,7 @@ import { toast } from 'react-hot-toast';
 export function Reports() {
     const [loading, setLoading] = useState<string | null>(null);
 
-    const exportToCSV = (data: any[], filename: string) => {
+    const exportToCSV = (data: Record<string, unknown>[], filename: string) => {
         if (!data || data.length === 0) return;
 
         const csvRows = [];
@@ -44,8 +44,8 @@ export function Reports() {
     const handleExport = async (type: 'members' | 'payments' | 'attendance' | 'gamification') => {
         setLoading(type);
         try {
-            let data: any[] | null = [];
-            let error: any = null;
+            let data: Record<string, unknown>[] | null = [];
+            let error: { message: string } | null = null;
 
             if (type === 'members') {
                 const result = await supabase.from('members').select('*');
@@ -79,8 +79,9 @@ export function Reports() {
             } else {
                 toast.error('Nenhum dado encontrado para este relatório.');
             }
-        } catch (err: any) {
-            toast.error(`Erro ao gerar relatório: ${err.message}`);
+        } catch (err: unknown) {
+            const error = err as Error;
+            toast.error(`Erro ao gerar relatório: ${error.message}`);
         } finally {
             setLoading(null);
         }

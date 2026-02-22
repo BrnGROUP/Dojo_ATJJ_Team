@@ -71,7 +71,13 @@ export function GroupForm() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        setFormData(prev => {
+            const updated = { ...prev, [name]: value };
+            if (name === 'time') {
+                updated.schedule_description = buildScheduleDescription(prev.selectedDays, value);
+            }
+            return updated;
+        });
     };
 
     const handleDayToggle = (dayId: string) => {
@@ -85,19 +91,19 @@ export function GroupForm() {
             const order = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
             updated.sort((a, b) => order.indexOf(a) - order.indexOf(b));
 
-            return { ...prev, selectedDays: updated };
+            return {
+                ...prev,
+                selectedDays: updated,
+                schedule_description: buildScheduleDescription(updated, prev.time)
+            };
         });
     };
 
 
-    // Update schedule_description whenever days or time changes
-    useEffect(() => {
-        const { selectedDays, time } = formData;
-        if (selectedDays.length > 0 && time) {
-            const desc = `${selectedDays.join('/')} ${time}`;
-            setFormData(prev => ({ ...prev, schedule_description: desc }));
-        }
-    }, [formData.selectedDays, formData.time]);
+    const buildScheduleDescription = (days: string[], time: string) => {
+        if (days.length > 0 && time) return `${days.join('/')} ${time}`;
+        return '';
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -226,8 +232,8 @@ export function GroupForm() {
                         <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-border-slate shadow-inner">
                             <div className="relative group cursor-pointer hover:scale-105 transition-transform">
                                 <div
-                                    className="w-14 h-14 rounded-2xl border-2 border-white/10 shadow-lg ring-4 ring-black/20"
-                                    style={{ backgroundColor: formData.color } as React.CSSProperties}
+                                    className="w-14 h-14 rounded-2xl border-2 border-white/10 shadow-lg ring-4 ring-black/20 [background-color:var(--preview-color)]"
+                                    style={{ '--preview-color': formData.color } as React.CSSProperties}
                                 />
                                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                     <span className="material-symbols-outlined text-white text-xl drop-shadow-md">palette</span>

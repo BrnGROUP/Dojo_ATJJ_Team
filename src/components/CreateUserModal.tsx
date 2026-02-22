@@ -50,7 +50,7 @@ export function CreateUserModal({ isOpen, onClose, onSuccess }: CreateUserModalP
                 // Para cadastrar OUTROS sem deslogar, o ideal é uma Edge Function.
                 // Aqui faremos o flow de signUp e avisaremos sobre o login ou usaremos o profile.
 
-                const { error: signUpError } = await supabase.auth.signUp({
+                const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
@@ -62,6 +62,20 @@ export function CreateUserModal({ isOpen, onClose, onSuccess }: CreateUserModalP
                 });
 
                 if (signUpError) throw signUpError;
+
+                // Sincronização: Criar o Membro correspondente
+                if (signUpData.user) {
+                    const { error: memberError } = await supabase.from('members').insert([{
+                        user_id: signUpData.user.id,
+                        full_name: fullName,
+                        email: email,
+                        type: role === 'admin' || role === 'manager' ? 'staff' : role,
+                        status: 'Active',
+                        belt: 'Branca'
+                    }]);
+                    if (memberError) console.error('Aviso: Perfil de membro não criado automaticamente:', memberError);
+                }
+
                 toast.success(`Usuário ${fullName} cadastrado com sucesso!`);
             }
 
@@ -72,9 +86,10 @@ export function CreateUserModal({ isOpen, onClose, onSuccess }: CreateUserModalP
             setPassword('');
             setRole('student');
 
-        } catch (error: any) {
-            console.error('Erro ao cadastrar:', error);
-            toast.error(error.message || 'Erro ao processar cadastro');
+        } catch (error: unknown) {
+            const err = error as Error;
+            console.error('Erro ao cadastrar:', err);
+            toast.error(err.message || 'Erro ao processar cadastro');
         } finally {
             setLoading(false);
         }

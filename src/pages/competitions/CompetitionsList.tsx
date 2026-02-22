@@ -32,7 +32,7 @@ export function CompetitionsList() {
 
             if (error) throw error;
             setCompetitions(data || []);
-        } catch (err) {
+        } catch {
             toast.error('Erro ao carregar competições.');
         } finally {
             setLoading(false);

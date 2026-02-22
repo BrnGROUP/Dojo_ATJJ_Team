@@ -13,7 +13,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         try {
             await signOut();
             toast.success('Sessão encerrada.');
-        } catch (error) {
+        } catch {
             toast.error('Erro ao sair.');
         }
     };
@@ -62,7 +62,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                                 {profile?.full_name || 'Usuário'}
                             </p>
                             <p className="text-[10px] text-primary font-bold uppercase tracking-wider">
-                                {getRoleLabel(profile?.role)}
+                                {getRoleLabel(profile?.role ?? '')}
                             </p>
                         </div>
 

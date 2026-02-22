@@ -18,7 +18,7 @@ export interface Member {
 export function useMembers() {
     const [members, setMembers] = useState<Member[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<any>(null);
+    const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
         fetchMembers();
@@ -35,8 +35,9 @@ export function useMembers() {
             if (error) throw error;
             setMembers((data || []) as Member[]);
         } catch (err) {
-            console.error('Error fetching members:', err);
-            setError(err);
+            const error = err as Error;
+            console.error('Error fetching members:', error);
+            setError(error);
         } finally {
             setLoading(false);
         }

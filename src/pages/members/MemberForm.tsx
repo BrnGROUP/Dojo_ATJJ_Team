@@ -36,6 +36,9 @@ export function MemberForm() {
         type: 'student',
     });
 
+    const [createAccess, setCreateAccess] = useState(false);
+    const [password, setPassword] = useState('');
+
     const { cities, loadingCities } = useCities(formData.state);
     const [groups, setGroups] = useState<{ id: string, name: string }[]>([]);
     const [belts, setBelts] = useState<{ id: string, name: string, color: string, color_secondary?: string, min_xp: number }[]>([]);
@@ -94,7 +97,7 @@ export function MemberForm() {
                     type: data.type || 'student',
                 });
             }
-        } catch (err) {
+        } catch {
             toast.error('Erro ao buscar dados');
         } finally {
             setLoading(false);
@@ -110,7 +113,14 @@ export function MemberForm() {
         if (name === 'cep') maskedValue = maskCEP(value);
         if (name === 'email') maskedValue = value.toLowerCase().trim();
 
-        setFormData((prev) => ({ ...prev, [name]: maskedValue }));
+        setFormData((prev) => {
+            const next = { ...prev, [name]: maskedValue };
+            // Regra da Academia: Professores são Faixa Preta
+            if (name === 'type' && value === 'teacher') {
+                next.belt = 'Preta';
+            }
+            return next;
+        });
     };
 
     const handleClassToggle = (className: string) => {
@@ -149,16 +159,45 @@ export function MemberForm() {
         };
 
         try {
+            let userId = null;
+
+            // Se for novo membro e quiser criar acesso do sistema
+            if (!id && createAccess && formData.email && password) {
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: formData.email,
+                    password: password,
+                    options: {
+                        data: {
+                            full_name: formData.full_name,
+                            role: formData.type === 'staff' ? 'admin' : formData.type // simplificado
+                        }
+                    }
+                });
+
+                if (authError) {
+                    toast.error(`Erro ao criar acesso: ${authError.message}`);
+                    setSaving(false);
+                    return;
+                }
+
+                if (authData.user) {
+                    userId = authData.user.id;
+                }
+            }
+
+            const finalDataToSave = userId ? { ...dataToSave, user_id: userId } : dataToSave;
+
             const { error } = id
-                ? await supabase.from('members').update(dataToSave).eq('id', id)
-                : await supabase.from('members').insert([dataToSave]);
+                ? await supabase.from('members').update(finalDataToSave).eq('id', id)
+                : await supabase.from('members').insert([finalDataToSave]);
 
             if (error) throw error;
 
             toast.success(id ? 'Aluno atualizado!' : 'Aluno cadastrado!');
             navigate('/members');
-        } catch (err: any) {
-            toast.error(`Erro: ${err.message}`);
+        } catch (err: unknown) {
+            const error = err as Error;
+            toast.error(`Erro: ${error.message}`);
         } finally {
             setSaving(false);
         }
@@ -221,6 +260,47 @@ export function MemberForm() {
                                     placeholder="Ex: Hélio Gracie"
                                     required
                                 />
+
+                                {!id && (
+                                    <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6 space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex flex-col gap-1">
+                                                <h4 className="text-white text-sm font-bold flex items-center gap-2">
+                                                    <span className="material-symbols-outlined text-primary">key</span>
+                                                    Acesso ao Sistema
+                                                </h4>
+                                                <p className="text-muted text-[10px] font-medium uppercase tracking-wider">Permitir que o aluno(a) acesse o painel</p>
+                                            </div>
+                                            <label className="relative inline-flex items-center cursor-pointer" htmlFor="create-access-toggle">
+                                                <input
+                                                    id="create-access-toggle"
+                                                    type="checkbox"
+                                                    className="sr-only peer"
+                                                    checked={createAccess}
+                                                    onChange={(e) => setCreateAccess(e.target.checked)}
+                                                />
+                                                <div className="w-11 h-6 bg-main peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary peer-checked:after:bg-white"></div>
+                                                <span className="sr-only">Ativar acesso ao sistema</span>
+                                            </label>
+                                        </div>
+
+                                        {createAccess && (
+                                            <div className="animate-in slide-in-from-top-2 duration-300 pt-2">
+                                                <Input
+                                                    label="Senha Inicial"
+                                                    type="password"
+                                                    icon="lock"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    placeholder="Mínimo 6 caracteres"
+                                                    required={createAccess}
+                                                />
+                                                <p className="text-[10px] text-muted italic mt-2 ml-1">* O usuário poderá logar imediatamente com este e-mail e senha.</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
                                 <div className="w-full space-y-2">
                                     <label className="text-slate-400 text-xs font-bold uppercase tracking-wider ml-1">Categoria / Vínculo</label>
                                     <div className="relative group">

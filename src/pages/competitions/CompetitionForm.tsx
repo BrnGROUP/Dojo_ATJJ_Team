@@ -46,7 +46,7 @@ export function CompetitionForm() {
                     description: data.description || '',
                 });
             }
-        } catch (err) {
+        } catch {
             toast.error('Torneio não encontrado');
             navigate('/competitions');
         } finally {
@@ -70,8 +70,9 @@ export function CompetitionForm() {
             if (error) throw error;
             toast.success(id ? 'Torneio atualizado!' : 'Torneio agendado!');
             navigate('/competitions');
-        } catch (err: any) {
-            toast.error(`Erro: ${err.message}`);
+        } catch (err: unknown) {
+            const error = err as Error;
+            toast.error(`Erro: ${error.message}`);
         } finally {
             setSaving(false);
         }

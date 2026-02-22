@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../lib/auth';
@@ -33,19 +33,7 @@ export function UserForm() {
 
     const isOwnProfile = currentUser?.id === id;
 
-    useEffect(() => {
-        if (!isAdmin && currentUser?.id !== id) {
-            toast.error('Você só pode editar o seu próprio perfil.');
-            navigate('/');
-            return;
-        }
-
-        if (id) {
-            fetchUser();
-        }
-    }, [id, isAdmin, currentUser]);
-
-    async function fetchUser() {
+    const fetchUser = useCallback(async () => {
         if (!id) return;
         setLoading(true);
         try {
@@ -75,12 +63,24 @@ export function UserForm() {
                     password: ''
                 });
             }
-        } catch (err: any) {
+        } catch {
             toast.error('Erro de conexão');
         } finally {
             setLoading(false);
         }
-    }
+    }, [id]);
+
+    useEffect(() => {
+        if (!isAdmin && currentUser?.id !== id) {
+            toast.error('Você só pode editar o seu próprio perfil.');
+            navigate('/');
+            return;
+        }
+
+        if (id) {
+            fetchUser();
+        }
+    }, [id, isAdmin, currentUser, navigate, fetchUser]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -126,8 +126,9 @@ export function UserForm() {
 
             toast.success('Perfil atualizado com sucesso!');
             navigate(isAdmin ? '/users' : '/');
-        } catch (err: any) {
-            toast.error(`Erro ao salvar: ${err.message}`);
+        } catch (err: unknown) {
+            const error = err as Error;
+            toast.error(`Erro ao salvar: ${error.message}`);
         } finally {
             setSaving(false);
         }

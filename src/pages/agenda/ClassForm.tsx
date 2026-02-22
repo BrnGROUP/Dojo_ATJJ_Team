@@ -73,7 +73,7 @@ export function ClassForm() {
                     lesson_plan: data.lesson_plan || '',
                 });
             }
-        } catch (err) {
+        } catch {
             toast.error('Erro ao buscar dados da aula');
         } finally {
             setLoading(false);
@@ -125,8 +125,9 @@ export function ClassForm() {
 
             toast.success(id ? 'Aula atualizada!' : 'Aula criada!');
             navigate('/agenda');
-        } catch (err: any) {
-            toast.error(`Erro: ${err.message}`);
+        } catch (err: unknown) {
+            const error = err as Error;
+            toast.error(`Erro: ${error.message}`);
         } finally {
             setSaving(false);
         }
@@ -177,7 +178,7 @@ export function ClassForm() {
                     <button
                         key={tab.id}
                         type="button"
-                        onClick={() => !tab.disabled && setActiveTab(tab.id as any)}
+                        onClick={() => !tab.disabled && setActiveTab(tab.id as 'details' | 'plan' | 'attendance')}
                         disabled={tab.disabled}
                         className={cn(
                             "flex items-center justify-center gap-2 px-4 sm:px-6 h-12 rounded-xl transition-all font-bold text-sm whitespace-nowrap flex-1",

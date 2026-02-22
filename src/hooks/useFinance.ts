@@ -31,7 +31,7 @@ export function useFinance(filter: string = 'all') {
         totalOverdue: 0,
         projectedRevenue: 0,
     });
-    const [error, setError] = useState<any>(null);
+    const [error, setError] = useState<unknown>(null);
 
     useEffect(() => {
         fetchPayments();
@@ -62,7 +62,7 @@ export function useFinance(filter: string = 'all') {
                 .select('amount, status');
 
             if (!statsError && allPayments) {
-                const newStats = allPayments.reduce((acc: FinanceStats, curr: any) => {
+                const newStats = allPayments.reduce((acc: FinanceStats, curr) => {
                     if (curr.status === 'Paid') acc.totalPaid += curr.amount;
                     if (curr.status === 'Pending') acc.totalPending += curr.amount;
                     if (curr.status === 'Overdue') acc.totalOverdue += curr.amount;

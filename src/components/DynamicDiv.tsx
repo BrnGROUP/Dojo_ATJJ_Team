@@ -12,14 +12,14 @@ export function DynamicDiv({ dynamicStyle, className, children, ...props }: Dyna
         if (!el || !dynamicStyle) return;
 
         Object.entries(dynamicStyle).forEach(([key, value]) => {
+            const style = el.style as CSSStyleDeclaration & Record<string, string | null>;
             if (value === undefined || value === null) {
-                // Try to remove both property formats
-                el.style.removeProperty(key);
-                if ((el.style as any)[key]) (el.style as any)[key] = '';
+                style.removeProperty(key);
+                if (style[key]) style[key] = '';
             } else if (key.startsWith('--')) {
-                el.style.setProperty(key, String(value));
+                style.setProperty(key, String(value));
             } else {
-                (el.style as any)[key] = value;
+                style[key] = String(value);
             }
         });
     }, [dynamicStyle]);

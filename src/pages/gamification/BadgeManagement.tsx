@@ -32,25 +32,26 @@ export function BadgeManagement() {
         criteria_value: 0
     });
 
-    useEffect(() => {
-        fetchBadges();
-    }, []);
+    const [refreshKey, setRefreshKey] = useState(0);
+    const refresh = () => setRefreshKey(k => k + 1);
 
-    async function fetchBadges() {
-        setLoading(true);
-        const { data, error } = await supabase
+
+    useEffect(() => {
+        let cancelled = false;
+        supabase
             .from('badges')
             .select('*')
             .order('category', { ascending: true })
-            .order('xp_reward', { ascending: true });
+            .order('xp_reward', { ascending: true })
+            .then(({ data, error }) => {
+                if (cancelled) return;
+                if (!error) setBadges(data || []);
+                setLoading(false);
+            });
+        return () => { cancelled = true; };
+    }, [refreshKey]);
 
-        if (error) {
-            console.error('Error fetching badges:', error);
-        } else {
-            setBadges(data || []);
-        }
-        setLoading(false);
-    }
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -81,7 +82,7 @@ export function BadgeManagement() {
                 criteria_type: 'manual',
                 criteria_value: 0
             });
-            fetchBadges();
+            refresh();
         }
         setSaving(false);
     };
@@ -109,7 +110,7 @@ export function BadgeManagement() {
             console.error('Error deleting badge:', error);
             alert('Erro ao excluir insígnia.');
         } else {
-            fetchBadges();
+            refresh();
         }
     };
 
