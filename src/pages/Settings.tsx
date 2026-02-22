@@ -18,7 +18,7 @@ export function Settings() {
         cep: '',
         address: '',
         city: '',
-        state: '',
+        state: 'SP',
     });
 
     useEffect(() => {
@@ -194,20 +194,34 @@ export function Settings() {
                             <Input
                                 label="Cidade"
                                 name="city"
-                                icon="city"
+                                icon="location_city"
                                 value={formData.city}
                                 onChange={handleChange}
                                 placeholder="Sua Cidade"
                             />
 
-                            <Input
-                                label="Estado (UF)"
-                                name="state"
-                                icon="public"
-                                value={formData.state}
-                                onChange={handleChange}
-                                placeholder="Estado"
-                            />
+                            <div className="w-full space-y-2">
+                                <label className="text-slate-400 text-xs font-bold uppercase tracking-wider ml-1">Estado (UF)</label>
+                                <div className="relative group">
+                                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">
+                                        public
+                                    </span>
+                                    <select
+                                        name="state"
+                                        title="Estado (UF)"
+                                        value={formData.state}
+                                        onChange={handleChange}
+                                        className="w-full bg-main border border-border-slate rounded-xl py-3 px-12 text-white text-sm outline-none transition-all duration-300 focus:border-primary focus:ring-1 focus:ring-primary/30 appearance-none cursor-pointer"
+                                    >
+                                        {['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'].map(uf => (
+                                            <option key={uf} value={uf} className="bg-zinc-900">{uf}</option>
+                                        ))}
+                                    </select>
+                                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
+                                        expand_more
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </CardContent>
                 </Card>
