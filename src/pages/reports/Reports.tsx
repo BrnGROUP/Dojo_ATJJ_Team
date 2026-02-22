@@ -8,20 +8,29 @@ export function Reports() {
     const [loading, setLoading] = useState<string | null>(null);
 
     const exportToCSV = (data: any[], filename: string) => {
+        if (!data || data.length === 0) return;
+
         const csvRows = [];
-        const headers = Object.keys(data[0]);
+        // Flatten headers recursively for a few levels if needed, or just focus on flat keys
+        const headers = Object.keys(data[0]).filter(k => typeof data[0][k] !== 'object' || data[0][k] === null);
+
+        // Add specific nested fields if they exist
+        if (data[0].student_name !== undefined) headers.push('student_name');
+        if (data[0].class_name !== undefined) headers.push('class_name');
+
         csvRows.push(headers.join(','));
 
         for (const row of data) {
             const values = headers.map(header => {
                 const val = row[header];
-                return `"${val}"`;
+                const cleanVal = (val === null || val === undefined) ? '' : String(val).replace(/"/g, '""');
+                return `"${cleanVal}"`;
             });
             csvRows.push(values.join(','));
         }
 
-        const csvContent = csvRows.join('\n');
-        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const csvContent = "\uFEFF" + csvRows.join('\n'); // Add BOM for Excel compatibility
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.setAttribute('hidden', '');
@@ -32,7 +41,7 @@ export function Reports() {
         document.body.removeChild(a);
     };
 
-    const handleExport = async (type: 'members' | 'payments' | 'attendance') => {
+    const handleExport = async (type: 'members' | 'payments' | 'attendance' | 'gamification') => {
         setLoading(type);
         try {
             let data: any[] | null = [];
@@ -49,12 +58,24 @@ export function Reports() {
                     student_name: p.members?.full_name
                 })) || [];
                 error = result.error;
+            } else if (type === 'attendance') {
+                const result = await supabase.from('attendance').select('*, members(full_name), classes(name)');
+                data = result.data?.map(a => ({
+                    ...a,
+                    student_name: a.members?.full_name,
+                    class_name: a.classes?.name
+                })) || [];
+                error = result.error;
+            } else if (type === 'gamification') {
+                const result = await supabase.from('members').select('full_name, belt, stripes, xp');
+                data = result.data;
+                error = result.error;
             }
 
             if (error) throw error;
             if (data && data.length > 0) {
                 exportToCSV(data, `relatorio_${type}_${new Date().toISOString().split('T')[0]}`);
-                toast.success('Relatório gerado com sucesso!');
+                toast.success(`Relatório de ${type} gerado com sucesso!`);
             } else {
                 toast.error('Nenhum dado encontrado para este relatório.');
             }
@@ -119,18 +140,44 @@ export function Reports() {
                     </CardContent>
                 </Card>
 
-                {/* Presença (Fase 3) */}
-                <Card className="opacity-60 cursor-not-allowed">
+                {/* Presença */}
+                <Card className="hover:border-primary/30 transition-all">
                     <CardContent className="p-8 space-y-6">
-                        <div className="w-12 h-12 rounded-2xl bg-muted/10 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-muted text-3xl">how_to_reg</span>
+                        <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center">
+                            <span className="material-symbols-outlined text-indigo-500 text-3xl">how_to_reg</span>
                         </div>
                         <div>
-                            <h3 className="text-xl font-black text-muted uppercase italic">Frequência Geral</h3>
-                            <p className="text-muted text-sm font-medium mt-1">Análise de assiduidade por aluno e turma. (Em breve)</p>
+                            <h3 className="text-xl font-black text-white uppercase italic">Frequência Geral</h3>
+                            <p className="text-muted text-sm font-medium mt-1">Análise de assiduidade por aluno e turma.</p>
                         </div>
-                        <Button variant="outline" className="w-full" disabled>
-                            Indisponível
+                        <Button
+                            variant="outline"
+                            className="w-full"
+                            loading={loading === 'attendance'}
+                            onClick={() => handleExport('attendance')}
+                        >
+                            Exportar CSV
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                {/* Gamificação */}
+                <Card className="hover:border-primary/30 transition-all">
+                    <CardContent className="p-8 space-y-6">
+                        <div className="w-12 h-12 rounded-2xl bg-rose-500/10 flex items-center justify-center">
+                            <span className="material-symbols-outlined text-rose-500 text-3xl">military_tech</span>
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-black text-white uppercase italic">Evolução Técnica</h3>
+                            <p className="text-muted text-sm font-medium mt-1">Ranking de XP, faixas atuais e graus conquistados.</p>
+                        </div>
+                        <Button
+                            variant="outline"
+                            className="w-full"
+                            loading={loading === 'gamification'}
+                            onClick={() => handleExport('gamification')}
+                        >
+                            Exportar CSV
                         </Button>
                     </CardContent>
                 </Card>
