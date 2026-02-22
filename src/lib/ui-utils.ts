@@ -47,3 +47,11 @@ export const getInitials = (name: string) => {
         .substring(0, 2)
         .toUpperCase();
 };
+
+export const calculateLevel = (xp: number) => {
+    // 1000 XP per level
+    const level = Math.floor(xp / 1000) + 1;
+    const currentLevelXP = xp % 1000;
+    const progress = (currentLevelXP / 1000) * 100;
+    return { level, progress };
+};

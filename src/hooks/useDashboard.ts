@@ -52,8 +52,17 @@ export function useDashboard() {
             const { count: totalCount } = await supabase.from('members').select('*', { count: 'exact', head: true });
             const { count: activeCount } = await supabase.from('members').select('*', { count: 'exact', head: true }).eq('status', 'Active');
 
-            // Mock revenue for now (Active * 150)
-            const revenue = (activeCount || 0) * 150;
+            // Calculate Real Revenue (Paid this month)
+            const today = new Date();
+            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString();
+
+            const { data: revenueData } = await supabase
+                .from('payments')
+                .select('amount')
+                .eq('status', 'Paid')
+                .gte('paid_date', firstDayOfMonth);
+
+            const revenue = revenueData?.reduce((acc, curr) => acc + curr.amount, 0) || 0;
 
             setStats({
                 totalStudents: totalCount || 0,

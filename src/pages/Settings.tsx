@@ -1,18 +1,60 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import { maskCNPJ, maskPhone, maskCEP } from '../lib/masks';
+import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
+import { Card, CardContent } from '../components/ui/Card';
+import { toast } from 'react-hot-toast';
 
 export function Settings() {
     const [loading, setLoading] = useState(false);
+    const [saving, setSaving] = useState(false);
     const [formData, setFormData] = useState({
-        dojoName: 'ATJJ Dojo v4',
+        id: '',
+        dojoName: '',
         cnpj: '',
-        email: 'contato@atjjdojo.com',
+        email: '',
         phone: '',
         cep: '',
         address: '',
         city: '',
         state: '',
     });
+
+    useEffect(() => {
+        fetchSettings();
+    }, []);
+
+    async function fetchSettings() {
+        setLoading(true);
+        try {
+            const { data, error } = await supabase
+                .from('settings')
+                .select('*')
+                .maybeSingle();
+
+            if (error) throw error;
+
+            if (data) {
+                setFormData({
+                    id: data.id,
+                    dojoName: data.dojo_name || '',
+                    cnpj: maskCNPJ(data.cnpj || ''),
+                    email: data.email || '',
+                    phone: maskPhone(data.phone || ''),
+                    cep: maskCEP(data.cep || ''),
+                    address: data.address || '',
+                    city: data.city || '',
+                    state: data.state || '',
+                });
+            }
+        } catch (err: any) {
+            console.error('Erro ao buscar configurações:', err);
+            toast.error('Não foi possível carregar as configurações.');
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -28,113 +70,157 @@ export function Settings() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
-        // This is a placeholder for actual saving logic
-        setTimeout(() => {
-            setLoading(false);
-            alert('Configurações salvas (Simulação)');
-        }, 1000);
+        setSaving(true);
+        try {
+            const updateData = {
+                dojo_name: formData.dojoName,
+                cnpj: formData.cnpj.replace(/\D/g, ''),
+                email: formData.email,
+                phone: formData.phone.replace(/\D/g, ''),
+                cep: formData.cep.replace(/\D/g, ''),
+                address: formData.address,
+                city: formData.city,
+                state: formData.state,
+                updated_at: new Date().toISOString(),
+            };
+
+            const { error } = formData.id
+                ? await supabase.from('settings').update(updateData).eq('id', formData.id)
+                : await supabase.from('settings').insert([updateData]);
+
+            if (error) throw error;
+
+            toast.success('Configurações salvas com sucesso!');
+            fetchSettings();
+        } catch (err: any) {
+            console.error('Erro ao salvar configurações:', err);
+            toast.error('Erro ao salvar configurações.');
+        } finally {
+            setSaving(false);
+        }
     };
 
+    if (loading) {
+        return (
+            <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
+                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-muted font-black uppercase tracking-widest text-xs animate-pulse">Carregando Configurações...</p>
+            </div>
+        );
+    }
+
     return (
-        <div className="max-w-[800px] w-full mx-auto space-y-6">
-            <div className="flex flex-col gap-2 mb-8">
-                <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Configurações do Dojo</h1>
-                <p className="text-muted text-base font-normal leading-normal">Gerencie os dados institucionais e operacionais do seu Dojo.</p>
+        <div className="max-w-[800px] w-full mx-auto space-y-6 pb-20">
+            <div className="flex flex-col gap-2 mb-10">
+                <h1 className="text-white text-3xl sm:text-5xl font-black leading-none tracking-tighter uppercase italic">
+                    Configurações
+                </h1>
+                <p className="text-muted text-sm sm:text-base font-medium">
+                    Gerencie a identidade e dados institucionais do seu Dojo.
+                </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="bg-card p-6 rounded-2xl border border-border-slate space-y-6">
-                    <div className="flex items-center gap-2 border-b border-border-slate pb-4">
-                        <span className="material-symbols-outlined text-primary">domain</span>
-                        <h2 className="text-white text-xl font-bold">Informações Institucionais</h2>
-                    </div>
+            <form onSubmit={handleSubmit} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <Card>
+                    <CardContent className="p-6 sm:p-8 space-y-8">
+                        <div className="flex items-center gap-3 border-b border-border-slate pb-6">
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-primary">domain</span>
+                            </div>
+                            <h2 className="text-white text-xl font-black uppercase tracking-tight italic">Informações do Dojo</h2>
+                        </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <label className="flex flex-col w-full">
-                            <p className="text-white text-sm font-semibold mb-2">Nome do Dojo</p>
-                            <input
-                                name="dojoName"
-                                value={formData.dojoName}
-                                onChange={handleChange}
-                                className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary h-12 px-4 outline-none"
-                            />
-                        </label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="md:col-span-2">
+                                <Input
+                                    label="Nome do Dojo"
+                                    name="dojoName"
+                                    icon="store"
+                                    value={formData.dojoName}
+                                    onChange={handleChange}
+                                    required
+                                    placeholder="Ex: My Dojo Training Center"
+                                />
+                            </div>
 
-                        <label className="flex flex-col w-full">
-                            <p className="text-white text-sm font-semibold mb-2">CNPJ</p>
-                            <input
+                            <Input
+                                label="CNPJ"
                                 name="cnpj"
+                                icon="badge"
                                 value={formData.cnpj}
                                 onChange={handleChange}
                                 placeholder="00.000.000/0000-00"
-                                className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary h-12 px-4 outline-none"
                             />
-                        </label>
 
-                        <label className="flex flex-col w-full">
-                            <p className="text-white text-sm font-semibold mb-2">E-mail de Contato</p>
-                            <input
+                            <Input
+                                label="E-mail de Contato"
                                 name="email"
+                                type="email"
+                                icon="mail"
                                 value={formData.email}
                                 onChange={handleChange}
-                                type="email"
-                                className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary h-12 px-4 outline-none"
+                                placeholder="contato@dojo.com"
                             />
-                        </label>
 
-                        <label className="flex flex-col w-full">
-                            <p className="text-white text-sm font-semibold mb-2">Telefone Comercial</p>
-                            <input
+                            <Input
+                                label="Telefone Comercial"
                                 name="phone"
+                                icon="call"
                                 value={formData.phone}
                                 onChange={handleChange}
                                 placeholder="(00) 00000-0000"
-                                className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary h-12 px-4 outline-none"
                             />
-                        </label>
-                    </div>
-                </div>
 
-                <div className="bg-card p-6 rounded-2xl border border-border-slate space-y-6">
-                    <div className="flex items-center gap-2 border-b border-border-slate pb-4">
-                        <span className="material-symbols-outlined text-primary">location_on</span>
-                        <h2 className="text-white text-xl font-bold">Localização</h2>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <label className="flex flex-col w-full">
-                            <p className="text-white text-sm font-semibold mb-2">CEP</p>
-                            <input
+                            <Input
+                                label="CEP"
                                 name="cep"
+                                icon="location_on"
                                 value={formData.cep}
                                 onChange={handleChange}
                                 placeholder="00000-000"
-                                className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary h-12 px-4 outline-none"
                             />
-                        </label>
 
-                        <label className="flex flex-col md:col-span-2 w-full">
-                            <p className="text-white text-sm font-semibold mb-2">Endereço</p>
-                            <input
-                                name="address"
-                                value={formData.address}
+                            <div className="md:col-span-2">
+                                <Input
+                                    label="Endereço Completo"
+                                    name="address"
+                                    icon="map"
+                                    value={formData.address}
+                                    onChange={handleChange}
+                                    placeholder="Rua, Número, Bairro"
+                                />
+                            </div>
+
+                            <Input
+                                label="Cidade"
+                                name="city"
+                                icon="city"
+                                value={formData.city}
                                 onChange={handleChange}
-                                className="w-full rounded-lg text-white bg-main border border-border-slate focus:border-primary h-12 px-4 outline-none"
+                                placeholder="Sua Cidade"
                             />
-                        </label>
-                    </div>
-                </div>
 
-                <div className="flex justify-end gap-4">
-                    <button
+                            <Input
+                                label="Estado (UF)"
+                                name="state"
+                                icon="public"
+                                value={formData.state}
+                                onChange={handleChange}
+                                placeholder="Estado"
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <div className="flex justify-end pt-4">
+                    <Button
                         type="submit"
-                        disabled={loading}
-                        className="flex items-center justify-center gap-2 bg-primary text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-primary/20 hover:brightness-110 transition-all disabled:opacity-50"
+                        loading={saving}
+                        className="w-full sm:min-w-[250px]"
+                        icon={<span className="material-symbols-outlined">save</span>}
                     >
-                        <span className="material-symbols-outlined">{loading ? 'sync' : 'save'}</span>
-                        {loading ? 'Salvando...' : 'Salvar Configurações'}
-                    </button>
+                        Salvar Configurações
+                    </Button>
                 </div>
             </form>
         </div>

@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { useAuth } from '../lib/auth';
+import { useSettings } from '../hooks/useSettings';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -10,6 +11,7 @@ interface SidebarProps {
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
     const location = useLocation();
     const { profile, isAdmin, isManager } = useAuth();
+    const { settings } = useSettings();
 
     // Close sidebar when route changes on mobile
     const handleLinkClick = () => {
@@ -67,7 +69,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                             <img src="/logo.png" alt="ATJJ Logo" className="w-10 h-10 object-contain" />
                         </div>
                         <div>
-                            <h1 className="text-white text-xl font-extrabold tracking-tight leading-none uppercase">ATJJ Dojo</h1>
+                            <h1 className="text-white text-xl font-extrabold tracking-tight leading-none uppercase truncate max-w-[120px]">
+                                {settings.dojo_name}
+                            </h1>
                             <p className="text-muted text-[10px] font-bold tracking-[0.2em] mt-1">SISTEMA V4</p>
                         </div>
                     </div>

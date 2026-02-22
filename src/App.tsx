@@ -7,13 +7,13 @@ import { Login } from './pages/Login';
 
 import { MembersList } from './pages/members/MembersList';
 import { MemberForm } from './pages/members/MemberForm';
-import { PlaceholderPage } from './pages/Placeholder';
 import { Agenda } from './pages/agenda/Agenda';
 import { ClassForm } from './pages/agenda/ClassForm';
 import { GroupList } from './pages/groups/GroupList';
 import { GroupForm } from './pages/groups/GroupForm';
 import { Finance } from './pages/finance/Finance';
 import { PaymentForm } from './pages/finance/PaymentForm';
+import { Reports } from './pages/reports/Reports';
 import { BadgeManagement } from './pages/gamification/BadgeManagement';
 import { BeltManagement } from './pages/gamification/BeltManagement';
 import { Leaderboard } from './pages/gamification/Leaderboard';
@@ -23,6 +23,8 @@ import { CurriculumManagement } from './pages/gamification/CurriculumManagement'
 import { Settings } from './pages/Settings';
 import { UsersList } from './pages/users/UsersList';
 import { UserForm } from './pages/users/UserForm';
+import { CompetitionsList } from './pages/competitions/CompetitionsList';
+import { CompetitionForm } from './pages/competitions/CompetitionForm';
 
 function App() {
   return (
@@ -56,8 +58,10 @@ function App() {
                 <Route path="gamification/curriculum" element={<CurriculumManagement />} />
                 <Route path="finance" element={<Finance />} />
                 <Route path="finance/new" element={<PaymentForm />} />
-                <Route path="reports" element={<PlaceholderPage title="Relatórios" />} />
-                <Route path="competitions" element={<PlaceholderPage title="Competições" />} />
+                <Route path="reports" element={<Reports />} />
+                <Route path="competitions" element={<CompetitionsList />} />
+                <Route path="competitions/new" element={<CompetitionForm />} />
+                <Route path="competitions/:id" element={<CompetitionForm />} />
               </Route>
 
               {/* Admin & Manager Only Routes */}

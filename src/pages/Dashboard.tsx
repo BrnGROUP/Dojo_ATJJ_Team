@@ -1,12 +1,16 @@
 
+import { useNavigate, Link } from 'react-router-dom';
 import { useDashboard } from '../hooks/useDashboard';
+import { useFinanceAlerts } from '../hooks/useFinanceAlerts';
 import { DynamicDiv } from '../components/DynamicDiv';
-import { getBeltColor } from '../lib/ui-utils';
+import { getBeltColor, calculateLevel } from '../lib/ui-utils';
 import { BeltAvatar } from '../components/shared/BeltAvatar';
 import { StatCard } from '../components/shared/StatCard';
 
 export function Dashboard() {
+    const navigate = useNavigate();
     const { stats, recentMembers, topStudents, birthdays, classes, highlightStudent, loading } = useDashboard();
+    const { overdueMembers } = useFinanceAlerts();
 
     if (loading) {
         return (
@@ -24,10 +28,35 @@ export function Dashboard() {
             {/* KPI Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatCard label="Total de Alunos" value={stats.totalStudents} trend="+12%" />
-                <StatCard label="Aulas no Mês" value="42" trend="ESTÁVEL" trendType="neutral" />
-                <StatCard label="Média de XP" value="1,240" trend="+8%" />
-                <StatCard label="Faturamento (Est.)" value={`R$ ${(stats.monthlyRevenue / 1000).toFixed(1)}k`} trend="+5%" />
+                <StatCard label="Alunos Ativos" value={stats.activeStudents} trend="ESTÁVEL" trendType="neutral" />
+                <StatCard label="Mensalidades Pendentes" value={overdueMembers.length} trend={overdueMembers.length > 0 ? "ATENÇÃO" : "OK"} trendType={overdueMembers.length > 0 ? "negative" : "positive"} />
+                <StatCard
+                    label="Faturamento Mensal"
+                    value={new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(stats.monthlyRevenue)}
+                    trend="+15%"
+                />
             </div>
+
+            {overdueMembers.length > 0 && (
+                <div className="bg-red-500/5 border border-red-500/20 rounded-3xl p-6 sm:p-8 animate-in slide-in-from-top-4 duration-500">
+                    <div className="flex items-center gap-3 mb-6">
+                        <span className="material-symbols-outlined text-red-500">warning</span>
+                        <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">Pendências Críticas</h2>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {overdueMembers.slice(0, 4).map(member => (
+                            <div key={member.id} className="bg-main border border-red-500/10 p-4 rounded-2xl flex items-center gap-3">
+                                <BeltAvatar name={member.full_name} belt={member.belt} size="sm" showGlow={false} />
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-xs font-bold text-white truncate">{member.full_name}</p>
+                                    <p className="text-[10px] text-red-500 font-bold">Vencimento: Dia {member.billing_day}</p>
+                                </div>
+                                <span className="material-symbols-outlined text-red-500 text-sm">priority_high</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             <div className="bg-card rounded-3xl p-4 sm:p-8 border border-border-slate shadow-sm">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
@@ -127,7 +156,11 @@ export function Dashboard() {
                                         const startTime = new Date(c.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                                         const occupancy = Math.round((c.enrolled_count / c.max_students) * 100);
                                         return (
-                                            <tr key={c.id} className="hover:bg-main/20 transition-colors group">
+                                            <tr
+                                                key={c.id}
+                                                onClick={() => navigate(`/agenda/edit/${c.id}`)}
+                                                className="hover:bg-main/40 transition-all group cursor-pointer border-b border-border-slate last:border-0"
+                                            >
                                                 <td className="px-6 py-4 text-sm font-bold text-white whitespace-nowrap">{startTime}</td>
                                                 <td className="px-6 py-4">
                                                     <div className="flex flex-col">
@@ -138,7 +171,7 @@ export function Dashboard() {
                                                 <td className="px-6 py-4 text-sm font-semibold text-muted hidden md:table-cell">{c.instructor}</td>
                                                 <td className="px-6 py-4 text-right">
                                                     <div className="inline-flex items-center gap-3">
-                                                        <div className="w-16 sm:w-24 bg-main h-1.5 rounded-full overflow-hidden border border-border-slate">
+                                                        <div className="w-16 sm:w-24 bg-card h-2 rounded-full overflow-hidden border border-border-slate">
                                                             <DynamicDiv
                                                                 className="bg-primary h-full progress-fill shadow-[0_0_8px_rgba(215,38,54,0.4)]"
                                                                 dynamicStyle={{ '--w': `${occupancy}%` }}
@@ -160,18 +193,26 @@ export function Dashboard() {
                 <div className="xl:col-span-4 space-y-6">
                     <h2 className="text-xl font-black text-white tracking-tight uppercase">Ranking Elite</h2>
                     <div className="bg-card rounded-3xl p-6 sm:p-8 border border-border-slate shadow-sm">
-                        <div className="mb-8 p-4 bg-main rounded-2xl border border-border-slate">
-                            <div className="flex justify-between items-end mb-3">
-                                <div>
-                                    <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Caminho Suave</p>
-                                    <h3 className="text-xl font-black text-white">Nível 42</h3>
+                        {highlightStudent && (() => {
+                            const { level, progress } = calculateLevel(highlightStudent.xp);
+                            return (
+                                <div className="mb-8 p-4 bg-main rounded-2xl border border-border-slate">
+                                    <div className="flex justify-between items-end mb-3">
+                                        <div>
+                                            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">{highlightStudent.full_name}</p>
+                                            <h3 className="text-xl font-black text-white">Nível {level}</h3>
+                                        </div>
+                                        <span className="text-[9px] font-bold text-muted px-2 py-0.5 bg-card rounded-lg">{Math.floor(progress)}%</span>
+                                    </div>
+                                    <div className="h-2 w-full bg-card rounded-full overflow-hidden border border-border-slate">
+                                        <div
+                                            className="h-full bg-gradient-to-r from-primary to-primary/40 rounded-full shadow-[0_0_10px_rgba(215,38,54,0.3)] transition-all duration-1000"
+                                            style={{ width: `${progress}%` }}
+                                        ></div>
+                                    </div>
                                 </div>
-                                <span className="text-[9px] font-bold text-muted px-2 py-0.5 bg-card rounded-lg">75%</span>
-                            </div>
-                            <div className="h-2 w-full bg-card rounded-full overflow-hidden border border-border-slate">
-                                <div className="h-full bg-gradient-to-r from-primary to-primary/40 rounded-full w-[75%] shadow-[0_0_10px_rgba(215,38,54,0.3)]"></div>
-                            </div>
-                        </div>
+                            );
+                        })()}
                         <div className="space-y-4">
                             {topStudents.slice(0, 4).map((student, index) => (
                                 <div key={student.id} className="flex items-center justify-between group p-2 hover:bg-main/50 rounded-2xl transition-all border border-transparent hover:border-border-slate">
@@ -183,13 +224,18 @@ export function Dashboard() {
                                             <p className={`text-[9px] font-black uppercase ${getBeltColor(student.belt)}`}>{student.belt}</p>
                                         </div>
                                     </div>
-                                    <span className="text-[10px] font-black text-white bg-main border border-border-slate px-2 py-1 rounded-lg tabular-nums">{student.xp} XP</span>
+                                    <div className="flex flex-col items-end">
+                                        <span className="text-[10px] font-black text-white bg-main border border-border-slate px-2 py-1 rounded-lg tabular-nums">{student.xp} XP</span>
+                                        <span className="text-[8px] font-bold text-muted uppercase mt-1">Lvl {calculateLevel(student.xp).level}</span>
+                                    </div>
                                 </div>
                             ))}
                         </div>
-                        <button className="w-full mt-8 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:brightness-110 active:scale-95 transition-all">
-                            Ver Placar de Líderes
-                        </button>
+                        <Link to="/gamification/leaderboard">
+                            <button className="w-full mt-8 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:brightness-110 active:scale-95 transition-all">
+                                Ver Placar de Líderes
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

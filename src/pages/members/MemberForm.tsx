@@ -26,6 +26,8 @@ export function MemberForm() {
         stripes: 0,
         status: 'Active',
         xp: 0,
+        billing_day: 10,
+        monthly_fee: 150.00,
     });
     const [groups, setGroups] = useState<{ id: string, name: string }[]>([]);
     const [belts, setBelts] = useState<{ id: string, name: string, color: string, color_secondary?: string, min_xp: number }[]>([]);
@@ -75,6 +77,8 @@ export function MemberForm() {
                     stripes: data.stripes || 0,
                     status: data.status || 'Active',
                     xp: data.xp || 0,
+                    billing_day: data.billing_day || 10,
+                    monthly_fee: data.monthly_fee || 150.00,
                 });
             }
         } catch (err) {
@@ -121,6 +125,8 @@ export function MemberForm() {
             belt: formData.belt,
             stripes: formData.stripes,
             status: formData.status,
+            billing_day: Number(formData.billing_day),
+            monthly_fee: Number(formData.monthly_fee),
         };
 
         try {
@@ -368,6 +374,44 @@ export function MemberForm() {
                                     </button>
                                 ))}
                             </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Financeiro Selection */}
+                    <Card>
+                        <CardContent className="p-6 sm:p-8 space-y-6">
+                            <div className="flex items-center gap-3">
+                                <span className="material-symbols-outlined text-primary">payments</span>
+                                <h3 className="text-white text-lg font-black uppercase tracking-tight italic">Gestão Financeira</h3>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <Input
+                                    label="Dia de Vencimento"
+                                    name="billing_day"
+                                    type="number"
+                                    icon="calendar_today"
+                                    min="1"
+                                    max="31"
+                                    value={formData.billing_day}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <Input
+                                    label="Valor Mensalidade"
+                                    name="monthly_fee"
+                                    type="number"
+                                    icon="monetization_on"
+                                    min="0"
+                                    step="0.01"
+                                    value={formData.monthly_fee}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <p className="text-muted text-[10px] italic">
+                                Estes dados serão usados para gerar alertas automáticos de pendências no Dashboard.
+                            </p>
                         </CardContent>
                     </Card>
                 </div>

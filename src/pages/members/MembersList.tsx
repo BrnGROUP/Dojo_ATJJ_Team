@@ -1,8 +1,8 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../lib/auth';
 import { useMembers } from '../../hooks/useMembers';
+import { useFinanceAlerts } from '../../hooks/useFinanceAlerts';
 import type { Member } from '../../hooks/useMembers';
 import { XPModal } from '../../components/XPModal';
 import { BeltAvatar } from '../../components/shared/BeltAvatar';
@@ -10,6 +10,7 @@ import { getBeltColor, getBeltBg } from '../../lib/ui-utils';
 
 export function MembersList() {
     const { members, loading, refresh } = useMembers();
+    const { overdueMembers } = useFinanceAlerts();
     const [xpModalOpen, setXpModalOpen] = useState(false);
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const { isAdmin, isManager, isCoordinator } = useAuth();
@@ -122,12 +123,20 @@ export function MembersList() {
                                             </div>
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-center">
-                                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${member.status === 'Active' ? 'bg-emerald-900/30 text-emerald-400' :
-                                                member.status === 'Paused' ? 'bg-yellow-900/30 text-yellow-400' :
-                                                    'bg-red-900/30 text-red-400'
-                                                }`}>
-                                                {member.status === 'Active' ? 'Ativo' : member.status === 'Paused' ? 'Pausado' : 'Inativo'}
-                                            </span>
+                                            <div className="flex flex-col items-center gap-1">
+                                                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${member.status === 'Active' ? 'bg-emerald-900/30 text-emerald-400' :
+                                                    member.status === 'Paused' ? 'bg-yellow-900/30 text-yellow-400' :
+                                                        'bg-red-900/30 text-red-400'
+                                                    }`}>
+                                                    {member.status === 'Active' ? 'Ativo' : member.status === 'Paused' ? 'Pausado' : 'Inativo'}
+                                                </span>
+                                                {overdueMembers.some(om => om.id === member.id) && (
+                                                    <div className="flex items-center gap-1 text-red-500 animate-pulse">
+                                                        <span className="material-symbols-outlined text-[14px]">warning</span>
+                                                        <span className="text-[8px] font-black uppercase">Pendência</span>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-right">
                                             <div className="flex justify-end gap-1 md:gap-2 text-slate-400">

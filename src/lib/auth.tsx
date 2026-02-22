@@ -11,6 +11,8 @@ interface AuthContextType {
     isCoordinator: boolean;
     isInstructor: boolean;
     signOut: () => Promise<void>;
+    signIn: (email: string, password: string) => Promise<{ error: any }>;
+    signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
     refreshProfile: () => Promise<void>;
 }
 
@@ -122,6 +124,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signOut: async () => {
             await supabase.auth.signOut();
             window.location.href = '/login';
+        },
+        signIn: async (email: string, password: string) => {
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+            return { error };
+        },
+        signUp: async (email: string, password: string, fullName: string) => {
+            const { error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: fullName,
+                        role: 'admin' // Default to admin for now as requested
+                    }
+                }
+            });
+            return { error };
         },
         refreshProfile: async () => {
             if (user) await fetchProfile(user.id);
