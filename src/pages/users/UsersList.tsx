@@ -8,7 +8,7 @@ import { BeltAvatar } from '../../components/shared/BeltAvatar';
 import { CreateUserModal } from '../../components/CreateUserModal';
 
 export function UsersList() {
-    const { users, loading, refresh } = useUsers();
+    const { users, loading, refresh, deleteUser, updateUserStatus } = useUsers();
     const { user: currentAuthUser } = useAuth();
     const [searchTerm, setSearchTerm] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -27,6 +27,22 @@ export function UsersList() {
             student: 'Aluno'
         };
         return labels[role] || role;
+    };
+
+    const handleDelete = async (id: string, name: string) => {
+        if (id === currentAuthUser?.id) {
+            toast.error('Você não pode excluir seu próprio usuário.');
+            return;
+        }
+
+        if (window.confirm(`Tem certeza que deseja excluir o usuário "${name}"? Esta ação não pode ser desfeita.`)) {
+            const success = await deleteUser(id);
+            if (success) {
+                toast.success('Usuário excluído com sucesso!');
+            } else {
+                toast.error('Erro ao excluir usuário. Verifique as permissões.');
+            }
+        }
     };
 
     const getRoleColor = (role: string) => {
@@ -83,6 +99,7 @@ export function UsersList() {
                                 <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Usuário</th>
                                 <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden md:table-cell">E-mail</th>
                                 <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">Nível de Acesso</th>
+                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">Status</th>
                                 <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">Cadastro em</th>
                                 <th className="px-4 md:px-6 py-4 text-slate-400 text-xs font-bold uppercase tracking-wider text-right">Ações</th>
                             </tr>
@@ -118,6 +135,11 @@ export function UsersList() {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-center">
+                                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${user.status === 'Active' ? 'bg-emerald-900/30 text-emerald-400' : 'bg-red-900/30 text-red-400'}`}>
+                                                {user.status === 'Active' ? 'Ativo' : 'Inativo'}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
                                             <span className="text-slate-400 text-xs">
                                                 {new Date(user.created_at).toLocaleDateString('pt-BR')}
                                             </span>
@@ -128,8 +150,26 @@ export function UsersList() {
                                                     <span className="material-symbols-outlined text-[18px] md:text-[20px]">manage_accounts</span>
                                                 </Link>
                                                 {user.id !== currentAuthUser?.id && (
-                                                    <button className="p-1 hover:text-red-500 transition-colors" title="Bloquear Acesso">
-                                                        <span className="material-symbols-outlined text-[18px] md:text-[20px]">block</span>
+                                                    <button
+                                                        onClick={async () => {
+                                                            const success = await updateUserStatus(user.id, user.status || 'Active');
+                                                            if (success) toast.success(`Status alterado para ${user.status === 'Active' ? 'Inativo' : 'Ativo'}`);
+                                                        }}
+                                                        className={`p-1 transition-colors ${user.status === 'Active' ? 'hover:text-amber-500' : 'hover:text-emerald-500'}`}
+                                                        title={user.status === 'Active' ? "Desativar" : "Ativar"}
+                                                    >
+                                                        <span className="material-symbols-outlined text-[18px] md:text-[20px]">
+                                                            {user.status === 'Active' ? 'do_not_disturb_on' : 'check_circle'}
+                                                        </span>
+                                                    </button>
+                                                )}
+                                                {user.id !== currentAuthUser?.id && (
+                                                    <button 
+                                                        onClick={() => handleDelete(user.id, user.full_name)}
+                                                        className="p-1 hover:text-red-500 transition-colors" 
+                                                        title="Excluir Usuário"
+                                                    >
+                                                        <span className="material-symbols-outlined text-[18px] md:text-[20px]">delete</span>
                                                     </button>
                                                 )}
                                             </div>

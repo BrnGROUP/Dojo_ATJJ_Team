@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { toast } from 'react-hot-toast';
@@ -46,10 +47,6 @@ export function CreateUserModal({ isOpen, onClose, onSuccess }: CreateUserModalP
                 toast.success(`Convite enviado para ${email}!`);
             } else {
                 // Cadastro Manual com Senha
-                // Nota: No Supabase Client padrão, signUp cria e LOGA o novo usuário.
-                // Para cadastrar OUTROS sem deslogar, o ideal é uma Edge Function.
-                // Aqui faremos o flow de signUp e avisaremos sobre o login ou usaremos o profile.
-
                 const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
                     email,
                     password,
@@ -65,7 +62,10 @@ export function CreateUserModal({ isOpen, onClose, onSuccess }: CreateUserModalP
 
                 // Sincronização: Criar o Membro correspondente
                 if (signUpData.user) {
+                    // Nota: O profile é criado via Trigger no DB na maioria dos setups Supabase,
+                    // mas garantimos o vínculo aqui na tabela members que é a base da v4.
                     const { error: memberError } = await supabase.from('members').insert([{
+                        id: signUpData.user.id, // Forçar ID igual para unificação
                         user_id: signUpData.user.id,
                         full_name: fullName,
                         email: email,
@@ -73,6 +73,7 @@ export function CreateUserModal({ isOpen, onClose, onSuccess }: CreateUserModalP
                         status: 'Active',
                         belt: 'Branca'
                     }]);
+                    
                     if (memberError) console.error('Aviso: Perfil de membro não criado automaticamente:', memberError);
                 }
 
@@ -101,7 +102,7 @@ export function CreateUserModal({ isOpen, onClose, onSuccess }: CreateUserModalP
                 <div className="p-6 border-b border-border-slate flex justify-between items-center bg-main/50">
                     <h2 className="text-white text-xl font-bold flex items-center gap-2">
                         <span className="material-symbols-outlined text-primary">person_add</span>
-                        Novo Usuário
+                        Novo Usuário / Membro
                     </h2>
                     <button onClick={onClose} className="text-muted hover:text-white transition-colors">
                         <span className="material-symbols-outlined">close</span>

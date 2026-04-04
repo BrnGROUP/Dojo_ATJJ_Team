@@ -7,12 +7,19 @@ import { getBeltColor, calculateLevel } from '../lib/ui-utils';
 import { BeltAvatar } from '../components/shared/BeltAvatar';
 import { StatCard } from '../components/shared/StatCard';
 
+// Extrai primeiro e segundo nome
+function getDisplayName(fullName: string): string {
+    const parts = fullName.trim().split(/\s+/);
+    return parts.slice(0, 2).join(' ');
+}
+
 export function Dashboard() {
     const navigate = useNavigate();
     const { stats, recentMembers, topStudents, birthdays, classes, highlightStudent, loading } = useDashboard();
     const { overdueMembers } = useFinanceAlerts();
     const { profile } = useAuth();
     const isStudent = profile?.role === 'student';
+    const displayName = getDisplayName(profile?.full_name || 'Guerreiro');
 
     if (loading) {
         return (
@@ -29,12 +36,20 @@ export function Dashboard() {
         return (
             <div className="max-w-7xl mx-auto space-y-10 animate-fade-in">
                 {/* Cabeçalho de Boas Vindas Personalizado */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-r from-primary/20 to-transparent p-8 rounded-3xl border border-primary/20">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-zinc-900/40 p-8 rounded-3xl border border-white/5 backdrop-blur-sm">
                     <div className="flex items-center gap-6">
-                        <BeltAvatar name={profile?.full_name || 'Aluno'} belt={String(profile?.member?.belt || 'Branca')} size="xl" />
+                        <BeltAvatar
+                            name={(profile?.member as any)?.full_name || profile?.full_name || 'Usuário'}
+                            belt={String((profile?.member as any)?.belt || 'Branca')}
+                            size="xl"
+                            avatarUrl={(profile?.member as any)?.avatar_url || profile?.avatar_url}
+                            showGlow={true}
+                        />
                         <div>
-                            <h1 className="text-3xl font-black text-white italic tracking-tighter">OSS, {profile?.full_name?.split(' ')[0]}!</h1>
-                            <p className="text-primary text-sm font-bold uppercase tracking-widest mt-1">Sua jornada no tatame continua.</p>
+                            <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase">
+                                OSS, {displayName}!
+                            </h1>
+                            <p className="text-primary text-[10px] font-black uppercase tracking-[0.2em] mt-1">Sua jornada no tatame continua.</p>
                         </div>
                     </div>
                     <div className="flex gap-4">
@@ -91,9 +106,14 @@ export function Dashboard() {
 
                             <div className="flex justify-center">
                                 <div className="relative">
-                                    <BeltAvatar name={profile?.full_name || 'Aluno'} belt={String(profile?.member?.belt || 'Branca')} size="xl" />
+                                    <BeltAvatar
+                                        name={(profile?.member as any)?.full_name || profile?.full_name || 'Aluno'}
+                                        belt={String((profile?.member as any)?.belt || 'Branca')}
+                                        size="xl"
+                                        avatarUrl={(profile?.member as any)?.avatar_url || profile?.avatar_url}
+                                    />
                                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white text-main text-[8px] font-black px-3 py-0.5 rounded-full border-2 border-card uppercase whitespace-nowrap">
-                                        Faixa {profile?.member?.belt || 'Branca'}
+                                        Faixa {(profile?.member as any)?.belt || 'Branca'}
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +151,13 @@ export function Dashboard() {
                         {topStudents.slice(0, 3).map((student, idx) => (
                             <div key={student.id} className={`p-6 rounded-2xl border ${idx === 0 ? 'bg-primary/5 border-primary/20' : 'bg-main border-border-slate'} flex items-center gap-4`}>
                                 <span className={`text-xl font-black italic ${idx === 0 ? 'text-primary' : 'text-muted'}`}>#{idx + 1}</span>
-                                <BeltAvatar name={student.full_name} belt={student.belt} size="md" showGlow={idx === 0} />
+                                <BeltAvatar
+                                    name={student.full_name}
+                                    belt={student.belt}
+                                    size="md"
+                                    showGlow={idx === 0}
+                                    avatarUrl={student.avatar_url}
+                                />
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-bold text-white truncate">{student.full_name}</p>
                                     <p className="text-[10px] text-muted font-bold uppercase">{student.xp} XP</p>
@@ -167,7 +193,13 @@ export function Dashboard() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {overdueMembers.slice(0, 4).map(member => (
                             <div key={member.id} className="bg-main border border-red-500/10 p-4 rounded-2xl flex items-center gap-3">
-                                <BeltAvatar name={member.full_name} belt={member.belt} size="sm" showGlow={false} />
+                                <BeltAvatar
+                                    name={member.full_name}
+                                    belt={member.belt}
+                                    size="sm"
+                                    showGlow={false}
+                                    avatarUrl={member.avatar_url}
+                                />
                                 <div className="flex-1 min-w-0">
                                     <p className="text-xs font-bold text-white truncate">{member.full_name}</p>
                                     <p className="text-[10px] text-red-500 font-bold">Vencimento: Dia {member.billing_day}</p>
@@ -196,7 +228,12 @@ export function Dashboard() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {recentMembers.map((member) => (
                                 <div key={member.id} className="flex items-center gap-4 p-4 rounded-2xl bg-main border border-border-slate hover:border-primary/50 transition-all group shadow-sm">
-                                    <BeltAvatar name={member.full_name} belt={member.belt} size="lg" />
+                                    <BeltAvatar
+                                        name={member.full_name}
+                                        belt={member.belt}
+                                        size="lg"
+                                        avatarUrl={member.avatar_url}
+                                    />
                                     <div>
                                         <p className="font-bold text-white text-sm leading-tight">{member.full_name}</p>
                                         <span className={`text-[10px] font-black uppercase ${getBeltColor(member.belt)}`}>Faixa {member.belt}</span>
@@ -216,7 +253,12 @@ export function Dashboard() {
                             {highlightStudent ? (
                                 <div className="relative z-10 w-full flex flex-col items-center">
                                     <div className="relative inline-block mb-4">
-                                        <BeltAvatar name={highlightStudent.full_name} belt={highlightStudent.belt} size="xl" />
+                                        <BeltAvatar
+                                            name={highlightStudent.full_name}
+                                            belt={highlightStudent.belt}
+                                            size="xl"
+                                            avatarUrl={highlightStudent.avatar_url}
+                                        />
                                         <div className="absolute -bottom-1 right-0 bg-yellow-400 text-main font-black text-[9px] px-2 py-0.5 rounded-full border-2 border-card">#1 XP</div>
                                     </div>
                                     <h4 className="text-base sm:text-lg font-bold text-white leading-tight">{highlightStudent.full_name}</h4>
@@ -237,7 +279,13 @@ export function Dashboard() {
                         <div className="space-y-3 flex-1 overflow-y-auto max-h-[200px] sm:max-h-none">
                             {birthdays.length > 0 ? birthdays.map(b => (
                                 <div key={b.id} className="flex items-center gap-3 p-3 rounded-2xl border border-border-slate bg-main/30 shadow-sm">
-                                    <BeltAvatar name={b.full_name} belt={b.belt} size="md" showGlow={false} />
+                                    <BeltAvatar
+                                        name={b.full_name}
+                                        belt={b.belt}
+                                        size="md"
+                                        showGlow={false}
+                                        avatarUrl={b.avatar_url}
+                                    />
                                     <div className="flex-1">
                                         <p className="text-xs sm:text-sm font-bold text-white truncate">{b.full_name}</p>
                                         <p className="text-[10px] text-muted font-bold">{new Date(b.birth_date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</p>
@@ -339,7 +387,13 @@ export function Dashboard() {
                                 <div key={student.id} className="flex items-center justify-between group p-2 hover:bg-main/50 rounded-2xl transition-all border border-transparent hover:border-border-slate">
                                     <div className="flex items-center gap-3">
                                         <div className={`w-5 text-[10px] font-black ${index === 0 ? 'text-yellow-400' : 'text-muted'} italic`}>{(index + 1).toString().padStart(2, '0')}</div>
-                                        <BeltAvatar name={student.full_name} belt={student.belt} size="md" className={index === 0 ? 'ring-2 ring-yellow-400/30' : ''} />
+                                        <BeltAvatar
+                                            name={student.full_name}
+                                            belt={student.belt}
+                                            size="md"
+                                            className={index === 0 ? 'ring-2 ring-yellow-400/30' : ''}
+                                            avatarUrl={student.avatar_url}
+                                        />
                                         <div className="overflow-hidden">
                                             <p className="text-sm font-bold text-white truncate max-w-[120px]">{student.full_name}</p>
                                             <p className={`text-[9px] font-black uppercase ${getBeltColor(student.belt)}`}>{student.belt}</p>

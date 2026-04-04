@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './lib/auth';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -21,8 +22,6 @@ import { GraduationPanel } from './pages/gamification/GraduationPanel';
 import { StudentEvolution } from './pages/gamification/StudentEvolution';
 import { CurriculumManagement } from './pages/gamification/CurriculumManagement';
 import { Settings } from './pages/Settings';
-import { UsersList } from './pages/users/UsersList';
-import { UserForm } from './pages/users/UserForm';
 import { CompetitionsList } from './pages/competitions/CompetitionsList';
 import { CompetitionForm } from './pages/competitions/CompetitionForm';
 
@@ -64,11 +63,9 @@ function App() {
                 <Route path="competitions/:id" element={<CompetitionForm />} />
               </Route>
 
-              {/* Admin & Manager Only Routes */}
-              <Route element={<ProtectedRoute allowedRoles={['admin', 'manager']} />}>
-                <Route path="users" element={<UsersList />} />
-                <Route path="users/:id" element={<UserForm />} />
-              </Route>
+              {/* Redirecionamento de rotas legadas de Usuários para Membros */}
+              <Route path="users" element={<Navigate to="/members" replace />} />
+              <Route path="users/:id" element={<Navigate to="/members" replace />} />
 
               {/* Admin Only Routes */}
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>

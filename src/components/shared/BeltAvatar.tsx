@@ -8,9 +8,10 @@ interface BeltAvatarProps {
     size?: 'sm' | 'md' | 'lg' | 'xl';
     className?: string;
     showGlow?: boolean;
+    avatarUrl?: string; // Nova prop
 }
 
-export function BeltAvatar({ name, belt, size = 'md', className, showGlow = true }: BeltAvatarProps) {
+export function BeltAvatar({ name, belt, size = 'md', className, showGlow = true, avatarUrl }: BeltAvatarProps) {
     const initials = getInitials(name);
     const colorClass = getBeltColor(belt);
     const glowClass = showGlow ? getBeltGlow(belt) : '';
@@ -24,12 +25,16 @@ export function BeltAvatar({ name, belt, size = 'md', className, showGlow = true
 
     return (
         <div className={cn(
-            "rounded-full flex items-center justify-center bg-zinc-800 text-white font-black shrink-0 transition-all",
+            "rounded-full flex items-center justify-center bg-zinc-800 text-white font-black shrink-0 transition-all overflow-hidden",
             sizeClasses[size],
             glowClass,
             className
         )}>
-            <span className={cn(colorClass)}>{initials}</span>
+            {avatarUrl ? (
+                <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+            ) : (
+                <span className={cn(colorClass)}>{initials}</span>
+            )}
         </div>
     );
 }

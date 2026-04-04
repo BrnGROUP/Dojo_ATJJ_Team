@@ -1,3 +1,4 @@
+
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { useAuth } from '../lib/auth';
@@ -22,8 +23,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
     const menuItems = [
         { label: 'Painel Geral', icon: 'dashboard', path: '/', roles: ['admin', 'manager', 'coordinator', 'instructor'] },
-        { label: 'Meu Perfil', icon: 'person', path: `/users/${profile?.id}`, roles: ['student'] },
-        { label: 'Membros', icon: 'group', path: '/members', roles: ['admin', 'manager', 'coordinator', 'instructor'] },
+        { label: 'Meu Perfil', icon: 'person', path: `/members/${profile?.id}`, roles: ['student'] },
+        { label: 'Membros & Equipe', icon: 'group', path: '/members', roles: ['admin', 'manager', 'coordinator', 'instructor'] },
         { label: 'Agenda de Aulas', icon: 'calendar_today', path: '/agenda' },
         { label: 'Turmas', icon: 'groups', path: '/groups', roles: ['admin', 'manager', 'coordinator', 'instructor'] },
         { label: 'Competições', icon: 'trophy', path: '/competitions' },
@@ -40,7 +41,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
     const adminItems = [
         { label: 'Financeiro', icon: 'payments', path: '/finance', roles: ['admin', 'manager', 'coordinator'] },
-        { label: 'Usuários', icon: 'manage_accounts', path: '/users', roles: ['admin', 'manager'] },
         { label: 'Relatórios', icon: 'analytics', path: '/reports', roles: ['admin', 'manager', 'coordinator'] },
         { label: 'Configurações', icon: 'settings', path: '/settings', roles: ['admin'] },
     ];

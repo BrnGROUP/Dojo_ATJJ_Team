@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../lib/auth';
 import { toast } from 'react-hot-toast';
+import { BeltAvatar } from './shared/BeltAvatar';
 
 interface HeaderProps {
     onMenuClick: () => void;
@@ -15,17 +16,6 @@ export function Header({ onMenuClick }: HeaderProps) {
             toast.success('Sessão encerrada.');
         } catch {
             toast.error('Erro ao sair.');
-        }
-    };
-
-    const getRoleLabel = (role: string) => {
-        switch (role) {
-            case 'admin': return 'Administrador';
-            case 'manager': return 'Gerente';
-            case 'coordinator': return 'Coordenador';
-            case 'instructor': return 'Instrutor';
-            case 'student': return 'Aluno';
-            default: return 'Usuário';
         }
     };
 
@@ -57,20 +47,26 @@ export function Header({ onMenuClick }: HeaderProps) {
                         to={profile?.id ? `/users/${profile.id}` : '#'}
                         className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-all cursor-pointer"
                     >
-                        <div className="text-right hidden sm:block">
-                            <p className="text-sm font-bold text-white group-hover:text-primary transition-colors">
-                                {profile?.full_name || 'Usuário'}
-                            </p>
-                            <p className="text-[10px] text-primary font-bold uppercase tracking-wider">
-                                {getRoleLabel(profile?.role ?? '')}
-                            </p>
+                        <div className="flex flex-col text-right">
+                            <span className="text-white text-xs md:text-sm font-black leading-none italic uppercase tracking-tighter">
+                                {(profile?.full_name || 'Usuário').trim().split(/\s+/).slice(0, 2).join(' ')}
+                            </span>
+                            <span className="text-[9px] md:text-[10px] font-bold text-primary uppercase tracking-[0.2em] mt-1">
+                                {profile?.role === 'admin' ? 'Administrador' : 
+                                 profile?.role === 'manager' ? 'Gestor' : 
+                                 profile?.role === 'coordinator' ? 'Coordenador' : 
+                                 profile?.role === 'instructor' ? 'Instrutor' : 'Membro'}
+                            </span>
                         </div>
 
                         <div className="relative">
-                            <img
-                                alt="User"
-                                className="w-8 h-8 md:w-10 md:h-10 rounded-xl object-cover shadow-sm border border-border-slate"
-                                src={profile?.avatar_url || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"}
+                            <BeltAvatar
+                                name={(profile?.member as any)?.full_name || profile?.full_name || 'Usuário'}
+                                belt={(profile?.member as any)?.belt || 'Branca'}
+                                avatarUrl={(profile?.member as any)?.avatar_url || profile?.avatar_url}
+                                size="md"
+                                showGlow={false}
+                                className="border-border-slate hover:border-primary transition-all duration-300 rounded-xl"
                             />
                         </div>
                     </Link>

@@ -15,6 +15,7 @@ export interface Member {
     xp: number;
     status: string;
     birth_date: string;
+    avatar_url?: string; // Adicionado
 }
 
 export interface ClassSession {
@@ -70,13 +71,18 @@ export function useDashboard() {
                 monthlyRevenue: revenue,
             });
 
+            const sanitizeMember = (m: any) => ({
+                ...m,
+                full_name: m.full_name?.toUpperCase() || ''
+            });
+
             // 2. Recent Members
             const { data: recent } = await supabase
                 .from('members')
                 .select('*')
                 .order('created_at', { ascending: false })
                 .limit(4);
-            setRecentMembers(recent || []);
+            setRecentMembers((recent || []).map(sanitizeMember));
 
             // 3. Top Students
             const { data: top } = await supabase
@@ -86,8 +92,9 @@ export function useDashboard() {
                 .limit(5);
 
             if (top && top.length > 0) {
-                setTopStudents(top);
-                setHighlightStudent(top[0]);
+                const sanitizedTop = top.map(sanitizeMember);
+                setTopStudents(sanitizedTop);
+                setHighlightStudent(sanitizedTop[0]);
             }
 
             // 4. Birthdays
@@ -98,7 +105,7 @@ export function useDashboard() {
                     if (!m.birth_date) return false;
                     const d = new Date(m.birth_date);
                     return d.getMonth() === currentMonth;
-                }).slice(0, 3);
+                }).slice(0, 3).map(sanitizeMember);
                 setBirthdays(bdays);
             }
 

@@ -7,6 +7,7 @@ export interface PendingMember {
     belt: string;
     billing_day: number;
     monthly_fee: number;
+    avatar_url?: string; // Adicionado
 }
 
 export function useFinanceAlerts() {

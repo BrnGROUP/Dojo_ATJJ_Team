@@ -70,56 +70,106 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async function fetchProfile(userId: string) {
         try {
             console.log('Buscando perfil para ID:', userId);
-            const { data, error } = await supabase
+            
+            // 1. Buscar perfil básico (sem join que pode falhar por RLS)
+            const { data: profileRow, error: profileError } = await supabase
                 .from('profiles')
-                .select('*, member:members!user_id(*)')
+                .select('*')
                 .eq('id', userId)
-                .single();
+                .maybeSingle();
 
-            if (error) {
-                console.error('Erro detalhado do Supabase:', error);
-                // PGRST116 is "no rows returned" for .single()
-                if (error.code === 'PGRST116') {
-                    console.warn('Perfil não encontrado. Criando perfil base...');
+            if (profileError) throw profileError;
 
-                    // Buscar metadados do usuário
-                    const { data: { user: authUser } } = await supabase.auth.getUser();
+            // 2. Pegar o e-mail do usuário autenticado
+            const userEmail = profileRow?.email || user?.email;
 
-                    if (authUser) {
-                        const newProfile = {
-                            id: userId,
-                            full_name: authUser.user_metadata?.full_name || authUser.email?.split('@')[0] || 'Usuário',
-                            email: authUser.email,
-                            role: authUser.user_metadata?.role || (authUser.email?.includes('claudio.bruno') ? 'admin' : 'student'),
-                            created_at: new Date().toISOString(),
-                            updated_at: new Date().toISOString()
-                        };
+            // 3. Buscar o membro - tentar múltiplas estratégias
+            let memberData: any = null;
+            
+            // Estratégia A: Busca direta por e-mail
+            if (userEmail) {
+                const { data: memberRow } = await supabase
+                    .from('members')
+                    .select('*')
+                    .eq('email', userEmail.toLowerCase().trim())
+                    .maybeSingle();
+                memberData = memberRow;
+            }
 
-                        const { data: createdData, error: createError } = await supabase
-                            .from('profiles')
-                            .insert([newProfile])
-                            .select('*, member:members!user_id(*)')
-                            .single();
+            // Estratégia B: Busca direta por user_id
+            if (!memberData) {
+                const { data: memberById } = await supabase
+                    .from('members')
+                    .select('*')
+                    .eq('user_id', userId)
+                    .maybeSingle();
+                memberData = memberById;
+            }
 
-                        if (createError) {
-                            console.error('Erro ao criar perfil inicial:', createError);
-                            setProfile(null);
-                        } else {
-                            console.log('Perfil criado com sucesso:', createdData);
-                            setProfile(createdData);
-                        }
-                    } else {
-                        setProfile(null);
-                    }
-                } else {
-                    setProfile(null);
+            // Estratégia C: RPC SECURITY DEFINER (ignora RLS - funciona para alunos)
+            if (!memberData) {
+                console.warn('Queries diretas em members falharam (RLS?). Usando RPC...');
+                const { data: rpcResult } = await supabase.rpc('get_my_member_info');
+                if (rpcResult) {
+                    memberData = rpcResult;
+                    console.log('Member recuperado via RPC:', memberData?.full_name);
                 }
+            }
+
+            // 5. Montar perfil
+            let profileData = profileRow;
+
+            // Se perfil não existe, criar
+            if (!profileData) {
+                console.warn('Perfil não encontrado. Criando perfil base...');
+                const { data: { user: authUser } } = await supabase.auth.getUser();
+
+                if (authUser) {
+                    const displayName = memberData?.full_name || authUser.user_metadata?.full_name || authUser.email?.split('@')[0] || 'Usuário';
+                    const newProfile: any = {
+                        id: userId,
+                        full_name: displayName,
+                        email: authUser.email,
+                        role: authUser.user_metadata?.role || (authUser.email?.includes('claudio.bruno') ? 'admin' : 'student'),
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    };
+
+                    const { data: createdData, error: createError } = await supabase
+                        .from('profiles')
+                        .insert([newProfile])
+                        .select('*')
+                        .maybeSingle();
+
+                    if (createError) throw createError;
+                    profileData = createdData;
+                }
+            }
+
+            if (profileData) {
+                // Vincular o member ao perfil
+                (profileData as any).member = memberData || null;
+
+                // Sobrescrever o full_name com o nome real do membro (se existir)
+                if (memberData?.full_name) {
+                    profileData.full_name = memberData.full_name;
+                }
+
+                // Sincronizar user_id no member se estiver ausente
+                if (memberData && !memberData.user_id) {
+                    await supabase
+                        .from('members')
+                        .update({ user_id: userId })
+                        .eq('id', memberData.id);
+                }
+
+                console.log('Perfil final:', { name: profileData.full_name, member: memberData?.full_name });
+                setProfile(profileData as UserProfile);
             } else {
-                console.log('Perfil carregado com sucesso:', data);
-                setProfile(data);
+                setProfile(null);
             }
         } catch (error) {
-            console.error('Falha catastrófica ao buscar perfil:', error);
+            console.error('Erro ao buscar perfil:', error);
             setProfile(null);
         } finally {
             setLoading(false);
@@ -127,14 +177,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     // Lógica de Admin Forçado (Seguro para Debug)
-    // Se o perfil falhar mas o email for o seu, garantimos o acesso.
     const effectiveRole = profile?.role || (user?.email?.includes('claudio.bruno') ? 'admin' : 'student');
+
+    // Buscar nome do membro vinculado para o fallback
+    const fallbackName = (profile?.member as any)?.full_name || profile?.full_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuário';
 
     const value = {
         user,
         profile: profile || (user ? {
             id: user.id,
-            full_name: user.email?.split('@')[0] || 'Usuário',
+            full_name: fallbackName,
             email: user.email || '',
             role: effectiveRole
         } : null),

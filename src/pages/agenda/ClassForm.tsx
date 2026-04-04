@@ -26,6 +26,7 @@ export function ClassForm() {
         allowed_groups: [] as string[],
     });
     const [groups, setGroups] = useState<{ id: string, name: string }[]>([]);
+    const [staffMembers, setStaffMembers] = useState<string[]>([]);
     const [activeTab, setActiveTab] = useState<'details' | 'plan' | 'attendance'>('details');
 
     useEffect(() => {
@@ -37,10 +38,21 @@ export function ClassForm() {
 
     async function fetchInitialData() {
         try {
-            const { data } = await supabase.from('groups').select('id, name');
-            if (data) setGroups(data);
+            const [groupsRes, membersRes] = await Promise.all([
+                supabase.from('groups').select('id, name'),
+                supabase.from('members')
+                    .select('full_name')
+                    .in('type', ['teacher', 'instructor', 'staff'])
+                    .order('full_name')
+            ]);
+            
+            if (groupsRes.data) setGroups(groupsRes.data);
+            if (membersRes.data) {
+                const names = Array.from(new Set(membersRes.data.map(m => m.full_name))).filter(Boolean);
+                setStaffMembers(names);
+            }
         } catch (err) {
-            console.error('Error fetching groups:', err);
+            console.error('Error fetching initial data:', err);
         }
     }
 
@@ -253,15 +265,23 @@ export function ClassForm() {
                                         />
                                     </div>
 
-                                    <Input
-                                        label="Instrutor Responsável"
-                                        name="instructor"
-                                        icon="person"
-                                        value={formData.instructor}
-                                        onChange={handleChange}
-                                        required
-                                        placeholder="Nome do Professor"
-                                    />
+                                    <div className="relative">
+                                        <Input
+                                            label="Instrutor Responsável"
+                                            name="instructor"
+                                            icon="person"
+                                            value={formData.instructor}
+                                            onChange={handleChange}
+                                            required
+                                            list="staff-list"
+                                            placeholder="Selecione ou digite o nome"
+                                        />
+                                        <datalist id="staff-list">
+                                            {staffMembers.map(name => (
+                                                <option key={name} value={name} />
+                                            ))}
+                                        </datalist>
+                                    </div>
 
                                     <Input
                                         label="Data"

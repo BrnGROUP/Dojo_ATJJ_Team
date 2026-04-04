@@ -9,6 +9,8 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Card, CardContent } from '../../components/ui/Card';
 import { useCities } from '../../hooks/useCities';
+import { PhotoUpload } from '../../components/ui/PhotoUpload';
+import { fetchAddressByCEP } from '../../lib/cep-lookup';
 
 export function UserForm() {
     const { id } = useParams();
@@ -26,6 +28,7 @@ export function UserForm() {
         city: '',
         state: 'SP',
         cpf: '',
+        avatar_url: '',
         password: '' // Apenas para alteração
     });
 
@@ -60,6 +63,7 @@ export function UserForm() {
                     city: data.city || '',
                     state: data.state || 'SP',
                     cpf: data.cpf || '',
+                    avatar_url: data.avatar_url || '',
                     password: ''
                 });
             }
@@ -82,6 +86,26 @@ export function UserForm() {
         }
     }, [id, isAdmin, currentUser, navigate, fetchUser]);
 
+    // Busca automática por CEP
+    useEffect(() => {
+        const cleanCEP = formData.cep.replace(/\D/g, '');
+        if (cleanCEP.length === 8) {
+            const timer = setTimeout(async () => {
+                const addressData = await fetchAddressByCEP(cleanCEP);
+                if (addressData) {
+                    setFormData(prev => ({
+                        ...prev,
+                        address: `${addressData.logradouro}${addressData.bairro ? `, ${addressData.bairro}` : ''}`,
+                        city: addressData.localidade,
+                        state: addressData.uf
+                    }));
+                    toast.success('Endereço preenchido via CEP');
+                }
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [formData.cep]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSaving(true);
@@ -101,6 +125,7 @@ export function UserForm() {
                     city: formData.city,
                     state: formData.state,
                     cpf: formData.cpf,
+                    avatar_url: formData.avatar_url,
                     updated_at: new Date().toISOString()
                 });
 
@@ -188,8 +213,14 @@ export function UserForm() {
                                 <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                                     <span className="material-symbols-outlined text-primary text-xl">person</span>
                                 </span>
-                                Informações Pessoais
                             </h2>
+                            
+                            {/* Novo Campo: Foto do Usuário */}
+                            <PhotoUpload 
+                                url={formData.avatar_url}
+                                onUpload={(url) => setFormData(prev => ({ ...prev, avatar_url: url }))}
+                                className="mb-6 p-4 rounded-3xl bg-main/30 border border-border-slate/50"
+                            />
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <Input

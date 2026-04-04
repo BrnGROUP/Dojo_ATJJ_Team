@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chave de Campeonato · Jiu-Jitsu</title>
+  <meta name="description" content="Sistema de gerenciamento de chave de campeonato para Jiu-Jitsu. Organize confrontos, avance vencedores e visualize a final de forma rápida e clara." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="40" height="40" rx="4" fill="#C0392B"/>
+          <path d="M8 20 L20 8 L32 20 L20 32 Z" stroke="white" stroke-width="2.5" fill="none"/>
+          <circle cx="20" cy="20" r="4" fill="white"/>
+        </svg>
+        <span class="brand-name">BracketOS</span>
+        <span class="brand-tag">Jiu-Jitsu</span>
+      </div>
+      <div class="header-actions">
+        <button id="btn-restart" class="btn btn-ghost" title="Reiniciar chave" aria-label="Reiniciar toda a chave">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10a7 7 0 1 0 7-7 7 7 0 0 0-4.95 2.05" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3 5v5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Reiniciar
+        </button>
+        <button id="btn-print" class="btn btn-ghost" title="Imprimir chave" aria-label="Imprimir a chave">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7V3h10v4M5 15H3a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-2M5 12h10v5H5v-5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Imprimir
+        </button>
+        <button id="btn-export" class="btn btn-primary" title="Exportar como imagem" aria-label="Exportar chave como imagem PNG">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 16h12M10 3v10m0 0-3-3m3 3 3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Exportar PNG
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SETUP PANEL -->
+  <section class="setup-panel" id="setup-panel" aria-label="Configuração da chave">
+    <div class="setup-inner">
+      <div class="setup-header">
+        <h1 class="setup-title">Montar Chave</h1>
+        <div class="size-tabs" role="group" aria-label="Número de atletas">
+          <button class="size-tab active" data-size="8" id="tab-8" aria-pressed="true">8</button>
+          <button class="size-tab" data-size="16" id="tab-16" aria-pressed="false">16</button>
+          <button class="size-tab" data-size="32" id="tab-32" aria-pressed="false">32</button>
+          <span class="size-label">atletas</span>
+        </div>
+      </div>
+
+      <div class="athletes-grid" id="athletes-grid" aria-label="Lista de atletas">
+        <!-- cards inseridos via JS -->
+      </div>
+
+      <div class="setup-footer">
+        <button class="btn-add" id="btn-add-athlete" aria-label="Adicionar novo atleta">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Adicionar Atleta
+        </button>
+        <div class="setup-footer-right">
+          <span class="athlete-count" id="athlete-count">8 / 8 atletas</span>
+          <button class="btn btn-primary btn-generate" id="btn-generate" aria-label="Gerar chave de campeonato">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5h14M7 5V3h6v2M4 5l1 12h10L16 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Gerar Chave
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOURNAMENT BRACKET -->
+  <main class="bracket-container" id="bracket-container" aria-label="Chave de campeonato" hidden>
+
+    <!-- BRACKET VISUAL -->
+    <div class="bracket-stage" id="bracket-stage">
+      <!-- Cols geradas pelo JS -->
+    </div>
+
+    <!-- CHAMPION BANNER -->
+    <div class="champion-banner" id="champion-banner" hidden aria-live="polite">
+      <div class="champion-inner">
+        <svg class="trophy-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path d="M16 4h32v20c0 11-8 18-16 20C24 42 16 35 16 24V4Z" fill="#F2C94C" stroke="#D4A800" stroke-width="1.5"/>
+          <path d="M4 8h12v10c0 4-2 6-5 7" stroke="#D4A800" stroke-width="2" stroke-linecap="round"/>
+          <path d="M60 8H48v10c0 4 2 6 5 7" stroke="#D4A800" stroke-width="2" stroke-linecap="round"/>
+          <rect x="24" y="44" width="16" height="6" rx="2" fill="#F2C94C" stroke="#D4A800" stroke-width="1.5"/>
+          <rect x="18" y="56" width="28" height="4" rx="2" fill="#F2C94C" stroke="#D4A800" stroke-width="1.5"/>
+          <path d="M32 14l3 6h7l-5.5 4 2 6L32 26l-6.5 4 2-6L22 20h7l3-6Z" fill="#FFFDE7"/>
+        </svg>
+        <p class="champion-label">CAMPEÃO</p>
+        <p class="champion-name" id="champion-name">—</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- html2canvas CDN para exportar como PNG -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
