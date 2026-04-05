@@ -10,14 +10,15 @@ export function Finance() {
     const now = new Date();
     const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+    const [period, setPeriod] = useState<'month' | 'semester1' | 'semester2' | 'year'>('month');
     const [page, setPage] = useState(1);
     
-    const { payments, stats, totalCount, loading, deletePayment, markAsPaid, generateMonthlyFees } = useFinance(filter, selectedMonth, selectedYear, page);
+    const { payments, stats, totalCount, loading, deletePayment, markAsPaid, generateMonthlyFees } = useFinance(filter, selectedMonth, selectedYear, page, 50, period);
     const [generating, setGenerating] = useState(false);
 
     useEffect(() => {
         setPage(1);
-    }, [filter, selectedMonth, selectedYear]);
+    }, [filter, selectedMonth, selectedYear, period]);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
     const toggleSelect = (id: string) => {
@@ -194,15 +195,29 @@ export function Finance() {
 
                     <div className="flex bg-main rounded-lg p-1 border border-border-slate h-10 gap-1">
                         <select 
-                            value={selectedMonth} 
-                            onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                            title="Mês da Mensalidade"
-                            className="bg-transparent text-white text-xs font-bold outline-none px-1 cursor-pointer"
+                            value={period} 
+                            onChange={(e) => setPeriod(e.target.value as any)}
+                            title="Período de Visualização"
+                            className="bg-transparent text-white text-[10px] font-black uppercase outline-none px-1 cursor-pointer border-r border-border-slate/30 mr-1"
                         >
-                            {months.map((m, i) => (
-                                <option key={m} value={i + 1} className="bg-zinc-900">{m}</option>
-                            ))}
+                            <option value="month" className="bg-zinc-900">Mensal</option>
+                            <option value="semester1" className="bg-zinc-900">1º Semestre</option>
+                            <option value="semester2" className="bg-zinc-900">2º Semestre</option>
+                            <option value="year" className="bg-zinc-900">Anual</option>
                         </select>
+
+                        {period === 'month' && (
+                            <select 
+                                value={selectedMonth} 
+                                onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                                title="Mês da Mensalidade"
+                                className="bg-transparent text-white text-xs font-bold outline-none px-1 cursor-pointer"
+                            >
+                                {months.map((m, i) => (
+                                    <option key={m} value={i + 1} className="bg-zinc-900">{m}</option>
+                                ))}
+                            </select>
+                        )}
                         <select 
                             value={selectedYear} 
                             onChange={(e) => setSelectedYear(Number(e.target.value))}
@@ -215,18 +230,20 @@ export function Finance() {
                         </select>
                     </div>
 
-                    <button
-                        onClick={handleGenerateMonthlyFees}
-                        disabled={generating}
-                        className="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-white/5 border border-border-slate text-slate-300 text-sm font-bold hover:bg-white/10 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {generating ? (
-                            <span className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin mr-2"></span>
-                        ) : (
-                            <span className="material-symbols-outlined mr-2 text-[20px]">sync</span>
-                        )}
-                        <span>Mensalidades do Mês</span>
-                    </button>
+                    {period === 'month' && (
+                        <button
+                            onClick={handleGenerateMonthlyFees}
+                            disabled={generating}
+                            className="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-white/5 border border-border-slate text-slate-300 text-sm font-bold hover:bg-white/10 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {generating ? (
+                                <span className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin mr-2"></span>
+                            ) : (
+                                <span className="material-symbols-outlined mr-2 text-[20px]">sync</span>
+                            )}
+                            <span>Mensalidades do Mês</span>
+                        </button>
+                    )}
 
                     <Link to="/finance/new" className="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all shadow-lg shadow-primary/20">
                         <span className="material-symbols-outlined mr-2 text-[20px]">add_card</span>
@@ -237,14 +254,14 @@ export function Finance() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 gap-6">
                 <StatCard
-                    label="Recebido (Mês)"
+                    label={period === 'month' ? "Recebido (Mês)" : "Recebido (Total)"}
                     value={formatCurrency(stats.totalPaid)}
                     className="border-emerald-500/20"
                     trendType="positive"
                     trend="Confirmado"
                 />
                 <StatCard
-                    label="Previsão Próx. Mês"
+                    label={period === 'month' ? "Previsão Próx. Mês" : "Lançado no Período"}
                     value={formatCurrency(stats.projectedRevenue)}
                     className="border-blue-500/20"
                     trendType="neutral"

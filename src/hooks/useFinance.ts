@@ -22,7 +22,14 @@ export interface FinanceStats {
     projectedRevenue: number;
 }
 
-export function useFinance(filter: string = 'all', month?: number, year?: number, page: number = 1, pageSize: number = 50) {
+export function useFinance(
+    filter: string = 'all', 
+    month?: number, 
+    year: number = new Date().getFullYear(), 
+    page: number = 1, 
+    pageSize: number = 50,
+    period: 'month' | 'semester1' | 'semester2' | 'year' = 'month'
+) {
     const [payments, setPayments] = useState<Payment[]>([]);
     const [loading, setLoading] = useState(true);
     const [totalCount, setTotalCount] = useState(0);
@@ -36,7 +43,7 @@ export function useFinance(filter: string = 'all', month?: number, year?: number
 
     useEffect(() => {
         fetchPayments();
-    }, [filter, month, year, page]);
+    }, [filter, month, year, page, period]);
 
     async function fetchPayments() {
         setLoading(true);
@@ -50,10 +57,25 @@ export function useFinance(filter: string = 'all', month?: number, year?: number
             else if (filter === 'paid') query = query.eq('status', 'Paid');
             else if (filter === 'overdue') query = query.eq('status', 'Overdue');
 
-            if (month && year) {
-                const firstDay = `${year}-${month.toString().padStart(2, '0')}-01`;
-                const lastDay = `${year}-${month.toString().padStart(2, '0')}-${new Date(year, month, 0).getDate()}`;
-                query = query.gte('due_date', firstDay).lte('due_date', lastDay);
+            let startDate = '';
+            let endDate = '';
+
+            if (period === 'month' && month) {
+                startDate = `${year}-${month.toString().padStart(2, '0')}-01`;
+                endDate = `${year}-${month.toString().padStart(2, '0')}-${new Date(year, month, 0).getDate()}`;
+            } else if (period === 'semester1') {
+                startDate = `${year}-01-01`;
+                endDate = `${year}-06-30`;
+            } else if (period === 'semester2') {
+                startDate = `${year}-07-01`;
+                endDate = `${year}-12-31`;
+            } else if (period === 'year') {
+                startDate = `${year}-01-01`;
+                endDate = `${year}-12-31`;
+            }
+
+            if (startDate && endDate) {
+                query = query.gte('due_date', startDate).lte('due_date', endDate);
             }
 
             // Pagination
@@ -69,8 +91,8 @@ export function useFinance(filter: string = 'all', month?: number, year?: number
             setTotalCount(count || 0);
 
             // Calculate stats for the selected period
-            const statsQuery = month && year 
-                ? supabase.from('payments').select('amount, status, due_date').gte('due_date', `${year}-${month.toString().padStart(2, '0')}-01`).lte('due_date', `${year}-${month.toString().padStart(2, '0')}-${new Date(year, month, 0).getDate()}`)
+            const statsQuery = startDate && endDate
+                ? supabase.from('payments').select('amount, status, due_date').gte('due_date', startDate).lte('due_date', endDate)
                 : supabase.from('payments').select('amount, status, due_date');
 
             const { data: allPayments, error: statsError } = await statsQuery;
@@ -80,11 +102,12 @@ export function useFinance(filter: string = 'all', month?: number, year?: number
                     if (curr.status === 'Paid') acc.totalPaid += curr.amount;
                     if (curr.status === 'Pending') acc.totalPending += curr.amount;
                     if (curr.status === 'Overdue') acc.totalOverdue += curr.amount;
+                    acc.projectedRevenue += curr.amount; // Total launched in period
                     return acc;
                 }, { totalPaid: 0, totalPending: 0, totalOverdue: 0, projectedRevenue: 0 });
 
-                // Calculate Projected Revenue for NEXT MONTH
-                if (month && year) {
+                // Overwrite projectedRevenue ONLY if we are in 'month' mode to show NEXT MONTH's forecast
+                if (period === 'month' && month) {
                     const nextMonth = month === 12 ? 1 : month + 1;
                     const nextYear = month === 12 ? year + 1 : year;
                     const nextFirstDay = `${nextYear}-${nextMonth.toString().padStart(2, '0')}-01`;
@@ -98,15 +121,12 @@ export function useFinance(filter: string = 'all', month?: number, year?: number
                     
                     const launchedNext = nextPayments?.reduce((sum, p) => sum + (p.amount || 0), 0) || 0;
                     
-                    // Also get potential from active members if launched is zero or as a reference
                     const { data: activeMembers } = await supabase
                         .from('members')
                         .select('monthly_fee')
                         .eq('status', 'active');
                     
                     const potentialNext = activeMembers?.reduce((sum, m) => sum + (m.monthly_fee || 0), 0) || 0;
-                    
-                    // User wants to see "valores JÁ LANÇADOS"
                     newStats.projectedRevenue = launchedNext > 0 ? launchedNext : potentialNext;
                 }
 

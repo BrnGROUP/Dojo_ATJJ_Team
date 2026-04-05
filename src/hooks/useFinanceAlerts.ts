@@ -25,7 +25,7 @@ export function useFinanceAlerts() {
             const { data: unpaidPayments, error } = await supabase
                 .from('payments')
                 .select('id, member_id, description, amount, due_date, status, members(id, full_name, belt, avatar_url, billing_day)')
-                .in('status', ['Pending', 'Overdue']);
+                .eq('status', 'Overdue');
 
             if (error) throw error;
 

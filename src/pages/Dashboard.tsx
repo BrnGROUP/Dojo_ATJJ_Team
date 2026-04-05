@@ -176,7 +176,7 @@ export function Dashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 gap-6">
                 <StatCard label="Total de Alunos" value={stats.totalStudents} trend="+12%" />
                 <StatCard label="Alunos Ativos" value={stats.activeStudents} trend="ESTÁVEL" trendType="neutral" />
-                <StatCard label="Mensalidades Pendentes" value={overdueMembers.length} trend={overdueMembers.length > 0 ? "ATENÇÃO" : "OK"} trendType={overdueMembers.length > 0 ? "negative" : "positive"} />
+                <StatCard label="Mensalidades em Atraso" value={overdueMembers.length} trend={overdueMembers.length > 0 ? "ATENÇÃO" : "OK"} trendType={overdueMembers.length > 0 ? "negative" : "positive"} />
                 <StatCard
                     label="Faturamento Mensal"
                     value={new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(stats.monthlyRevenue)}
