@@ -24,10 +24,11 @@ interface Technique {
 
 interface TechniqueChecklistProps {
     memberId: string;
-    beltName: string; // The member's current belt name (or targeted belt)
+    beltName: string;
+    onUpdate?: () => void;
 }
 
-export function TechniqueChecklist({ memberId, beltName }: TechniqueChecklistProps) {
+export function TechniqueChecklist({ memberId, beltName, onUpdate }: TechniqueChecklistProps) {
     const [techniques, setTechniques] = useState<Technique[]>([]);
     const [memberProgress, setMemberProgress] = useState<Record<string, string>>({}); // techId -> status
     const [loading, setLoading] = useState(true);
@@ -43,50 +44,55 @@ export function TechniqueChecklist({ memberId, beltName }: TechniqueChecklistPro
 
     useEffect(() => {
         fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [memberId, beltName]);
 
     const fetchData = async () => {
         setLoading(true);
         try {
-            // 1. Find Belt ID
-            const effectiveName = normalizeBeltName(beltName);
-            // Search belt by name (or partial)
-            // We need to fetch all belts to find the best match if 'like' queries are tricky, or just use ilike
-            const { data: belts } = await supabase.from('belts').select('id, name');
-            const targetBelt = belts?.find(b => b.name.toLowerCase() === effectiveName.toLowerCase())
-                || belts?.find(b => effectiveName.toLowerCase().includes(b.name.toLowerCase()));
-
-            if (!targetBelt) {
-                setLoading(false);
+            // 1. Resolve Belt ID
+            const normalizedName = normalizeBeltName(beltName);
+            const { data: bData, error: bErr } = await supabase
+                .from('belts')
+                .select('id')
+                .ilike('name', `%${normalizedName}%`)
+                .limit(1)
+                .single();
+                
+            if (bErr && bErr.code !== 'PGRST116') throw bErr;
+            if (!bData) {
+                setTechniques([]);
                 return;
             }
-            setBeltId(targetBelt.id);
 
-            // 2. Fetch Techniques for this belt
-            const { data: techData } = await supabase
+            setBeltId(bData.id);
+
+            // 2. Fetch Techniques for this Belt
+            const { data: techData, error: techErr } = await supabase
                 .from('techniques')
                 .select('*')
-                .eq('belt_id', targetBelt.id)
-                .order('category');
-
+                .eq('belt_id', bData.id)
+                .order('category')
+                .order('name');
+                
+            if (techErr) throw techErr;
             setTechniques(techData || []);
 
             // 3. Fetch Member Progress
-            const { data: progressData } = await supabase
+            const { data: progData, error: progErr } = await supabase
                 .from('member_techniques')
                 .select('technique_id, status')
                 .eq('member_id', memberId);
+                
+            if (progErr) throw progErr;
 
-            const progressMap: Record<string, string> = {};
-            if (progressData) {
-                progressData.forEach((p) => {
-                    progressMap[p.technique_id] = p.status || 'not_seen';
-                });
-            }
-            setMemberProgress(progressMap);
+            const progMap: Record<string, string> = {};
+            (progData || []).forEach(p => { progMap[p.technique_id] = p.status; });
+            setMemberProgress(progMap);
 
         } catch (error) {
-            console.error(error);
+            console.error('Error fetching checklist data:', error);
+            toast.error('Erro ao buscar técnicas.');
         } finally {
             setLoading(false);
         }
@@ -111,6 +117,10 @@ export function TechniqueChecklist({ memberId, beltName }: TechniqueChecklistPro
             }, { onConflict: 'member_id,technique_id' });
 
             if (error) throw error;
+            
+            // Notifica o componente pai (StudentEvolution) para recalcular XP e Prontidão de forma silenciosa
+            onUpdate?.();
+            
         } catch (error) {
             console.error('Error updating status:', error);
             toast.error('Erro ao salvar.');

@@ -3,11 +3,12 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
 import { cn } from '../../lib/utils';
+import { useAuth } from '../../lib/auth';
 
 interface Evaluation {
     id: string;
     type: string;
-    status: 'Aprovado' | 'Reprovado' | 'Pendente';
+    status: 'Aprovado' | 'Reprovado' | 'Pendente' | 'Cancelado';
     score: number;
     notes: string;
     belt_snapshot: string;
@@ -17,9 +18,11 @@ interface Evaluation {
 interface EvaluationsListProps {
     memberId: string;
     currentBelt: string;
+    onUpdate?: () => void;
 }
 
-export function EvaluationsList({ memberId, currentBelt }: EvaluationsListProps) {
+export function EvaluationsList({ memberId, currentBelt, onUpdate }: EvaluationsListProps) {
+    const { isAdmin } = useAuth();
     const [evaluations, setEvaluations] = useState<Evaluation[]>([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -132,7 +135,7 @@ export function EvaluationsList({ memberId, currentBelt }: EvaluationsListProps)
                         const nextBelt = belts[currentBeltIndex + 1];
 
                         // Confirm promotion
-                        const confirmed = window.confirm(`O aluno foi aprovado! Deseja promover automaticamente para a faixa ${nextBelt.name}?`);
+                        const confirmed = window.confirm(`O aluno foi aprovado! Deseja registrar este exame E promover automaticamente para a faixa ${nextBelt.name}?\n\n(Atenção: Pressione Cancelar se desejar abortar a operação inteira sem salvar.)`);
 
                         if (confirmed) {
                             // Update Member
@@ -154,6 +157,9 @@ export function EvaluationsList({ memberId, currentBelt }: EvaluationsListProps)
                             });
 
                             promotionMessage = ` e promovido para ${nextBelt.name}`;
+                        } else {
+                            toast.error('Registro de Exame cancelado.');
+                            return;
                         }
                     }
                 }
@@ -175,6 +181,7 @@ export function EvaluationsList({ memberId, currentBelt }: EvaluationsListProps)
             setIsModalOpen(false);
             setNewEval({ type: 'Exame de Faixa', status: 'Aprovado', score: 100, notes: '' });
             fetchEvaluations();
+            if (onUpdate) onUpdate();
 
             // Reload page or trigger parent update to reflect new belt immediately? 
             // Since props.currentBelt doesn't update automatically without parent refresh,
@@ -190,9 +197,108 @@ export function EvaluationsList({ memberId, currentBelt }: EvaluationsListProps)
         }
     };
 
+    const handleCancelExam = async (ev: Evaluation) => {
+        const justification = window.prompt('Para cancelar o exame, digite uma justificativa (mínimo 10 caracteres):');
+        if (justification === null) return;
+        if (justification.trim().length < 10) {
+            toast.error('A justificativa deve ter pelo menos 10 caracteres.');
+            return;
+        }
+
+        try {
+            const { error: evalError } = await supabase.from('evaluations').update({
+                status: 'Cancelado',
+                notes: ev.notes ? `${ev.notes}\n\n[CANCELAMENTO]: ${justification}` : `[CANCELAMENTO]: ${justification}`
+            }).eq('id', ev.id);
+
+            if (evalError) throw evalError;
+
+            // Revert the belt if it's the latest belt exam
+            const { data: latestExams } = await supabase.from('evaluations')
+                .select('id')
+                .eq('member_id', memberId)
+                .eq('type', 'Exame de Faixa')
+                .order('evaluated_at', { ascending: false })
+                .limit(1);
+            
+            const isLatestExame = latestExams && latestExams.length > 0 && latestExams[0].id === ev.id;
+            
+            // ev.status !== 'Cancelado' means it was Aprovado or Reprovado before.
+            // But we specifically want to revert if the belt actually changed. 
+            // In our system, saving an exam updates the belt if it was approved and authorized.
+            if (isLatestExame && ev.belt_snapshot && ev.type === 'Exame de Faixa' && ev.status === 'Aprovado') {
+                await supabase.from('members').update({ belt: ev.belt_snapshot }).eq('id', memberId);
+            }
+
+            // Update xp_logs to add "[CANCELADO]"
+            const evalDateStr = new Date(ev.evaluated_at).toISOString().split('T')[0];
+            const { data: xpLogs } = await supabase.from('xp_logs')
+                .select('id, reason')
+                .eq('member_id', memberId)
+                .ilike('reason', '%(Exame)%')
+                .gte('created_at', `${evalDateStr}T00:00:00.000Z`)
+                .lte('created_at', `${evalDateStr}T23:59:59.999Z`);
+
+            if (xpLogs && xpLogs.length > 0) {
+                for (let log of xpLogs) {
+                    if (!log.reason.includes('[CANCELADO]')) {
+                        await supabase.from('xp_logs')
+                            .update({ reason: `[CANCELADO] ${log.reason}` })
+                            .eq('id', log.id);
+                    }
+                }
+            }
+
+            toast.success('Exame cancelado, faixa revertida e histórico devidamente justificado.');
+            fetchEvaluations();
+            if (onUpdate) onUpdate();
+        } catch (err) {
+            console.error(err);
+            toast.error('Erro ao cancelar exame.');
+        }
+    };
+
+    const handleDeleteExam = async (ev: Evaluation) => {
+        if (!window.confirm('Atenção Administrador: Tem certeza absoluta que deseja EXCLUIR este registro? Esta ação não pode ser desfeita.')) return;
+        try {
+            // Revert the belt if it's the latest belt exam
+            const { data: latestExams } = await supabase.from('evaluations')
+                .select('id')
+                .eq('member_id', memberId)
+                .eq('type', 'Exame de Faixa')
+                .order('created_at', { ascending: false })
+                .limit(1);
+            
+            const isLatestExame = latestExams && latestExams.length > 0 && latestExams[0].id === ev.id;
+            if (isLatestExame && ev.belt_snapshot && ev.type === 'Exame de Faixa' && ev.status === 'Aprovado') {
+                await supabase.from('members').update({ belt: ev.belt_snapshot }).eq('id', memberId);
+            }
+
+            const { error } = await supabase.from('evaluations').delete().eq('id', ev.id);
+            if (error) throw error;
+
+            // Remove o histórico da linha do tempo também
+            const evalDateStr = new Date(ev.evaluated_at).toISOString().split('T')[0];
+            await supabase.from('xp_logs')
+                .delete()
+                .eq('member_id', memberId)
+                .ilike('reason', '%(Exame)%')
+                .gte('created_at', `${evalDateStr}T00:00:00.000Z`)
+                .lte('created_at', `${evalDateStr}T23:59:59.999Z`);
+
+            toast.success('Exame, atualização de faixa e histórico excluídos com sucesso.');
+            fetchEvaluations();
+            if (onUpdate) onUpdate();
+        } catch (err) {
+            console.error(err);
+            toast.error('Erro ao excluir exame.');
+        }
+    };
+
     const getStatusColor = (status: string) => {
         if (status === 'Aprovado') return 'text-green-500 bg-green-500/10 border-green-500/20';
         if (status === 'Reprovado') return 'text-red-500 bg-red-500/10 border-red-500/20';
+        if (status === 'Cancelado') return 'text-zinc-500 bg-zinc-500/10 border-zinc-500/20';
         return 'text-yellow-500 bg-yellow-500/10 border-yellow-500/20';
     };
 
@@ -257,6 +363,26 @@ export function EvaluationsList({ memberId, currentBelt }: EvaluationsListProps)
                                     <span className={cn("px-3 py-1 rounded-full text-xs font-bold uppercase", getStatusColor(ev.status))}>
                                         {ev.status}
                                     </span>
+                                    <div className="flex items-center gap-1 mt-3 md:mt-0 md:ml-4 border-l border-white/5 pl-4">
+                                        {ev.status !== 'Cancelado' && (
+                                            <button 
+                                                onClick={() => handleCancelExam(ev)} 
+                                                title="Cancelar Exame" 
+                                                className="w-8 h-8 flex items-center justify-center text-muted hover:text-orange-500 hover:bg-orange-500/10 rounded-lg transition-colors"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px]">cancel</span>
+                                            </button>
+                                        )}
+                                        {isAdmin && (
+                                            <button 
+                                                onClick={() => handleDeleteExam(ev)} 
+                                                title="Excluir Definitivamente" 
+                                                className="w-8 h-8 flex items-center justify-center text-muted hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px]">delete</span>
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ))}

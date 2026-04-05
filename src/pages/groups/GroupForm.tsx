@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { cn } from '../../lib/utils';
+import { DynamicDiv } from '../../components/DynamicDiv';
 
 export function GroupForm() {
     const { id } = useParams();
@@ -13,7 +15,10 @@ export function GroupForm() {
         color: '#ffffff',
         selectedDays: [] as string[],
         time: '19:00',
+        belt_progression: [] as string[],
     });
+
+    const [allBelts, setAllBelts] = useState<{ id: string; name: string; color: string; color_secondary?: string; order_index: number }[]>([]);
 
     const daysOfWeek = [
         { id: 'Seg', label: 'Segunda' },
@@ -43,11 +48,11 @@ export function GroupForm() {
                     description: data.description || '',
                     schedule_description: data.schedule_description || '',
                     color: data.color || 'white',
-                    selectedDays: [], // We might parse this from description if possible, but for now reset or keep simple
+                    selectedDays: [],
                     time: '',
+                    belt_progression: data.belt_progression || [],
                 });
 
-                // Try to parse existing schedule string if it follows pattern "Seg/Qua 19:00"
                 if (data.schedule_description) {
                     const parts = data.schedule_description.split(' ');
                     if (parts.length >= 2) {
@@ -63,6 +68,13 @@ export function GroupForm() {
             }
             setLoading(false);
         }
+
+        async function fetchBelts() {
+            const { data } = await supabase.from('belts').select('id, name, color, color_secondary, order_index').order('order_index');
+            if (data) setAllBelts(data);
+        }
+
+        fetchBelts();
 
         if (id) {
             fetchGroup();
@@ -114,6 +126,7 @@ export function GroupForm() {
             description: formData.description,
             schedule_description: formData.schedule_description,
             color: formData.color,
+            belt_progression: formData.belt_progression,
         };
 
         const { error } = id
@@ -231,9 +244,9 @@ export function GroupForm() {
                         <p className="text-white text-sm font-semibold leading-normal pb-2">Cor Identificadora</p>
                         <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-border-slate shadow-inner">
                             <div className="relative group cursor-pointer hover:scale-105 transition-transform">
-                                <div
-                                    className="w-14 h-14 rounded-2xl border-2 border-white/10 shadow-lg ring-4 ring-black/20 [background-color:var(--preview-color)]"
-                                    style={{ '--preview-color': formData.color } as React.CSSProperties}
+                                <DynamicDiv
+                                    className="w-14 h-14 rounded-2xl border-2 border-white/10 shadow-lg ring-4 ring-black/20"
+                                    dynamicStyle={{ backgroundColor: formData.color }}
                                 />
                                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                     <span className="material-symbols-outlined text-white text-xl drop-shadow-md">palette</span>
@@ -261,6 +274,56 @@ export function GroupForm() {
                                 <label htmlFor="group-color" className="text-[10px] text-muted italic ml-1">Esta cor será usada nos ícones e destaques visuais da turma.</label>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Belt Progression */}
+                    <div className="flex flex-col w-full">
+                        <p className="text-white text-sm font-semibold leading-normal pb-2">Progressão de Faixas da Turma</p>
+                        <p className="text-[10px] text-muted mb-3">Selecione as faixas na ordem de evolução desta turma. Ex: Adultos podem pular Cinza/Amarela/Laranja/Verde.</p>
+                        <div className="flex flex-wrap gap-2">
+                            {allBelts.map(belt => {
+                                const isSelected = formData.belt_progression.includes(belt.id);
+                                const orderInProg = formData.belt_progression.indexOf(belt.id) + 1;
+                                return (
+                                    <button
+                                        key={belt.id}
+                                        type="button"
+                                        onClick={() => {
+                                            setFormData(prev => {
+                                                const current = prev.belt_progression;
+                                                if (current.includes(belt.id)) {
+                                                    return { ...prev, belt_progression: current.filter(b => b !== belt.id) };
+                                                }
+                                                return { ...prev, belt_progression: [...current, belt.id] };
+                                            });
+                                        }}
+                                        className={cn(
+                                            "relative h-10 px-4 rounded-lg text-sm font-bold border transition-all flex items-center gap-2",
+                                            isSelected
+                                                ? 'border-primary bg-primary/10 text-white shadow-md'
+                                                : 'bg-main border-border-slate text-muted hover:text-white hover:border-gray-500'
+                                        )}
+                                    >
+                                        <DynamicDiv
+                                            className="w-4 h-4 rounded-full border border-white/30 flex-shrink-0"
+                                            dynamicStyle={{ backgroundColor: belt.color }}
+                                        />
+                                        {belt.name}
+                                        {isSelected && (
+                                            <span className="absolute -top-2 -right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center text-[9px] font-black text-white">
+                                                {orderInProg}
+                                            </span>
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        {formData.belt_progression.length > 0 && (
+                            <div className="mt-3 flex items-center gap-1 text-[10px] text-muted">
+                                <span className="material-symbols-outlined text-primary text-sm">route</span>
+                                Ordem: {formData.belt_progression.map(bId => allBelts.find(b => b.id === bId)?.name).filter(Boolean).join(' → ')}
+                            </div>
+                        )}
                     </div>
                 </div>
 

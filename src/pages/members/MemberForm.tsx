@@ -41,7 +41,8 @@ export function MemberForm() {
         type: 'student',
         avatar_url: '',
         role: 'student' as 'admin' | 'manager' | 'coordinator' | 'instructor' | 'student',
-        user_id: null as string | null
+        user_id: null as string | null,
+        next_belt_override: null as string | null
     });
 
     const [createAccess, setCreateAccess] = useState(false);
@@ -163,7 +164,8 @@ export function MemberForm() {
                 type: data.type || 'student',
                 avatar_url: data.avatar_url || '',
                 role: 'student' as any,
-                user_id: data.user_id || null
+                user_id: data.user_id || null,
+                next_belt_override: data.next_belt_override || null
             };
 
             // Garantir que pegamos o Role mais atualizado do Profiles
@@ -215,7 +217,8 @@ export function MemberForm() {
             plan: formData.plan.toUpperCase().trim(),
             enrolled_classes: formData.enrolled_classes,
             avatar_url: formData.avatar_url,
-            user_id: formData.user_id
+            user_id: formData.user_id,
+            next_belt_override: formData.next_belt_override
         };
 
         try {
@@ -511,6 +514,21 @@ export function MemberForm() {
                                         <option value="Inactive">Inativo</option>
                                         <option value="Paused">Pausado</option>
                                     </select>
+                                </div>
+                                <div className="space-y-2 sm:col-span-2 md:col-span-4">
+                                    <label htmlFor="next-belt-select" className="text-muted text-[10px] font-black uppercase tracking-widest ml-1">Próxima Faixa (Override Manual)</label>
+                                    <select
+                                        id="next-belt-select"
+                                        className="w-full bg-main border border-border-slate rounded-xl px-4 h-12 text-white outline-none font-bold text-sm"
+                                        value={formData.next_belt_override || ''}
+                                        onChange={(e) => setFormData({ ...formData, next_belt_override: e.target.value || null })}
+                                    >
+                                        <option value="">Automático (pela turma)</option>
+                                        {belts.map(b => (
+                                            <option key={b.id} value={b.id}>{b.name}</option>
+                                        ))}
+                                    </select>
+                                    <p className="text-[10px] text-muted italic ml-1">Deixe como "Automático" para seguir a progressão da turma. Selecione para definir manualmente (ex: pular faixas).</p>
                                 </div>
                             </div>
                         </div>

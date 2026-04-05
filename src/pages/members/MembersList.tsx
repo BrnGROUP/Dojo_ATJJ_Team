@@ -63,7 +63,7 @@ export function MembersList() {
                 )}
             </div>
 
-            <div className="bg-card rounded-xl border border-border-slate p-3 md:p-4 shadow-sm">
+            <div className="bg-card rounded-xl border border-border-slate p-3 md:p-4 shadow-sm w-full">
                 <div className="flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
                     <div className="w-full md:flex-1">
                         <label className="flex flex-col min-w-0 h-11 w-full">
@@ -80,12 +80,14 @@ export function MembersList() {
                             </div>
                         </label>
                     </div>
-                    <div className="flex bg-main rounded-lg p-1 border border-border-slate overflow-x-auto custom-scrollbar whitespace-nowrap -mx-1 md:mx-0 flex-shrink-0">
-                        <button onClick={() => setTypeFilter('all')} className={`px-3 md:px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all flex-shrink-0 ${typeFilter === 'all' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Todos</button>
-                        <button onClick={() => setTypeFilter('student')} className={`px-3 md:px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all flex-shrink-0 ${typeFilter === 'student' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Alunos</button>
-                        <button onClick={() => setTypeFilter('instructor')} className={`px-3 md:px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all flex-shrink-0 ${typeFilter === 'instructor' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Instrutores</button>
-                        <button onClick={() => setTypeFilter('teacher')} className={`px-3 md:px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all flex-shrink-0 ${typeFilter === 'teacher' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Professores</button>
-                        <button onClick={() => setTypeFilter('staff')} className={`px-3 md:px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all flex-shrink-0 ${typeFilter === 'staff' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Equipe</button>
+                    <div className="w-full md:w-auto overflow-hidden">
+                        <div className="flex flex-wrap md:flex-nowrap bg-main rounded-lg p-1 border border-border-slate gap-1 w-full md:w-auto">
+                            <button onClick={() => setTypeFilter('all')} className={`flex-1 md:flex-none px-2 md:px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all ${typeFilter === 'all' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Todos</button>
+                            <button onClick={() => setTypeFilter('student')} className={`flex-1 md:flex-none px-2 md:px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all ${typeFilter === 'student' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Alunos</button>
+                            <button onClick={() => setTypeFilter('instructor')} className={`flex-1 md:flex-none px-2 md:px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all ${typeFilter === 'instructor' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Instrutores</button>
+                            <button onClick={() => setTypeFilter('teacher')} className={`flex-1 md:flex-none px-2 md:px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all ${typeFilter === 'teacher' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Professores</button>
+                            <button onClick={() => setTypeFilter('staff')} className={`flex-1 md:flex-none px-2 md:px-4 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all ${typeFilter === 'staff' ? 'bg-primary text-white' : 'text-muted hover:text-white'}`}>Equipe</button>
+                        </div>
                     </div>
                 </div>
             </div>
