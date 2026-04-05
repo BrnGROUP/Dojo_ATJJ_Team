@@ -173,7 +173,7 @@ export function Dashboard() {
     return (
         <div className="max-w-7xl mx-auto space-y-10 animate-fade-in">
             {/* KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 gap-6">
                 <StatCard label="Total de Alunos" value={stats.totalStudents} trend="+12%" />
                 <StatCard label="Alunos Ativos" value={stats.activeStudents} trend="ESTÁVEL" trendType="neutral" />
                 <StatCard label="Mensalidades Pendentes" value={overdueMembers.length} trend={overdueMembers.length > 0 ? "ATENÇÃO" : "OK"} trendType={overdueMembers.length > 0 ? "negative" : "positive"} />
@@ -190,9 +190,9 @@ export function Dashboard() {
                         <span className="material-symbols-outlined text-red-500">warning</span>
                         <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">Pendências Críticas</h2>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {overdueMembers.slice(0, 4).map(member => (
-                            <div key={member.id} className="bg-main border border-red-500/10 p-4 rounded-2xl flex items-center gap-3">
+                    <div className="flex flex-nowrap overflow-x-auto gap-4 pb-4 custom-scrollbar">
+                        {overdueMembers.map(member => (
+                            <div key={member.id} className="flex-none w-[280px] bg-main border border-red-500/10 p-4 rounded-2xl flex items-center gap-3 hover:border-red-500/30 transition-all">
                                 <BeltAvatar
                                     name={member.full_name}
                                     belt={member.belt}
@@ -201,10 +201,12 @@ export function Dashboard() {
                                     avatarUrl={member.avatar_url}
                                 />
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-xs font-bold text-white truncate">{member.full_name}</p>
-                                    <p className="text-[10px] text-red-500 font-bold">Vencimento: Dia {member.billing_day}</p>
+                                    <p className="text-sm font-bold text-white uppercase truncate">{member.full_name}</p>
+                                    <p className="text-[9px] text-red-500 font-black uppercase tracking-widest">
+                                        Vencimento: Dia {member.billing_day}
+                                    </p>
                                 </div>
-                                <span className="material-symbols-outlined text-red-500 text-sm">priority_high</span>
+                                <span className="material-symbols-outlined text-red-500 text-sm animate-pulse">priority_high</span>
                             </div>
                         ))}
                     </div>
@@ -218,14 +220,14 @@ export function Dashboard() {
                         <p className="text-muted text-xs sm:text-sm font-medium leading-normal">Reconhecimento e conquistas da semana</p>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
                     {/* Novos Membros */}
-                    <div className="lg:col-span-6 flex flex-col">
+                    <div className="xl:col-span-6 flex flex-col">
                         <h3 className="text-xs font-bold text-muted uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
                             <span className="material-symbols-outlined text-amber-500 text-sm">person_add</span>
                             Novos Integrantes
                         </h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {recentMembers.map((member) => (
                                 <div key={member.id} className="flex items-center gap-4 p-4 rounded-2xl bg-main border border-border-slate hover:border-primary/50 transition-all group shadow-sm">
                                     <BeltAvatar

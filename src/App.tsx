@@ -57,6 +57,7 @@ function App() {
                 <Route path="gamification/curriculum" element={<CurriculumManagement />} />
                 <Route path="finance" element={<Finance />} />
                 <Route path="finance/new" element={<PaymentForm />} />
+                <Route path="finance/edit/:id" element={<PaymentForm />} />
                 <Route path="reports" element={<Reports />} />
                 <Route path="competitions" element={<CompetitionsList />} />
                 <Route path="competitions/new" element={<CompetitionForm />} />

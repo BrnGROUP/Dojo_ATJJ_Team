@@ -1,20 +1,138 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useFinance } from '../../hooks/useFinance';
 import { StatCard } from '../../components/shared/StatCard';
 import { DynamicDiv } from '../../components/DynamicDiv';
+import { toast } from 'react-hot-toast';
 
 export function Finance() {
     const [filter, setFilter] = useState('all'); // all, pending, paid, overdue
-    const { payments, stats, loading } = useFinance(filter);
+    const now = new Date();
+    const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
+    const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+    const [page, setPage] = useState(1);
+    
+    const { payments, stats, totalCount, loading, deletePayment, markAsPaid, generateMonthlyFees } = useFinance(filter, selectedMonth, selectedYear, page);
+    const [generating, setGenerating] = useState(false);
+
+    useEffect(() => {
+        setPage(1);
+    }, [filter, selectedMonth, selectedYear]);
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+    const toggleSelect = (id: string) => {
+        setSelectedIds(prev => 
+            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+        );
+    };
+
+    const handleSelectAll = () => {
+        if (selectedIds.length === payments.length) {
+            setSelectedIds([]);
+        } else {
+            setSelectedIds(payments.map(p => p.id));
+        }
+    };
+
+    const handleBulkMarkAsPaid = async () => {
+        if (!window.confirm(`Deseja marcar ${selectedIds.length} lançamentos como pagos?`)) return;
+        try {
+            await markAsPaid(selectedIds);
+            toast.success(`${selectedIds.length} lançamentos atualizados!`);
+            setSelectedIds([]);
+        } catch (err) {
+            toast.error('Erro ao atualizar lançamentos.');
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        if (!window.confirm(`Deseja excluir ${selectedIds.length} lançamentos? Esta ação é irreversível.`)) return;
+        try {
+            await deletePayment(selectedIds);
+            toast.success(`${selectedIds.length} lançamentos excluídos!`);
+            setSelectedIds([]);
+        } catch (err) {
+            toast.error('Erro ao excluir lançamentos.');
+        }
+    };
+
+    const months = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
+    const years = Array.from({ length: 8 }, (_, i) => now.getFullYear() - 2 + i);
 
     const formatDate = (dateStr: string) => {
         if (!dateStr) return '-';
+        // Evita fuso horário ao usar string simples YYYY-MM-DD
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+            const [y, m, d] = parts;
+            return `${d}/${m}/${y}`;
+        }
         return new Date(dateStr).toLocaleDateString('pt-BR');
     };
 
     const formatCurrency = (val: number) => {
         return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+    };
+
+    const getTypeLabel = (type: string) => {
+        const labels: Record<string, string> = {
+            'Monthly': 'Mensalidade',
+            'Mensalidade': 'Mensalidade',
+            'Product': 'Produto',
+            'Produto': 'Produto',
+            'Registration': 'Matrícula',
+            'Matrícula': 'Matrícula',
+            'Event': 'Evento',
+            'Evento': 'Evento'
+        };
+        return labels[type] || type;
+    };
+
+    const handleGenerateMonthlyFees = async () => {
+        const monthName = months[selectedMonth - 1];
+        if (!window.confirm(`Deseja gerar a mensalidade de ${monthName}/${selectedYear} para todos os alunos ativos que ainda não possuem lançamento?`)) return;
+        
+        setGenerating(true);
+        try {
+            const result = await generateMonthlyFees(selectedYear, selectedMonth);
+            if (result.count > 0) {
+                toast.success(`${result.count} mensalidades geradas para ${monthName}!`);
+            } else {
+                if (result.reason === 'no_active_members') {
+                    toast.error('Nenhum aluno ativo encontrado no sistema.');
+                } else {
+                    toast.success(`Todos os alunos já possuem lançamento para ${monthName}.`);
+                }
+            }
+        } catch (err: any) {
+            toast.error('Erro ao gerar mensalidades.');
+        } finally {
+            setGenerating(false);
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!window.confirm('Deseja realmente excluir este lançamento?')) return;
+        try {
+            await deletePayment(id);
+            toast.success('Lançamento excluído!');
+        } catch (err: any) {
+            toast.error('Erro ao excluir lançamento.');
+        }
+    };
+
+    const handleMarkAsPaid = async (id: string) => {
+        if (!window.confirm('Confirmar recebimento deste valor?')) return;
+        try {
+            await markAsPaid(id);
+            toast.success('Lançamento marcado como pago!');
+        } catch (err: any) {
+            toast.error('Erro ao atualizar lançamento.');
+        }
     };
 
     const getStatusColor = (status: string) => {
@@ -42,20 +160,82 @@ export function Finance() {
                     <h1 className="text-white text-3xl font-black leading-tight tracking-tight">Financeiro</h1>
                     <p className="text-muted text-sm font-medium">Controle de mensalidades e lançamentos do Dojo.</p>
                 </div>
-                <div className="flex gap-3">
-                    <div className="flex bg-main rounded-lg p-1 border border-border-slate">
+                <div className="flex flex-wrap gap-3">
+                    {selectedIds.length > 0 && (
+                        <div className="flex bg-main border border-primary/30 rounded-lg p-1 h-10 items-center overflow-hidden animate-in fade-in slide-in-from-right-4 duration-300">
+                             <div className="px-3 border-r border-border-slate">
+                                <span className="text-[10px] font-black text-primary uppercase tracking-widest whitespace-nowrap">
+                                    {selectedIds.length} selecionados
+                                </span>
+                             </div>
+                             <button 
+                                onClick={handleBulkMarkAsPaid}
+                                className="flex items-center gap-2 px-3 py-1.5 hover:bg-emerald-500/10 text-emerald-500 transition-colors"
+                             >
+                                <span className="material-symbols-outlined text-sm">check_circle</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest">Marcar Pago</span>
+                             </button>
+                             <button 
+                                onClick={handleBulkDelete}
+                                className="flex items-center gap-2 px-3 py-1.5 hover:bg-red-500/10 text-red-500 transition-colors"
+                             >
+                                <span className="material-symbols-outlined text-sm">delete</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest">Excluir</span>
+                             </button>
+                        </div>
+                    )}
+
+                    <div className="flex bg-main rounded-lg p-1 border border-border-slate h-10">
                         <button onClick={() => setFilter('all')} className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${filter === 'all' ? 'bg-primary text-white shadow-sm' : 'text-muted hover:text-white'}`}>Todos</button>
                         <button onClick={() => setFilter('pending')} className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${filter === 'pending' ? 'bg-primary text-white shadow-sm' : 'text-muted hover:text-white'}`}>Pendentes</button>
                         <button onClick={() => setFilter('paid')} className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${filter === 'paid' ? 'bg-primary text-white shadow-sm' : 'text-muted hover:text-white'}`}>Pagos</button>
+                        <button onClick={() => setFilter('overdue')} className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${filter === 'overdue' ? 'bg-primary text-white shadow-sm' : 'text-muted hover:text-white'}`}>Atrasados</button>
                     </div>
-                    <Link to="/finance/new" className="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all">
+
+                    <div className="flex bg-main rounded-lg p-1 border border-border-slate h-10 gap-1">
+                        <select 
+                            value={selectedMonth} 
+                            onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                            title="Mês da Mensalidade"
+                            className="bg-transparent text-white text-xs font-bold outline-none px-1 cursor-pointer"
+                        >
+                            {months.map((m, i) => (
+                                <option key={m} value={i + 1} className="bg-zinc-900">{m}</option>
+                            ))}
+                        </select>
+                        <select 
+                            value={selectedYear} 
+                            onChange={(e) => setSelectedYear(Number(e.target.value))}
+                            title="Ano da Mensalidade"
+                            className="bg-transparent text-white text-xs font-bold outline-none px-1 cursor-pointer"
+                        >
+                            {years.map(y => (
+                                <option key={y} value={y} className="bg-zinc-900">{y}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <button
+                        onClick={handleGenerateMonthlyFees}
+                        disabled={generating}
+                        className="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-white/5 border border-border-slate text-slate-300 text-sm font-bold hover:bg-white/10 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {generating ? (
+                            <span className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin mr-2"></span>
+                        ) : (
+                            <span className="material-symbols-outlined mr-2 text-[20px]">sync</span>
+                        )}
+                        <span>Mensalidades do Mês</span>
+                    </button>
+
+                    <Link to="/finance/new" className="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary-hover transition-all shadow-lg shadow-primary/20">
                         <span className="material-symbols-outlined mr-2 text-[20px]">add_card</span>
                         <span className="truncate">Novo Lançamento</span>
                     </Link>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 gap-6">
                 <StatCard
                     label="Recebido (Mês)"
                     value={formatCurrency(stats.totalPaid)}
@@ -102,27 +282,45 @@ export function Finance() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-main/50 border-b border-border-slate">
-                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Aluno</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden sm:table-cell">Descrição</th>
-                                <th className="px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider hidden lg:table-cell">Vencimento</th>
-                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider">Valor</th>
-                                <th className="px-4 md:px-6 py-4 text-slate-200 text-xs font-bold uppercase tracking-wider text-center">Status</th>
-                                <th className="px-4 md:px-6 py-4 text-slate-400 text-xs font-bold uppercase tracking-wider text-right">Ações</th>
+                            <tr className="border-b border-border-slate">
+                                <th className="w-12 text-left py-4 px-4">
+                                    <input 
+                                        type="checkbox" 
+                                        title="Selecionar Todos"
+                                        className="w-4 h-4 rounded border-border-slate bg-main text-primary focus:ring-primary/30 cursor-pointer"
+                                        checked={payments.length > 0 && selectedIds.length === payments.length}
+                                        onChange={handleSelectAll}
+                                    />
+                                </th>
+                                <th className="text-left py-4 px-4 text-muted text-[10px] font-black uppercase tracking-widest">Aluno</th>
+                                <th className="text-left py-4 px-4 text-muted text-[10px] font-black uppercase tracking-widest">Descrição</th>
+                                <th className="text-left py-4 px-4 text-muted text-[10px] font-black uppercase tracking-widest">Vencimento</th>
+                                <th className="text-left py-4 px-4 text-muted text-[10px] font-black uppercase tracking-widest text-right">Valor</th>
+                                <th className="text-center py-4 px-4 text-muted text-[10px] font-black uppercase tracking-widest">Status</th>
+                                <th className="text-right py-4 px-4 text-muted text-[10px] font-black uppercase tracking-widest">Ações</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-border-slate/50">
+                        <tbody className="divide-y divide-border-slate/10">
                             {loading ? (
                                 <tr>
-                                    <td colSpan={6} className="px-6 py-8 text-center text-muted">Carregando financeiro...</td>
+                                    <td colSpan={7} className="px-6 py-8 text-center text-muted">Carregando financeiro...</td>
                                 </tr>
                             ) : payments.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="px-6 py-8 text-center text-muted">Nenhum lançamento encontrado.</td>
+                                    <td colSpan={7} className="px-6 py-8 text-center text-muted">Nenhum lançamento encontrado.</td>
                                 </tr>
                             ) : (
                                 payments.map((pay) => (
                                     <tr key={pay.id} className="hover:bg-main/30 transition-colors">
+                                        <td className="py-4 px-4">
+                                            <input 
+                                                type="checkbox" 
+                                                title={`Selecionar ${pay.members?.full_name}`}
+                                                className="w-4 h-4 rounded border-border-slate bg-main text-primary focus:ring-primary/30 cursor-pointer"
+                                                checked={selectedIds.includes(pay.id)}
+                                                onChange={() => toggleSelect(pay.id)}
+                                            />
+                                        </td>
                                         <td className="px-4 md:px-6 py-4">
                                             <div className="flex flex-col">
                                                 <span className="text-white text-sm font-bold truncate max-w-[120px] sm:max-w-none">{pay.members?.full_name || 'Aluno Removido'}</span>
@@ -139,7 +337,7 @@ export function Finance() {
                                                 </span>
                                                 <div>
                                                     <span className="text-slate-300 text-sm font-medium">{pay.description}</span>
-                                                    <span className="block text-[10px] text-muted uppercase tracking-wider font-bold">{pay.type}</span>
+                                                    <span className="block text-[10px] text-muted uppercase tracking-wider font-bold">{getTypeLabel(pay.type)}</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -164,13 +362,63 @@ export function Finance() {
                                             </span>
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-right">
-                                            <Link to={`/finance/edit/${pay.id}`} className="text-slate-400 hover:text-white transition-colors text-[18px] md:text-[20px] font-bold material-symbols-outlined">edit</Link>
+                                            <div className="flex items-center justify-end gap-2 md:gap-3">
+                                                {pay.status !== 'Paid' && (
+                                                    <button
+                                                        onClick={() => handleMarkAsPaid(pay.id)}
+                                                        className="text-emerald-500 hover:text-emerald-400 transition-colors material-symbols-outlined text-[20px] md:text-[22px]"
+                                                        title="Marcar como Pago"
+                                                    >
+                                                        check_circle
+                                                    </button>
+                                                )}
+                                                <Link
+                                                    to={`/finance/edit/${pay.id}`}
+                                                    className="text-slate-400 hover:text-white transition-colors material-symbols-outlined text-[20px] md:text-[22px]"
+                                                    title="Editar"
+                                                >
+                                                    edit
+                                                </Link>
+                                                <button
+                                                    onClick={() => handleDelete(pay.id)}
+                                                    className="text-slate-500 hover:text-red-500 transition-colors material-symbols-outlined text-[20px] md:text-[22px]"
+                                                    title="Excluir"
+                                                >
+                                                    delete
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
                             )}
                         </tbody>
                     </table>
+                </div>
+                
+                <div className="px-6 py-4 border-t border-border-slate flex items-center justify-between">
+                    <span className="text-[10px] font-black text-muted uppercase tracking-widest">
+                        {totalCount} REGISTROS ENCONTRADOS
+                    </span>
+                    
+                    <div className="flex items-center gap-2">
+                        <button 
+                            disabled={page === 1}
+                            onClick={() => setPage(p => p - 1)}
+                            className="flex items-center gap-1 px-3 py-1 bg-main border border-border-slate rounded-lg text-xs font-bold text-white hover:border-primary/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <span className="material-symbols-outlined text-sm">chevron_left</span>
+                            ANTERIOR
+                        </button>
+                        <span className="text-xs font-bold text-white px-2">PÁGINA {page}</span>
+                        <button 
+                            disabled={payments.length < 50}
+                            onClick={() => setPage(p => p + 1)}
+                            className="flex items-center gap-1 px-3 py-1 bg-main border border-border-slate rounded-lg text-xs font-bold text-white hover:border-primary/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            PRÓXIMA
+                            <span className="material-symbols-outlined text-sm">chevron_right</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

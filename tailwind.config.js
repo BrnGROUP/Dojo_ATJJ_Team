@@ -21,6 +21,10 @@ export default {
             fontFamily: {
                 "sans": ["Inter", "sans-serif"],
                 "display": ["Inter", "sans-serif"],
+            },
+            screens: {
+                // Default Tailwind breakpoints kept, widescreen added
+                'widescreen': '1580px',
             }
         },
     },

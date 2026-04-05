@@ -6,15 +6,16 @@ import { useSettings } from '../hooks/useSettings';
 
 interface SidebarProps {
     isOpen: boolean;
+    isCollapsed: boolean;
     onClose: () => void;
 }
 
-export function Sidebar({ isOpen, onClose }: SidebarProps) {
+export function Sidebar({ isOpen, isCollapsed, onClose }: SidebarProps) {
     const location = useLocation();
     const { profile, isAdmin, isManager } = useAuth();
     const { settings } = useSettings();
 
-    // Close sidebar when route changes on mobile
+    // Close sidebar when route changes on mobile (< 768px)
     const handleLinkClick = () => {
         if (window.innerWidth < 768) {
             onClose();
@@ -49,102 +50,121 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         !item.roles || (profile && item.roles.includes(profile.role))
     );
 
+    // On mobile (<768px): sidebar is an overlay that slides in/out
+    // On medium (768–1579px): sidebar is static, either icon-only (collapsed) or shown with text
+    // On widescreen (≥1580px): sidebar is always static and full width
+    const isMobileMode = typeof window !== 'undefined' && window.innerWidth < 768;
+
+    const isActive = (path: string) =>
+        location.pathname === path || location.pathname.startsWith(`${path}/`);
+
+    const renderLink = (item: { label: string; icon: string; path: string }) => (
+        <Link
+            key={item.path}
+            to={item.path}
+            onClick={handleLinkClick}
+            title={isCollapsed ? item.label : undefined}
+            className={cn(
+                "flex items-center rounded-xl text-sm font-semibold transition-all duration-200 group relative",
+                isCollapsed ? "justify-center px-0 py-3" : "gap-3 px-4 py-3",
+                isActive(item.path)
+                    ? "bg-primary/10 text-primary hover:bg-primary/20"
+                    : "text-muted hover:bg-white/5 hover:text-white"
+            )}
+        >
+            <span className={cn("material-symbols-outlined shrink-0", isActive(item.path) && "fill-current")}>
+                {item.icon}
+            </span>
+            {!isCollapsed && <span className="truncate">{item.label}</span>}
+            {/* Tooltip on collapsed mode */}
+            {isCollapsed && (
+                <span className="absolute left-full ml-3 px-2 py-1 bg-card border border-border-slate text-white text-xs font-bold rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-opacity shadow-lg">
+                    {item.label}
+                </span>
+            )}
+        </Link>
+    );
+
     return (
         <>
-            {/* Mobile Overlay */}
-            {isOpen && (
+            {/* Mobile Overlay - only below 768px */}
+            {isOpen && isMobileMode && (
                 <div
-                    className="fixed inset-0 bg-black/80 z-40 md:hidden backdrop-blur-sm transition-opacity"
+                    className="fixed inset-0 bg-black/80 z-40 backdrop-blur-sm transition-opacity"
                     onClick={onClose}
                 />
             )}
 
             {/* Sidebar Container */}
             <aside className={cn(
-                "fixed md:static inset-y-0 left-0 w-[var(--sidebar-width)] flex-shrink-0 bg-main flex flex-col h-full z-50 border-r border-border-slate transition-transform duration-300 transform md:transform-none",
-                isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+                // Base styles
+                "flex-shrink-0 bg-main flex flex-col h-full z-50 border-r border-border-slate transition-all duration-300",
+                // Mobile: fixed overlay, slides in/out
+                "fixed inset-y-0 left-0 md:static md:translate-x-0",
+                // Width: collapsed = 72px, full = 280px
+                isCollapsed ? "w-[72px]" : "w-[var(--sidebar-width)]",
+                // Mobile open/close
+                isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
             )}>
-                <div className="p-8 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="bg-white rounded-lg p-1 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-                            <img src="/logo.png" alt="ATJJ Logo" className="w-10 h-10 object-contain" />
+                {/* Logo Area */}
+                <div className={cn(
+                    "flex items-center border-b border-border-slate shrink-0",
+                    isCollapsed ? "justify-center p-4 h-[73px]" : "justify-between p-6 h-[73px]"
+                )}>
+                    {!isCollapsed && (
+                        <div className="flex items-center gap-3 min-w-0">
+                            <div className="bg-white rounded-lg p-1 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] shrink-0">
+                                <img src="/logo.png" alt="ATJJ Logo" className="w-8 h-8 object-contain" />
+                            </div>
+                            <div className="min-w-0">
+                                <h1 className="text-white text-base font-extrabold tracking-tight leading-none uppercase truncate">
+                                    {settings.dojo_name}
+                                </h1>
+                                <p className="text-muted text-[9px] font-bold tracking-[0.2em] mt-0.5">SISTEMA V4</p>
+                            </div>
                         </div>
-                        <div>
-                            <h1 className="text-white text-xl font-extrabold tracking-tight leading-none uppercase truncate max-w-[120px]">
-                                {settings.dojo_name}
-                            </h1>
-                            <p className="text-muted text-[10px] font-bold tracking-[0.2em] mt-1">SISTEMA V4</p>
+                    )}
+                    {isCollapsed && (
+                        <div className="bg-white rounded-lg p-1 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                            <img src="/logo.png" alt="ATJJ Logo" className="w-8 h-8 object-contain" />
                         </div>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="md:hidden p-2 text-muted hover:text-white rounded-lg hover:bg-white/5 transition-colors"
-                    >
-                        <span className="material-symbols-outlined">close</span>
-                    </button>
+                    )}
                 </div>
-                <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
-                    <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 opacity-50">Geral</p>
-                    {menuItems.filter(item => !item.roles || item.roles.includes(profile?.role ?? '')).map((item) => (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            onClick={handleLinkClick}
-                            className={cn(
-                                "sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200",
-                                location.pathname === item.path
-                                    ? "bg-primary/10 text-primary hover:bg-primary/20"
-                                    : "text-muted hover:bg-white/5 hover:text-white"
-                            )}
-                        >
-                            <span className={cn("material-symbols-outlined", location.pathname === item.path && "fill-current")}>{item.icon}</span>
-                            {item.label}
-                        </Link>
-                    ))}
 
-                    <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 mt-8 opacity-50">Gamificação</p>
-                    {gamificationItems.filter(item => !item.roles || item.roles.includes(profile?.role ?? '')).map((item) => (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            onClick={handleLinkClick}
-                            className={cn(
-                                "sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200",
-                                (location.pathname === item.path || location.pathname.startsWith(`${item.path}/`))
-                                    ? "bg-primary/10 text-primary hover:bg-primary/20"
-                                    : "text-muted hover:bg-white/5 hover:text-white"
-                            )}
-                        >
-                            <span className={cn("material-symbols-outlined", (location.pathname === item.path || location.pathname.startsWith(`${item.path}/`)) && "fill-current")}>{item.icon}</span>
-                            {item.label}
-                        </Link>
-                    ))}
+                {/* Navigation */}
+                <nav className="flex-1 px-2 py-4 space-y-0.5 overflow-y-auto custom-scrollbar">
+                    {!isCollapsed && (
+                        <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-2 opacity-50">Geral</p>
+                    )}
+                    {isCollapsed && <div className="h-4" />}
+
+                    {menuItems
+                        .filter(item => !item.roles || item.roles.includes(profile?.role ?? ''))
+                        .map(renderLink)}
+
+                    {!isCollapsed && (
+                        <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-2 mt-6 opacity-50">Gamificação</p>
+                    )}
+                    {isCollapsed && <div className="h-4 border-t border-border-slate/30 mt-2" />}
+
+                    {gamificationItems
+                        .filter(item => !item.roles || item.roles.includes(profile?.role ?? ''))
+                        .map(renderLink)}
 
                     {filteredAdminItems.length > 0 && (
                         <>
-                            <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-4 mt-8 opacity-50">Administrativo</p>
-                            {filteredAdminItems.map((item) => (
-                                <Link
-                                    key={item.path}
-                                    to={item.path}
-                                    onClick={handleLinkClick}
-                                    className={cn(
-                                        "sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200",
-                                        location.pathname === item.path
-                                            ? "bg-primary/10 text-primary hover:bg-primary/20"
-                                            : "text-muted hover:bg-white/5 hover:text-white"
-                                    )}
-                                >
-                                    <span className={cn("material-symbols-outlined", location.pathname === item.path && "fill-current")}>{item.icon}</span>
-                                    {item.label}
-                                </Link>
-                            ))}
+                            {!isCollapsed && (
+                                <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-widest mb-2 mt-6 opacity-50">Administrativo</p>
+                            )}
+                            {isCollapsed && <div className="h-4 border-t border-border-slate/30 mt-2" />}
+                            {filteredAdminItems.map(renderLink)}
                         </>
                     )}
                 </nav>
 
-                {(isAdmin || isManager) && (
-                    <div className="p-6 border-t border-border-slate">
+                {/* Bottom Card (only when not collapsed) */}
+                {!isCollapsed && (isAdmin || isManager) && (
+                    <div className="p-4 border-t border-border-slate shrink-0">
                         <div className="bg-card rounded-2xl p-4 border border-border-slate">
                             <p className="text-[11px] font-medium text-muted mb-2">Plano Premium</p>
                             <div className="h-1.5 w-full bg-main rounded-full mb-3">

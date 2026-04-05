@@ -59,6 +59,19 @@ export function PaymentForm() {
         fetchInitialData();
     }, [id, isEditing, navigate]);
 
+    useEffect(() => {
+        if (formData.status === 'Paid') return;
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const due = new Date(formData.due_date + 'T00:00:00');
+        
+        const newStatus = due < today ? 'Overdue' : 'Pending';
+        if (formData.status !== newStatus) {
+            setFormData(prev => ({ ...prev, status: newStatus }));
+        }
+    }, [formData.due_date, formData.status]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         let maskedValue = value;
@@ -205,10 +218,10 @@ export function PaymentForm() {
                                         onChange={handleChange}
                                         className="w-full bg-main border border-border-slate rounded-xl py-3 px-12 text-white text-sm outline-none transition-all duration-300 focus:border-primary focus:ring-1 focus:ring-primary/30 appearance-none cursor-pointer"
                                     >
-                                        <option value="Monthly" className="bg-zinc-900">Mensalidade</option>
-                                        <option value="Product" className="bg-zinc-900">Produto (Kimono, etc)</option>
-                                        <option value="Registration" className="bg-zinc-900">Matrícula</option>
-                                        <option value="Event" className="bg-zinc-900">Evento/Seminário</option>
+                                        <option value="Mensalidade" className="bg-zinc-900">Mensalidade</option>
+                                        <option value="Produto" className="bg-zinc-900">Produto (Kimono, etc)</option>
+                                        <option value="Matrícula" className="bg-zinc-900">Matrícula</option>
+                                        <option value="Evento" className="bg-zinc-900">Evento/Seminário</option>
                                     </select>
                                     <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
                                         expand_more
@@ -224,20 +237,24 @@ export function PaymentForm() {
                                         { id: 'Paid', label: 'Pago', icon: 'check_circle', activeBg: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' },
                                         { id: 'Overdue', label: 'Atrasado', icon: 'error', activeBg: 'bg-red-500/10 border-red-500/30 text-red-500' }
                                     ].map((status) => (
-                                        <button
+                                        <div
                                             key={status.id}
-                                            type="button"
-                                            onClick={() => setFormData(prev => ({ ...prev, status: status.id }))}
+                                            onClick={() => {
+                                                if (status.id === 'Paid') {
+                                                    setFormData(prev => ({ ...prev, status: status.id }));
+                                                }
+                                            }}
                                             className={cn(
-                                                "flex items-center gap-3 p-4 rounded-xl border transition-all text-left group",
+                                                "flex items-center gap-3 p-4 rounded-xl border transition-all text-left",
+                                                status.id === 'Paid' ? "cursor-pointer" : "cursor-default",
                                                 formData.status === status.id
                                                     ? `${status.activeBg} font-black shadow-lg shadow-black/20`
-                                                    : "bg-main border-border-slate text-muted hover:border-slate-500"
+                                                    : "bg-main border-border-slate text-muted grayscale opacity-50"
                                             )}
                                         >
                                             <span className="material-symbols-outlined">{status.icon}</span>
                                             <span className="text-sm font-bold uppercase tracking-widest">{status.label}</span>
-                                        </button>
+                                        </div>
                                     ))}
                                 </div>
                             </div>

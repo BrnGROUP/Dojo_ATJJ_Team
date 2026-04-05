@@ -10,7 +10,7 @@ interface Member {
     full_name: string;
     belt: string;
     xp: number;
-    photo_url?: string;
+    avatar_url?: string;
     stripes: number;
 }
 
@@ -45,7 +45,11 @@ export function GraduationPanel() {
         try {
             setLoading(true);
             const [membersRes, beltsRes] = await Promise.all([
-                supabase.from('members').select('*').eq('status', 'active'), // Only active members
+                supabase.from('members')
+                    .select('*')
+                    .ilike('status', 'active')
+                    .not('belt', 'ilike', '%preta%')
+                    .not('belt', 'ilike', '%black%'),
                 supabase.from('belts').select('*').order('order_index', { ascending: true })
             ]);
 
@@ -301,8 +305,8 @@ export function GraduationPanel() {
                                 <div className="relative z-10">
                                     <div className="flex items-center gap-4 mb-6">
                                         <div className="w-16 h-16 rounded-full bg-zinc-800 border-2 border-border-slate flex items-center justify-center overflow-hidden">
-                                            {member.photo_url ? (
-                                                <img src={member.photo_url} alt={member.full_name} className="w-full h-full object-cover" />
+                                            {member.avatar_url ? (
+                                                <img src={member.avatar_url} alt={member.full_name} className="w-full h-full object-cover" />
                                             ) : (
                                                 <span className="font-bold text-muted text-lg">{member.full_name.substring(0, 2).toUpperCase()}</span>
                                             )}
@@ -402,8 +406,8 @@ export function GraduationPanel() {
                                 <div key={member.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-white/5 p-4 rounded-xl border border-border-slate">
                                     <div className="md:col-span-4 flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-zinc-800 border border-border-slate flex items-center justify-center overflow-hidden shrink-0">
-                                            {member.photo_url ? (
-                                                <img src={member.photo_url} alt={member.full_name} className="w-full h-full object-cover" />
+                                            {member.avatar_url ? (
+                                                <img src={member.avatar_url} alt={member.full_name} className="w-full h-full object-cover" />
                                             ) : (
                                                 <span className="font-bold text-muted text-xs">{member.full_name.substring(0, 2).toUpperCase()}</span>
                                             )}

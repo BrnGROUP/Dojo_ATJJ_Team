@@ -24,20 +24,25 @@ export function Header({ onMenuClick }: HeaderProps) {
             <div className="flex items-center gap-4 flex-1">
                 <button
                     onClick={onMenuClick}
-                    className="md:hidden p-2 text-muted hover:text-white rounded-lg hover:bg-white/5 transition-colors"
+                    className="p-2 text-muted hover:text-white rounded-lg hover:bg-white/5 transition-colors shrink-0"
+                    title="Alternar Sidebar"
                 >
                     <span className="material-symbols-outlined">menu</span>
                 </button>
-                <div className="relative w-full max-w-md group">
+                <div className="relative w-full max-w-md group hidden sm:block">
                     <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors">search</span>
                     <input className="w-full bg-card border border-border-slate rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-muted/50" placeholder="Pesquisar por alunos, graduações..." type="text" />
                 </div>
             </div>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 md:gap-6">
                 <div className="flex gap-1 md:gap-2">
                     <button className="p-2 text-muted hover:text-white hover:bg-card rounded-xl transition-all relative">
                         <span className="material-symbols-outlined text-[20px] md:text-[24px]">notifications</span>
                         <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-primary rounded-full border-2 border-main shadow-[0_0_8px_#d72638]"></span>
+                    </button>
+                    {/* Search icon for mobile since bar is hidden */}
+                    <button className="p-2 text-muted hover:text-white hover:bg-card rounded-xl transition-all relative sm:hidden">
+                        <span className="material-symbols-outlined text-[20px]">search</span>
                     </button>
                 </div>
                 <div className="h-8 w-px bg-border-slate hidden sm:block"></div>
@@ -47,7 +52,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                         to={profile?.id ? `/users/${profile.id}` : '#'}
                         className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-all cursor-pointer"
                     >
-                        <div className="flex flex-col text-right">
+                        <div className="flex flex-col text-right hidden xl:flex">
                             <span className="text-white text-xs md:text-sm font-black leading-none italic uppercase tracking-tighter">
                                 {(profile?.full_name || 'Usuário').trim().split(/\s+/).slice(0, 2).join(' ')}
                             </span>

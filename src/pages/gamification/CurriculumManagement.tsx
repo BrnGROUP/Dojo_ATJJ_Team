@@ -200,7 +200,7 @@ export function CurriculumManagement() {
     };
 
     return (
-        <div className="p-6 md:p-10 space-y-8 animate-fade-in pb-24">
+        <div className="max-w-7xl mx-auto p-4 md:p-10 space-y-8 animate-fade-in pb-24">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 className="text-3xl font-black text-white uppercase tracking-tight flex items-center gap-3">
@@ -222,9 +222,9 @@ export function CurriculumManagement() {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 {/* Belt Selector */}
-                <div className="md:col-span-1 space-y-3">
+                <div className="lg:col-span-1 space-y-3">
                     <h3 className="text-xs font-bold text-muted uppercase tracking-widest px-2">Faixas</h3>
                     {belts.map(belt => (
                         <button
@@ -248,7 +248,7 @@ export function CurriculumManagement() {
                 </div>
 
                 {/* Techniques List */}
-                <div className="md:col-span-3 bg-card rounded-3xl border border-border-slate p-6 min-h-[500px]">
+                <div className="lg:col-span-3 bg-card rounded-3xl border border-border-slate p-6 min-h-[500px]">
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-bold text-white">
                             Técnicas: {belts.find(b => b.id === selectedBelt)?.name}

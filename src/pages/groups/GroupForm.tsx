@@ -8,6 +8,7 @@ export function GroupForm() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [originalName, setOriginalName] = useState<string | null>(null);
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -52,6 +53,7 @@ export function GroupForm() {
                     time: '',
                     belt_progression: data.belt_progression || [],
                 });
+                setOriginalName(data.name || '');
 
                 if (data.schedule_description) {
                     const parts = data.schedule_description.split(' ');
@@ -133,14 +135,44 @@ export function GroupForm() {
             ? await supabase.from('groups').update(dataToSave).eq('id', id)
             : await supabase.from('groups').insert([dataToSave]);
 
-        setLoading(false);
-
         if (error) {
             console.error('Error saving group:', error);
             alert('Erro ao salvar turma.');
-        } else {
-            navigate('/groups');
+            setLoading(false);
+            return;
         }
+
+        // Cascading update for members' enrolled_classes
+        if (id && originalName && formData.name !== originalName) {
+            try {
+                // Fetch members who have the old class name
+                const { data: membersToUpdate } = await supabase
+                    .from('members')
+                    .select('id, enrolled_classes')
+                    .contains('enrolled_classes', [originalName]);
+
+                if (membersToUpdate && membersToUpdate.length > 0) {
+                    const updatePromises = membersToUpdate.map(m => {
+                        // Replace the old name with the new one in the array
+                        const updatedClasses = m.enrolled_classes.map((c: string) => 
+                            c === originalName ? formData.name : c
+                        );
+                        // Ensure no duplicates if needed, but simple replacement is safer here 
+                        return supabase
+                            .from('members')
+                            .update({ enrolled_classes: updatedClasses })
+                            .eq('id', m.id);
+                    });
+                    await Promise.all(updatePromises);
+                }
+            } catch (caserr) {
+                console.error('Error cascading group name update:', caserr);
+                // We don't block navigation, but we log the error
+            }
+        }
+
+        setLoading(false);
+        navigate('/groups');
     };
 
     return (

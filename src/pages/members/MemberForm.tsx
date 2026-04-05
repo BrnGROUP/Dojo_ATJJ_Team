@@ -13,6 +13,7 @@ import { Card, CardContent } from '../../components/ui/Card';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../../lib/auth';
 import { BeltAvatar } from '../../components/shared/BeltAvatar';
+import { BadgeShowcase } from '../../components/shared/BadgeShowcase';
 
 export function MemberForm() {
     const { id } = useParams();
@@ -20,6 +21,7 @@ export function MemberForm() {
     const { profile, refreshProfile } = useAuth();
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
     const [formData, setFormData] = useState({
         full_name: '',
         email: '',
@@ -75,12 +77,19 @@ export function MemberForm() {
     useEffect(() => {
         const cleanCEP = formData.cep.replace(/\D/g, '');
         if (cleanCEP.length === 8) {
+            // Don't auto-lookup for initial load to avoid overwriting existing address details (number, etc)
+            if (isInitialLoad) {
+                setIsInitialLoad(false);
+                return;
+            }
+
             const timer = setTimeout(async () => {
                 const addressData = await fetchAddressByCEP(cleanCEP);
                 if (addressData) {
+                    const formattedAddress = `${addressData.logradouro || ''}${addressData.bairro ? `, ${addressData.bairro}` : ''}`.toUpperCase().trim();
                     setFormData(prev => ({
                         ...prev,
-                        address: `${addressData.logradouro}${addressData.bairro ? `, ${addressData.bairro}` : ''}`.toUpperCase(),
+                        address: formattedAddress,
                         city: addressData.localidade.toUpperCase(),
                         state: addressData.uf
                     }));
@@ -88,6 +97,9 @@ export function MemberForm() {
                 }
             }, 500);
             return () => clearTimeout(timer);
+        } else if (cleanCEP.length > 0) {
+            // If user cleared or typed something else, it's no longer initial load behavior
+            setIsInitialLoad(false);
         }
     }, [formData.cep]);
 
@@ -218,6 +230,7 @@ export function MemberForm() {
             enrolled_classes: formData.enrolled_classes,
             avatar_url: formData.avatar_url,
             user_id: formData.user_id,
+            xp: Number(formData.xp),
             next_belt_override: formData.next_belt_override
         };
 
@@ -458,9 +471,8 @@ export function MemberForm() {
                                         className="w-full bg-main border border-border-slate rounded-xl px-4 h-12 text-white outline-none font-bold text-sm"
                                         value={formData.city}
                                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                                        disabled={loadingCities}
                                     >
-                                        <option value="">Selecione a cidade</option>
+                                        <option value="">{loadingCities ? 'Carregando cidades...' : 'Selecione a cidade'}</option>
                                         {cities.map(cityName => (
                                             <option key={cityName} value={cityName}>{cityName}</option>
                                         ))}
@@ -675,6 +687,14 @@ export function MemberForm() {
                         </div>
                     </CardContent>
                 </Card>
+
+                {id && (
+                    <Card>
+                        <CardContent className="p-6">
+                            <BadgeShowcase memberId={id} />
+                        </CardContent>
+                    </Card>
+                )}
 
                 {id && (
                     <EvaluationsList memberId={id} currentBelt={formData.belt} />

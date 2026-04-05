@@ -18,7 +18,7 @@ export function useCities(selectedState: string) {
         try {
             const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
             const data = await response.json();
-            const cityNames = data.map((c: { nome: string }) => c.nome).sort();
+            const cityNames = data.map((c: { nome: string }) => c.nome.toUpperCase()).sort();
             setCities(cityNames);
         } catch (err) {
             console.error('Erro ao buscar cidades:', err);

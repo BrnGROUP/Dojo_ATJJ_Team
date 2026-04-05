@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 import { DynamicDiv } from '../../components/DynamicDiv';
 import { EvaluationsList } from '../members/EvaluationsList';
 import { TechniqueChecklist } from './TechniqueChecklist';
+import { BadgeShowcase } from '../../components/shared/BadgeShowcase';
 
 interface BeltObj {
     id: string;
@@ -29,7 +30,7 @@ export interface MemberEvolution {
     id: string;
     full_name: string;
     belt: string;
-    photo_url?: string;
+    avatar_url?: string;
     xp: number;
     stripes: number;
     enrolled_classes: string[];
@@ -81,11 +82,11 @@ export function StudentEvolution() {
     const fetchEvolutionData = async (silent = false) => {
         if (!silent) setLoading(true);
         try {
-            // 1. Fetch members (excluir Faixa Preta - regulamentada pela IBJJF)
+            // 1. Fetch members
             const { data: membersData, error: membError } = await supabase
                 .from('members')
-                .select('id, full_name, belt, xp, photo_url, stripes, enrolled_classes, next_belt_override')
-                .eq('status', 'Active')
+                .select('id, full_name, belt, xp, avatar_url, stripes, enrolled_classes, next_belt_override')
+                .ilike('status', 'active')
                 .not('belt', 'ilike', '%preta%')
                 .not('belt', 'ilike', '%black%')
                 .order('full_name');
@@ -254,7 +255,7 @@ export function StudentEvolution() {
                 return {
                     ...m,
                     xp: total_computed_xp, // Substitui a XP base pela XP + Técnicas
-                    photo_url: m.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(m.full_name)}&background=1f2937&color=fff`,
+                    avatar_url: m.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(m.full_name)}&background=1f2937&color=fff`,
                     attendance_count: recentAttendance.length,
                     total_attendance_count: allMemberAttendance.length,
                     last_presence: lastPres,
@@ -358,7 +359,7 @@ export function StudentEvolution() {
                 </div>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 {/* List Column */}
                 <div className="lg:col-span-1 space-y-4 max-h-[calc(100vh-12rem)] overflow-y-auto custom-scrollbar pr-2">
                     {loading ? (
@@ -377,8 +378,8 @@ export function StudentEvolution() {
                             >
                                 <div className="flex items-center gap-3 relative z-10">
                                     <div className="w-12 h-12 rounded-full bg-zinc-800 border-2 border-border-slate flex items-center justify-center overflow-hidden shrink-0">
-                                        {member.photo_url ? (
-                                            <img src={member.photo_url} alt={member.full_name} className="w-full h-full object-cover" />
+                                        {member.avatar_url ? (
+                                            <img src={member.avatar_url} alt={member.full_name} className="w-full h-full object-cover" />
                                         ) : (
                                             <span className="font-bold text-muted text-xs">{member.full_name.substring(0, 2).toUpperCase()}</span>
                                         )}
@@ -390,14 +391,14 @@ export function StudentEvolution() {
                                                 <span className="flex-shrink-0 w-2 h-2 bg-green-500 rounded-full animate-pulse" title="Pronto para promoção" />
                                             )}
                                         </div>
-                                        <div className="flex items-center gap-2 text-xs text-muted mt-1">
-                                            <span className="flex items-center gap-1">
+                                        <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-[10px] text-muted mt-1 leading-tight">
+                                            <span className="flex items-center gap-1 whitespace-nowrap">
                                                 <span className="material-symbols-outlined text-[10px]">military_tech</span>
                                                 {member.belt}
                                                 {member.kyu_label && <span className="text-primary font-bold">({member.kyu_label})</span>}
                                             </span>
-                                            <span>•</span>
-                                            <span className={cn("font-bold", member.attendance_count > 20 ? "text-green-500" : member.attendance_count > 10 ? "text-yellow-500" : "text-red-500")}>
+                                            <span className="hidden sm:inline opacity-30">•</span>
+                                            <span className={cn("font-bold whitespace-nowrap", member.attendance_count > 20 ? "text-green-500" : member.attendance_count > 10 ? "text-yellow-500" : "text-red-500")}>
                                                 {member.attendance_count} treinos (90d)
                                             </span>
                                         </div>
@@ -419,11 +420,11 @@ export function StudentEvolution() {
                 </div>
 
                 {/* Details Column */}
-                <div className="lg:col-span-2">
+                <div className="xl:col-span-2">
                     {selectedMember ? (
                         <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
                             {/* Header Stats */}
-                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                            <div className="grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
                                 <div className="bg-card p-5 rounded-2xl border border-border-slate flex flex-col items-center justify-center text-center group hover:border-primary/30 transition-colors">
                                     <div className="w-10 h-10 rounded-full bg-green-500/10 text-green-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                                         <span className="material-symbols-outlined">calendar_month</span>
@@ -526,7 +527,7 @@ export function StudentEvolution() {
                                         )}
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                                         <div className="space-y-4">
                                             {/* Critérios Configurados */}
                                             {selectedMember.current_requirements ? (
@@ -612,6 +613,11 @@ export function StudentEvolution() {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            {/* Conquered Badges */}
+                            <div className="bg-card rounded-3xl border border-border-slate p-6 md:p-8">
+                                <BadgeShowcase memberId={selectedMember.id} />
                             </div>
 
                             {/* Technical Checklist */}

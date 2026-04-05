@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { cn } from '../lib/utils';
 import { toast } from 'react-hot-toast';
+import { checkAndAwardBadges } from '../hooks/useBadgeEngine';
 
 interface AttendanceTabProps {
     classId: string;
@@ -158,6 +159,11 @@ export function AttendanceTab({ classId, date, classTitle }: AttendanceTabProps)
                         await supabase.from('members').update({ xp: (m.xp || 0) + xp }).eq('id', rec.member_id);
                     }
                 }
+            }
+
+            // 4. Check for badge awards (real-time)
+            for (const rec of attendanceToSave) {
+                checkAndAwardBadges(rec.member_id);
             }
 
             toast.success('Presença salva com sucesso!');

@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../../lib/auth';
+import { DynamicDiv } from '../../components/DynamicDiv';
 
 interface Evaluation {
     id: string;
@@ -122,44 +123,91 @@ export function EvaluationsList({ memberId, currentBelt, onUpdate }: Evaluations
 
             // Automatic Promotion Logic
             if (newEval.type === 'Exame de Faixa' && newEval.status === 'Aprovado') {
-                // 1. Fetch Belts to find the next one
-                const { data: belts } = await supabase.from('belts').select('*').order('order_index', { ascending: true });
+                // 1. Fetch all necessary data for precise belt resolution
+                const [memberRes, beltsRes, groupsRes] = await Promise.all([
+                    supabase.from('members').select('*').eq('id', memberId).single(),
+                    supabase.from('belts').select('*').order('order_index', { ascending: true }),
+                    supabase.from('groups').select('name, belt_progression')
+                ]);
 
-                if (belts) {
-                    const currentBeltIndex = belts.findIndex(b =>
+                const member = memberRes.data;
+                const belts = beltsRes.data;
+                const groups = groupsRes.data;
+
+                if (member && belts) {
+                    const groupsMap: Record<string, string[]> = {};
+                    groups?.forEach(g => { groupsMap[g.name] = g.belt_progression || []; });
+
+                    // Find Current Belt Obj
+                    const currentBeltObj = belts.find(b =>
                         b.name.toLowerCase() === currentBelt.toLowerCase() ||
                         currentBelt.toLowerCase().includes(b.name.toLowerCase())
                     );
 
-                    if (currentBeltIndex !== -1 && currentBeltIndex < belts.length - 1) {
-                        const nextBelt = belts[currentBeltIndex + 1];
+                    if (currentBeltObj) {
+                        let nextBelt: any = null;
 
-                        // Confirm promotion
-                        const confirmed = window.confirm(`O aluno foi aprovado! Deseja registrar este exame E promover automaticamente para a faixa ${nextBelt.name}?\n\n(Atenção: Pressione Cancelar se desejar abortar a operação inteira sem salvar.)`);
-
-                        if (confirmed) {
-                            // Update Member
-                            const { error: memberError } = await supabase
-                                .from('members')
-                                .update({
-                                    belt: nextBelt.name,
-                                    stripes: 0
-                                })
-                                .eq('id', memberId);
-
-                            if (memberError) throw memberError;
-
-                            // Log History
-                            await supabase.from('xp_logs').insert({
-                                member_id: memberId,
-                                amount: 0,
-                                reason: `Promovido para Faixa ${nextBelt.name} (Exame)`
-                            });
-
-                            promotionMessage = ` e promovido para ${nextBelt.name}`;
+                        // NEXT BELT LOGIC (Sync with StudentEvolution.tsx)
+                        if (member.next_belt_override) {
+                            nextBelt = belts.find(b => b.id === member.next_belt_override);
                         } else {
-                            toast.error('Registro de Exame cancelado.');
-                            return;
+                            // Try group progression
+                            const enrolledClasses = member.enrolled_classes || [];
+                            let groupProgression: string[] = [];
+                            for (const className of enrolledClasses) {
+                                if (groupsMap[className] && groupsMap[className].length > 0) {
+                                    groupProgression = groupsMap[className];
+                                    break;
+                                }
+                            }
+
+                            if (groupProgression.length > 0) {
+                                const nextBeltId = groupProgression.find(id => {
+                                    const b = belts.find(x => x.id === id);
+                                    return b && b.min_xp > currentBeltObj.min_xp;
+                                });
+                                if (nextBeltId) {
+                                    nextBelt = belts.find(b => b.id === nextBeltId);
+                                }
+                            }
+
+                            // Fallback to default order
+                            if (!nextBelt) {
+                                const currentBeltIndex = belts.indexOf(currentBeltObj);
+                                if (currentBeltIndex < belts.length - 1) {
+                                    nextBelt = belts[currentBeltIndex + 1];
+                                }
+                            }
+                        }
+
+                        if (nextBelt) {
+                            // Confirm promotion
+                            const confirmed = window.confirm(`O aluno foi aprovado! Deseja registrar este exame E promover automaticamente para a faixa ${nextBelt.name}?\n\n(Atenção: Pressione Cancelar se desejar abortar a operação inteira sem salvar.)`);
+
+                            if (confirmed) {
+                                // Update Member
+                                const { error: memberError } = await supabase
+                                    .from('members')
+                                    .update({
+                                        belt: nextBelt.name,
+                                        stripes: 0
+                                    })
+                                    .eq('id', memberId);
+
+                                if (memberError) throw memberError;
+
+                                // Log History
+                                await supabase.from('xp_logs').insert({
+                                    member_id: memberId,
+                                    amount: 0,
+                                    reason: `Promovido para Faixa ${nextBelt.name} (Exame)`
+                                });
+
+                                promotionMessage = ` e promovido para ${nextBelt.name}`;
+                            } else {
+                                toast.error('Registro de Exame cancelado.');
+                                return;
+                            }
                         }
                     }
                 }
@@ -213,20 +261,9 @@ export function EvaluationsList({ memberId, currentBelt, onUpdate }: Evaluations
 
             if (evalError) throw evalError;
 
-            // Revert the belt if it's the latest belt exam
-            const { data: latestExams } = await supabase.from('evaluations')
-                .select('id')
-                .eq('member_id', memberId)
-                .eq('type', 'Exame de Faixa')
-                .order('evaluated_at', { ascending: false })
-                .limit(1);
-            
-            const isLatestExame = latestExams && latestExams.length > 0 && latestExams[0].id === ev.id;
-            
-            // ev.status !== 'Cancelado' means it was Aprovado or Reprovado before.
-            // But we specifically want to revert if the belt actually changed. 
-            // In our system, saving an exam updates the belt if it was approved and authorized.
-            if (isLatestExame && ev.belt_snapshot && ev.type === 'Exame de Faixa' && ev.status === 'Aprovado') {
+            // Revert the belt if current belt is DIFFERENT from snapshot
+            const { data: m } = await supabase.from('members').select('belt').eq('id', memberId).single();
+            if (m && ev.belt_snapshot && m.belt !== ev.belt_snapshot && ev.type === 'Exame de Faixa') {
                 await supabase.from('members').update({ belt: ev.belt_snapshot }).eq('id', memberId);
             }
 
@@ -249,7 +286,7 @@ export function EvaluationsList({ memberId, currentBelt, onUpdate }: Evaluations
                 }
             }
 
-            toast.success('Exame cancelado, faixa revertida e histórico devidamente justificado.');
+            toast.success('Exame cancelado e faixa revertida com sucesso.');
             fetchEvaluations();
             if (onUpdate) onUpdate();
         } catch (err) {
@@ -261,16 +298,9 @@ export function EvaluationsList({ memberId, currentBelt, onUpdate }: Evaluations
     const handleDeleteExam = async (ev: Evaluation) => {
         if (!window.confirm('Atenção Administrador: Tem certeza absoluta que deseja EXCLUIR este registro? Esta ação não pode ser desfeita.')) return;
         try {
-            // Revert the belt if it's the latest belt exam
-            const { data: latestExams } = await supabase.from('evaluations')
-                .select('id')
-                .eq('member_id', memberId)
-                .eq('type', 'Exame de Faixa')
-                .order('created_at', { ascending: false })
-                .limit(1);
-            
-            const isLatestExame = latestExams && latestExams.length > 0 && latestExams[0].id === ev.id;
-            if (isLatestExame && ev.belt_snapshot && ev.type === 'Exame de Faixa' && ev.status === 'Aprovado') {
+            // Revert the belt if current belt is DIFFERENT from snapshot
+            const { data: m } = await supabase.from('members').select('belt').eq('id', memberId).single();
+            if (m && ev.belt_snapshot && m.belt !== ev.belt_snapshot && ev.type === 'Exame de Faixa') {
                 await supabase.from('members').update({ belt: ev.belt_snapshot }).eq('id', memberId);
             }
 
@@ -286,7 +316,7 @@ export function EvaluationsList({ memberId, currentBelt, onUpdate }: Evaluations
                 .gte('created_at', `${evalDateStr}T00:00:00.000Z`)
                 .lte('created_at', `${evalDateStr}T23:59:59.999Z`);
 
-            toast.success('Exame, atualização de faixa e histórico excluídos com sucesso.');
+            toast.success('Exame e histórico excluídos. Faixa revertida para o snapshot anterior.');
             fetchEvaluations();
             if (onUpdate) onUpdate();
         } catch (err) {
@@ -416,11 +446,11 @@ export function EvaluationsList({ memberId, currentBelt, onUpdate }: Evaluations
                                                 <span className="text-xs text-muted mb-1">{techniqueStats.mastered} de {techniqueStats.total} técnicas dominadas</span>
                                             </div>
                                             <div className="w-full h-2 bg-black/50 rounded-full overflow-hidden">
-                                                <div
-                                                    className={cn("h-full transition-all duration-1000 [width:var(--bar-width)]",
+                                                <DynamicDiv
+                                                    className={cn("h-full transition-all duration-1000",
                                                         techniqueStats.percent >= 70 ? "bg-green-500" : "bg-orange-500"
                                                     )}
-                                                    style={{ '--bar-width': `${techniqueStats.percent}%` } as React.CSSProperties}
+                                                    dynamicStyle={{ width: `${techniqueStats.percent}%` }}
                                                 />
                                             </div>
                                             {techniqueStats.percent < 70 && (

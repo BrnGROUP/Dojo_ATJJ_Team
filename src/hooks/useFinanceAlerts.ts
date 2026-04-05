@@ -21,11 +21,34 @@ export function useFinanceAlerts() {
     async function fetchAlerts() {
         setLoading(true);
         try {
-            // Chamando a RPC que criamos na migração
-            const { data, error } = await supabase.rpc('get_pending_members');
+            // Buscando lançamentos que não estão pagos
+            const { data: unpaidPayments, error } = await supabase
+                .from('payments')
+                .select('id, member_id, description, amount, due_date, status, members(id, full_name, belt, avatar_url, billing_day)')
+                .in('status', ['Pending', 'Overdue']);
 
             if (error) throw error;
-            setOverdueMembers(data || []);
+
+            // Transforma em uma lista de membros únicos com suas pendências
+            const membersMap = new Map<string, PendingMember>();
+            
+            unpaidPayments?.forEach(pay => {
+                const member = pay.members as any;
+                if (!member) return;
+                
+                if (!membersMap.has(member.id)) {
+                    membersMap.set(member.id, {
+                        id: member.id,
+                        full_name: member.full_name || 'Desconhecido',
+                        belt: member.belt || 'Branca',
+                        avatar_url: member.avatar_url,
+                        billing_day: member.billing_day || 10,
+                        monthly_fee: pay.amount // Mostra o valor da pendência
+                    });
+                }
+            });
+
+            setOverdueMembers(Array.from(membersMap.values()));
         } catch (err) {
             console.error('Erro ao buscar alertas financeiros:', err);
         } finally {
