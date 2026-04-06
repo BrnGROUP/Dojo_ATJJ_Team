@@ -55,3 +55,10 @@ export const calculateLevel = (xp: number) => {
     const progress = (currentLevelXP / 1000) * 100;
     return { level, progress };
 };
+
+export function formatDateBR(dateStr: string) {
+    if (!dateStr) return '';
+    // Evitar deslocamento de fuso (YYYY-MM-DD split)
+    const [, month, day] = dateStr.split('-');
+    return `${day}/${month}`;
+}

@@ -60,7 +60,7 @@ export function UserForm() {
                     phone: data.phone || '',
                     cep: data.cep || '',
                     address: data.address || '',
-                    city: data.city || '',
+                    city: data.city?.toUpperCase() || '',
                     state: data.state || 'SP',
                     cpf: data.cpf || '',
                     avatar_url: data.avatar_url || '',

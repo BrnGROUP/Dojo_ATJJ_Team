@@ -3,7 +3,7 @@ import { useAuth } from '../lib/auth';
 import { useDashboard } from '../hooks/useDashboard';
 import { useFinanceAlerts } from '../hooks/useFinanceAlerts';
 import { DynamicDiv } from '../components/DynamicDiv';
-import { getBeltColor, calculateLevel } from '../lib/ui-utils';
+import { getBeltColor, calculateLevel, formatDateBR } from '../lib/ui-utils';
 import { BeltAvatar } from '../components/shared/BeltAvatar';
 import { StatCard } from '../components/shared/StatCard';
 
@@ -290,7 +290,7 @@ export function Dashboard() {
                                     />
                                     <div className="flex-1">
                                         <p className="text-xs sm:text-sm font-bold text-white truncate">{b.full_name}</p>
-                                        <p className="text-[10px] text-muted font-bold">{new Date(b.birth_date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</p>
+                                        <p className="text-[10px] text-muted font-bold">{formatDateBR(b.birth_date)}</p>
                                     </div>
                                     <span className="material-symbols-outlined text-pink-500 text-lg">celebration</span>
                                 </div>

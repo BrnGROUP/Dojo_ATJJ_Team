@@ -171,7 +171,7 @@ export function MemberForm() {
                 monthly_fee: data.monthly_fee || 150.00,
                 address: data.address || '',
                 cep: data.cep || '',
-                city: data.city || '',
+                city: data.city?.toUpperCase() || '',
                 state: data.state || 'SP',
                 type: data.type || 'student',
                 avatar_url: data.avatar_url || '',

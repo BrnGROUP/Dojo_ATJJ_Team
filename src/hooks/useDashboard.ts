@@ -100,11 +100,12 @@ export function useDashboard() {
             // 4. Birthdays
             const { data: allActive } = await supabase.from('members').select('*').eq('status', 'Active');
             if (allActive) {
-                const currentMonth = new Date().getMonth();
+                const currentMonth = new Date().getMonth() + 1; // 1-12
                 const bdays = allActive.filter(m => {
                     if (!m.birth_date) return false;
-                    const d = new Date(m.birth_date);
-                    return d.getMonth() === currentMonth;
+                    // Evitar problema de fuso (YYYY-MM-DD split)
+                    const month = parseInt(m.birth_date.split('-')[1]);
+                    return month === currentMonth;
                 }).slice(0, 3).map(sanitizeMember);
                 setBirthdays(bdays);
             }
